@@ -16,11 +16,83 @@
   const interestForm = document.querySelector('#interest-form');
   const formNote = document.querySelector('#form-note');
 
+  const dishAssets = {
+    'benedict-avocado': 'assets/menu/benedict-avocado-chatgpt.png',
+    'benedict-lime': 'assets/menu/benedict-lime-chatgpt.png',
+    'benedict-chipotle': 'assets/menu/benedict-chipotle-chatgpt.png',
+    'salmon-sandwich': 'assets/menu/salmon-chatgpt-variant.png',
+    'pulled-sandwich': 'assets/menu/pulled-chatgpt.png',
+    'mango-salad': 'assets/menu/mango-gemini.jpg',
+    'caesar-salad': 'assets/menu/caesar-chatgpt.png',
+    'protein-salad': 'assets/menu/protein-gemini.jpg',
+    'cauliflower-wings': 'assets/menu/cauliflower-chatgpt.png',
+    'fries-rosemary': 'assets/menu/fries-rosemary-chatgpt.png',
+    'key-lime-pie': 'assets/menu/key-lime-chatgpt.png',
+    'strawberries-cream': 'assets/menu/strawberries-chatgpt.png'
+  };
+
+  const dishGeminiAssets = {
+    'benedict-avocado': 'assets/menu/benedict-avocado-gemini.jpg',
+    'benedict-lime': 'assets/menu/benedict-lime-gemini.jpg',
+    'pulled-sandwich': 'assets/menu/pulled-gemini.jpg',
+    'mango-salad': 'assets/menu/mango-gemini.jpg',
+    'caesar-salad': 'assets/menu/caesar-gemini.jpg',
+    'protein-salad': 'assets/menu/protein-gemini.jpg',
+    'cauliflower-wings': 'assets/menu/cauliflower-gemini.jpg',
+    'fries-rosemary': 'assets/menu/fries-rosemary-gemini.jpg',
+    'strawberries-cream': 'assets/menu/strawberries-gemini.jpg'
+  };
+
   body.classList.add('js-ready');
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  function applyDishAssets(provider = 'selected') {
+    document.querySelectorAll('.dish[data-item]').forEach((dish) => {
+      const selected = dishAssets[dish.dataset.item];
+      const src = provider === 'gemini' ? (dishGeminiAssets[dish.dataset.item] || selected) : selected;
+      const image = dish.querySelector('img');
+      const figure = dish.querySelector('.dish-art');
+      if (!src || !image || !figure) return;
+      image.src = src;
+      figure.hidden = false;
+    });
+  }
+
+  applyDishAssets();
+
+  const categoryTabs = [...document.querySelectorAll('[data-category-tab]')];
+  const categorySlides = [...document.querySelectorAll('[data-category-slide]')];
+  const categoryCount = document.querySelector('#menu-category-count');
+  const categoryPrevious = document.querySelector('#menu-category-prev');
+  const categoryNext = document.querySelector('#menu-category-next');
+  let activeCategory = 0;
+
+  function showCategory(index) {
+    if (!categorySlides.length) return;
+    activeCategory = (index + categorySlides.length) % categorySlides.length;
+    categorySlides.forEach((slide, i) => {
+      const isActive = i === activeCategory;
+      slide.hidden = !isActive;
+      slide.classList.toggle('is-active', isActive);
+      slide.setAttribute('aria-hidden', String(!isActive));
+    });
+    categoryTabs.forEach((tab, i) => {
+      const isActive = i === activeCategory;
+      tab.setAttribute('aria-selected', String(isActive));
+      tab.tabIndex = isActive ? 0 : -1;
+      tab.classList.toggle('is-active', isActive);
+    });
+    if (categoryCount) categoryCount.textContent = `${String(activeCategory + 1).padStart(2, '0')} / ${String(categorySlides.length).padStart(2, '0')}`;
+  }
+
+  categoryTabs.forEach((tab, index) => tab.addEventListener('click', () => showCategory(index)));
+  categoryPrevious?.addEventListener('click', () => showCategory(activeCategory - 1));
+  categoryNext?.addEventListener('click', () => showCategory(activeCategory + 1));
+  showCategory(0);
+
   const supports3d = CSS.supports('transform-style', 'preserve-3d') && CSS.supports('perspective', '1px');
-  let flatMode = prefersReducedMotion.matches || !supports3d;
+  let flatMode = flatSelect.checked || prefersReducedMotion.matches || !supports3d;
   let currentFace = 0;
   let rafId = 0;
   const faces = [...prism.querySelectorAll('.face')];
@@ -111,9 +183,9 @@
   assetSelect.addEventListener('change', (event) => {
     const asset = event.target.value;
     root.dataset.asset = asset;
-    if (menuImage) menuImage.src = asset === 'ink-02' ? 'assets/menu-chatgpt.png' : 'assets/menu-sheet.svg';
-    if (cityImage) cityImage.src = asset === 'ink-03' ? 'assets/nyhavn-gemini.png' : 'assets/nyhavn.svg';
-    if (danceImage) danceImage.src = asset === 'ink-03' ? 'assets/dance-gemini.png' : 'assets/dance.svg';
+    const hero = document.querySelector('#hero-image');
+    if (hero) hero.src = asset === 'gemini' ? 'assets/menu/benedict-avocado-gemini.jpg' : 'assets/menu/benedict-avocado-chatgpt.png';
+    applyDishAssets(asset);
     coffeeArt?.classList.toggle('coffee-art--generated', asset === 'ink-03');
   });
 
@@ -135,7 +207,11 @@
     requestPoseUpdate();
   });
 
-  interestForm.addEventListener('submit', (event) => {
+  document.querySelector('#logo-select')?.addEventListener('change', event => {
+    body.classList.toggle('logo-stacked', event.target.value === 'stacked');
+  });
+
+  interestForm?.addEventListener('submit', (event) => {
     event.preventDefault();
     const data = new FormData(interestForm);
     const email = String(data.get('email') || '').trim();
@@ -143,6 +219,25 @@
     formNote.textContent = 'A small hello received. We will keep the kettle warm.';
     formNote.style.color = 'var(--accent)';
     interestForm.reset();
+  });
+
+  document.querySelector('#share-button')?.addEventListener('click', async (event) => {
+    const button = event.currentTarget;
+    const status = document.querySelector('#share-status');
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: 'Open Heart', text: 'Open Heart, a vegetarian place for original plant-based creations.', url: window.location.href });
+        if (status) status.textContent = 'Shared.';
+      } else if (navigator.clipboard) {
+        await navigator.clipboard.writeText(window.location.href);
+        if (status) status.textContent = 'Link copied.';
+      } else if (status) {
+        status.textContent = window.location.href;
+      }
+    } catch (error) {
+      if (error?.name !== 'AbortError' && status) status.textContent = 'The link is ready in the address bar.';
+    }
+    button.blur();
   });
 
   applyFlatMode();

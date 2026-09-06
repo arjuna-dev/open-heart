@@ -1,86 +1,63 @@
-# open:heart
+# Open Heart
 
-An early-stage vegetarian food and coffee place that could open in Copenhagen.
+Open Heart is an early-stage vegetarian food and coffee place that could open in Copenhagen.
 
-This project is a space for shaping the idea, testing its appeal, and eventually presenting it through a simple, memorable landing page. The concept is intentionally open at this stage: the name, location, menu, visual identity, business model, and opening plan still need to be explored.
+The project is not selling breakfast as a category. It is exploring the experience of encountering an original plant-based creation, beginning with vegan eggs Benedict as a signature proof point. The landing page is a concept test for that feeling, not a claim that the address, opening date, menu, or business model is settled.
 
-## Project goals
+## Current working direction
 
-- Define a distinctive vegetarian food and coffee concept with a clear reason to exist.
-- Understand which Copenhagen audience and neighborhood could be the best fit.
-- Develop a warm, credible brand direction before committing to a full identity.
-- Build a landing page that communicates the feeling of the place and captures interest.
-- Use lightweight research, structured brainstorming, and fast iterations to reduce uncertainty.
+- Working name: **Open Heart**. The repository slug remains `open:heart`.
+- Offer: vegetarian food and coffee, with almost every menu item intended to be vegan.
+- Signature invitation: vegan eggs Benedict in several distinct interpretations.
+- Menu: sandwiches, eggs Benedict, salads, entrees, sauces, desserts, and beverages.
+- Website behavior: normal scrolling is the default. CSS 3D exploration remains available as a developer mode.
+- Visual language: editorial posters, restrained one-ink and two-ink studies, paper texture, oversized type, and bold compositions inspired by simple Japanese prints and woodblock work.
+- Wordmark direction: capitalized Open Heart with oversized O and H. Font selection is still open.
+- Project stage: concept exploration. No neighborhood, menu, supplier, price, opening date, or operating model is final.
 
-## Working idea
+## Landing page
 
-Create a place where people encounter plant-based food they did not expect to love. Vegan eggs Benedict is a first proof point: a familiar form remade with imagination, care, and enough deliciousness to make the idea memorable.
+The local prototype is a six-section story with a menu area, developer controls, palette experiments, and a print-room archive. The current page includes a first pass of the content and menu data, but it is still a design instrument rather than a finished restaurant website.
 
-The product is not only the food and coffee. It is the experience of meeting an original creation, feeling connected to the act of making, and sharing that discovery with other people. The room, the pace of service, the welcome, and the visual language should all make that feeling tangible.
+The intended information hierarchy is:
 
-## Belief at the centre
+1. A clear invitation to discover a plant-based creation.
+2. Vegan eggs Benedict as the memorable proof point.
+3. A menu carousel whose slides are menu sections, rather than a separate page for every category.
+4. Atmosphere and Copenhagen references used as visual context, not unsupported location claims.
+5. Dummy opening hours, contact, find-us, and language sections for layout testing only.
+6. A lightweight action such as feedback, an interest list, or following the concept.
 
-open:heart is for people who want to stay open to surprise. It is built on the belief that human creativity can connect us with something deeper, and that love for creation can be expressed through a plate that did not exist before someone imagined it.
+## Image collection
 
-## Likely first audience hypotheses
+The asset archive contains **41 files**:
 
-These are starting hypotheses, not decisions:
+- 25 current studies
+- 1 study under review
+- 10 rejected attempts retained for comparison
+- 5 legacy files kept for historical reference
 
-- Curious eaters who want to taste an idea they have not encountered before.
-- People who are open to vegetarian food but do not want to feel they are choosing a compromise.
-- Copenhagen residents and visitors looking for a distinctive, generous experience.
-- Small groups, couples, and solo guests who value imagination and atmosphere as much as the menu.
+The current and review sets include menu studies for Benedict variations, sandwiches, salads, cauliflower wings, fries, desserts, michelada, hot drinks, Copenhagen architecture, and people or animals holding hands. The generated studies were made through both the ChatGPT and Gemini browser interfaces, with the supplied fish and rooster poster references used during the exploration.
 
-## Landing page direction
+Open the local print room at [`studio.html`](studio.html) to browse the catalog and see which studies are current, under review, rejected, or legacy. The machine-readable inventory is [`assets/catalog.json`](assets/catalog.json).
 
-The first landing page should be a focused concept test rather than a complete restaurant website. It should help someone understand the idea within a few seconds and leave with a reason to remember it.
+The weak legacy SVG experiments are intentionally not part of the current visual system:
 
-Potential sections:
+- `assets/nyhavn.svg`
+- `assets/menu-sheet.svg`
+- `assets/dance.svg`
 
-- A clear hero statement that captures the place in one sentence.
-- A short explanation of the creative, plant-based experience.
-- A small set of signature menu or ritual ideas.
-- Visual references for the atmosphere, materials, colors, and pace.
-- A Copenhagen point of view, including the kind of neighborhood or morning it belongs to.
-- A simple call to action, such as joining an interest list, sharing feedback, or following the concept.
+New image work should follow the mono-color rule: control the whole composition, not only the text color. Start from one ink or a deliberate two-ink recipe, keep the paper field visible, make the crop and type part of the composition, and reject uncontrolled color, fake product mockups, measurement rulers, and accidental generated labels.
 
-The landing page will most likely be created and hosted with ChatGPT Sites once the concept has enough shape to present.
+## Historical comparison
 
-## Exploration themes
+The earlier, simpler alternating-section design is preserved on the branch [`archive/first-design`](https://github.com/arjuna-dev/open-heart/tree/archive/first-design). The Pages workflow also publishes it under `/comparisons/first-design/` when the workflow runs. This lets us compare the more restrained composition against the current exploratory system without losing either direction.
 
-- Concept and positioning
-- Name, language, and tone of voice
-- Menu principles and signature items
-- Coffee approach and service model
-- Space, interiors, music, and guest experience
-- Neighborhood and site selection in Copenhagen
-- Pricing, capacity, operating hours, and staffing assumptions
-- Brand identity and visual references
-- Landing page content, conversion, and feedback capture
+## Poem and interactive text
 
-## Current status
+The poem idea remains an experiment, not approved landing-page copy. The candidate text is Swami Vivekananda's *To a Friend*, which speaks about love across humans, animals, and other living beings. The source and the exact edition or translation should be checked before publishing.
 
-The project is at the concept exploration stage. No final name, location, menu, visual identity, or business case has been selected.
-
-## Suggested next steps
-
-1. Write a one-paragraph concept statement and a short list of non-negotiable principles.
-2. Generate several distinct concept directions instead of prematurely polishing one idea.
-3. Compare likely Copenhagen neighborhoods and customer use cases.
-4. Choose one direction to express through a lightweight landing page.
-5. Put the page in front of a small number of people and record what they remember, want, and question.
-6. Refine the concept based on evidence before investing in a more complete brand or operating plan.
-
-## Project files
-
-The site is intentionally lightweight and framework-free:
-
-- `index.html` contains the six semantic page faces and the concept copy.
-- `styles.css` contains the print system, palette recipes, responsive layout, and CSS 3D prism.
-- `app.js` maps scroll position to prism poses and powers the developer controls.
-- `assets/` contains original SVG plates plus generated exploration assets.
-
-Add research notes, concept explorations, copy drafts, visual references, and site assets as the idea develops. Keep temporary experiments separate from decisions that should guide future work.
+The likely technical experiment is to use [Pretext](https://pretextjs.dev/pretext-demo) for text measurement and reflow around an animated or shaped object. Pretext is a layout engine, so the shape, interaction, and motion would still belong to our own page layer. Keep the poem optional and subordinate to the food and place experience.
 
 ## Run locally
 
@@ -90,20 +67,36 @@ From the project directory:
 python3 -m http.server 4173
 ```
 
-Then open `http://localhost:4173/`.
+Then open [http://localhost:4173/](http://localhost:4173/).
 
-The page works as a normal vertical document when JavaScript is disabled, when reduced motion is requested, or when Developer view > Simple scroll (no 3D) is enabled. Default scrolling connects pairs of full-viewport pages with CSS 3D transforms: pages 1 through 4 turn upward, then pages 5 and 6 enter with rightward turns. Each transition shares a physical edge, uses face-local shading, and lands flat. Geometry resets between transitions rather than forcing six rectangular viewports into a fixed prism.
+The page also remains readable as a normal document when JavaScript is disabled, when reduced motion is requested, or when **Developer view > Simple scroll (no 3D)** is enabled. CSS 3D mode connects adjacent full-viewport sections with shared physical edges, local shading, and separate poses for the final two sections.
+
+## Repository map
+
+- [`index.html`](index.html) contains the landing page faces, menu content, and developer controls.
+- [`styles.css`](styles.css) contains the print system, palette recipes, responsive layout, and CSS 3D geometry.
+- [`app.js`](app.js) handles scroll poses, simple-scroll mode, palette switching, asset switching, and menu controls.
+- [`menu.json`](menu.json) is the working menu inventory and remains a hypothesis.
+- [`EXPLORATION.md`](EXPLORATION.md) records the design and asset decisions from this pass.
+- [`AGENTS.md`](AGENTS.md) is the project agent story and decision guardrail.
+- [`.github/workflows/deploy-pages.yml`](.github/workflows/deploy-pages.yml) publishes the static site and historical comparison.
 
 ## GitHub Pages
 
-The repository includes a GitHub Actions workflow for the static site. Once the repository is pushed and Pages is configured to use GitHub Actions, each push to `main` publishes the current site.
+The repository includes a GitHub Actions workflow for the static site. A push to `main` triggers the deployment once GitHub Pages is configured to use GitHub Actions.
+
+## Useful next decisions
+
+1. Choose the strongest wordmark type direction while keeping the oversized O and H ratio.
+2. Refactor the menu into one category carousel with a clear active-category cue.
+3. Decide which current image studies deserve cleanup, redraw, or live HTML type over the generated artwork.
+4. Test the short landing-page story with a few people and record what they remember.
+5. Only then decide whether a hosted ChatGPT Sites version should replace or accompany the static prototype.
 
 ## Working principles
 
-- Start with the act of discovery, then work backward to the guest experience, brand, and page.
-- Treat vegan eggs Benedict as a signature proof of the concept, not as the entire concept.
-- Keep hypotheses clearly labeled as hypotheses.
-- Prefer a few strong, testable ideas over a large collection of vague possibilities.
-- Make the concept feel Copenhagen-aware without relying on stereotypes.
-- Treat the landing page as a learning tool, not only as a polished presentation.
-- Keep decisions and open questions visible so the project can evolve without losing context.
+- Treat vegan eggs Benedict as a signature proof, not the entire concept.
+- Keep facts, hypotheses, decisions, open questions, and experiments distinct.
+- Use Copenhagen as a point of view without relying on stereotypes.
+- Prefer a few strong, testable ideas over a large collection of vague hospitality language.
+- Keep the difference between an appealing idea and an operationally viable business visible.

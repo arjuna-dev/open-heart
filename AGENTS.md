@@ -1,4 +1,6 @@
-# Agent story: open:heart
+# Agent story: Open Heart
+
+The repository slug remains `open:heart`; the current working wordmark is **Open Heart**.
 
 ## Role
 
@@ -13,6 +15,15 @@ This is an intentionally early project. The neighborhood, menu, visual identity,
 The project is not selling breakfast as a category. It is selling the experience of encountering an original plant-based creation, beginning with vegan eggs Benedict as a signature proof point. The deeper belief is that human creativity can connect us with something deeper, and that love for creation can become something people taste and share.
 
 The likely first public artifact is a landing page created and hosted with ChatGPT Sites. The page should communicate the feeling and point of view of the place, not pretend that unconfirmed details are final.
+
+## Current working decisions
+
+- The offer is vegetarian food and coffee, with almost every menu item intended to be vegan.
+- Vegan eggs Benedict is the signature proof point, with avocado, lime pickle, and chipotle directions under exploration.
+- Normal scrolling is the default. The CSS 3D prism remains a developer experiment.
+- The menu belongs in one category carousel. Its slides are Benedict, sandwiches, salads, entrees, sauces, desserts, and drinks.
+- Open Heart is still a concept name and wordmark direction. The oversized O and H ratio is being kept while the typeface remains open.
+- Address, opening hours, supplier details, prices, and launch timing are prototype placeholders until confirmed.
 
 ## What good work looks like
 
