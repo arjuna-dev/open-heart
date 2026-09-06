@@ -1,0 +1,205 @@
+[
+  {
+    "id": "benedict-avocado",
+    "category": "Benedict",
+    "name": "Avocado Benedict",
+    "description": "Avocado, vegan egg, vegan hollandaise.",
+    "diet": "Vegan"
+  },
+  {
+    "id": "benedict-lime",
+    "category": "Benedict",
+    "name": "Lime pickle Benedict",
+    "description": "Lime pickle, crushed spiced peas, vegan egg, coriander hollandaise.",
+    "diet": "Vegan"
+  },
+  {
+    "id": "benedict-chipotle",
+    "category": "Benedict",
+    "name": "Chipotle Benedict",
+    "description": "Chipotle mayo, charred corn, black beans, vegan egg, lime.",
+    "diet": "Vegan"
+  },
+  {
+    "id": "salmon-sandwich",
+    "category": "Sandwiches",
+    "name": "Vegan salmon open sandwich",
+    "description": "Plant-based salmon, open-faced.",
+    "diet": "Vegan"
+  },
+  {
+    "id": "pulled-sandwich",
+    "category": "Sandwiches",
+    "name": "Veggie pulled sandwich",
+    "description": "Pulled mushrooms, sharp slaw, BBQ sauce.",
+    "diet": "Vegan"
+  },
+  {
+    "id": "mango-salad",
+    "category": "Salads",
+    "name": "Avocado & mango",
+    "description": "Avocado, mango, parsley, raisins.",
+    "diet": "Vegan"
+  },
+  {
+    "id": "caesar-salad",
+    "category": "Salads",
+    "name": "Vegan Caesar",
+    "description": "Crisp leaves, croutons, creamy vegan Caesar dressing.",
+    "diet": "Vegan"
+  },
+  {
+    "id": "protein-salad",
+    "category": "Salads",
+    "name": "Protein salad",
+    "description": "Lentils, chickpeas, edamame, toasted seeds, lemon dressing.",
+    "diet": "Vegan"
+  },
+  {
+    "id": "cauliflower-wings",
+    "category": "Entrees",
+    "name": "BBQ no-chicken wings",
+    "description": "Breaded cauliflower, BBQ sauce.",
+    "diet": "Vegan"
+  },
+  {
+    "id": "fries-plain",
+    "category": "Entrees",
+    "name": "Plain fries",
+    "description": "Crisp potatoes, salt. Choose your sauce.",
+    "diet": "Vegan"
+  },
+  {
+    "id": "fries-spicy",
+    "category": "Entrees",
+    "name": "Spicy fries",
+    "description": "Chilli-dusted potatoes. Choose your sauce.",
+    "diet": "Vegan"
+  },
+  {
+    "id": "fries-rosemary",
+    "category": "Entrees",
+    "name": "Rosemary fries",
+    "description": "Potatoes, rosemary, salt. Choose your sauce.",
+    "diet": "Vegan"
+  },
+  {
+    "id": "key-lime-pie",
+    "category": "Desserts",
+    "name": "Avocado key-lime pie",
+    "description": "A sharp lime filling, avocado, crisp crumb base.",
+    "diet": "Vegan"
+  },
+  {
+    "id": "strawberries-cream",
+    "category": "Desserts",
+    "name": "Strawberries & mascarpone",
+    "description": "Strawberries, mascarpone cream, crumble.",
+    "diet": "Vegetarian / vegan version in development"
+  },
+  {
+    "id": "creme-brulee",
+    "category": "Desserts",
+    "name": "Vegan creme brulee",
+    "description": "Crackly caramel, soft vanilla custard.",
+    "diet": "Vegan / recipe in development"
+  },
+  {
+    "id": "licorice-beer",
+    "category": "Cold drinks",
+    "name": "Licorice beer",
+    "description": "Beer with a licorice note.",
+    "diet": "Recipe in development"
+  },
+  {
+    "id": "michelada",
+    "category": "Cold drinks",
+    "name": "0,0 michelada",
+    "description": "Alcohol-free, lime, spice, a salted rim.",
+    "diet": "0,0 / recipe in development"
+  },
+  {
+    "id": "matcha",
+    "category": "Hot drinks",
+    "name": "Matcha",
+    "description": "Whisked matcha.",
+    "diet": "Plant milk available"
+  },
+  {
+    "id": "hojicha",
+    "category": "Hot drinks",
+    "name": "Hojicha",
+    "description": "Roasted Japanese green tea.",
+    "diet": "Plant milk available"
+  },
+  {
+    "id": "espresso",
+    "category": "Hot drinks",
+    "name": "Espresso",
+    "description": "Small, dark, concentrated.",
+    "diet": "Vegan"
+  },
+  {
+    "id": "cappuccino",
+    "category": "Hot drinks",
+    "name": "Cappuccino",
+    "description": "Espresso, steamed milk, soft foam.",
+    "diet": "Plant milk available"
+  },
+  {
+    "id": "london-fog",
+    "category": "Hot drinks",
+    "name": "Decadent Earl Grey",
+    "description": "London fog: Earl Grey, vanilla, honey, milk.",
+    "diet": "Vegetarian / vegan option without honey"
+  },
+  {
+    "id": "cafe-viennois",
+    "category": "Hot drinks",
+    "name": "Cafe viennois",
+    "description": "Coffee, whipped cream.",
+    "diet": "Plant-based cream option in development"
+  },
+  {
+    "id": "chocolate-espanol",
+    "category": "Hot drinks",
+    "name": "Chocolate espanol",
+    "description": "Thick, hot drinking chocolate.",
+    "diet": "Vegan version in development"
+  },
+  {
+    "id": "chipotle-mayo",
+    "category": "Sauces",
+    "name": "Chipotle mayo",
+    "description": "Smoky chipotle mayonnaise.",
+    "diet": "Vegan version"
+  },
+  {
+    "id": "chimichurri",
+    "category": "Sauces",
+    "name": "Chimichurri",
+    "description": "Herbs, oil, a sharp finish.",
+    "diet": "Vegan"
+  },
+  {
+    "id": "pesto",
+    "category": "Sauces",
+    "name": "Pesto",
+    "description": "Basil, a generous spoonful.",
+    "diet": "Vegan version"
+  },
+  {
+    "id": "yogurt-dill",
+    "category": "Sauces",
+    "name": "Yogurt dill",
+    "description": "Cool yogurt, fresh dill.",
+    "diet": "Vegetarian / plant-based yogurt option"
+  },
+  {
+    "id": "vegan-cheese",
+    "category": "Sauces",
+    "name": "Melted vegan cheese",
+    "description": "Warm, melted plant-based cheese.",
+    "diet": "Vegan"
+  }
+]
