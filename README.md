@@ -92,7 +92,7 @@ python3 -m http.server 4173
 
 Then open `http://localhost:4173/`.
 
-The page works as a normal vertical document when JavaScript is disabled, when reduced motion is requested, or when the developer flat mode is enabled. With the default mode, scrolling moves through six CSS-rendered prism faces.
+The page works as a normal vertical document when JavaScript is disabled, when reduced motion is requested, or when Developer view > Simple scroll (no 3D) is enabled. Default scrolling connects pairs of full-viewport pages with CSS 3D transforms: pages 1 through 4 turn upward, then pages 5 and 6 enter with rightward turns. Each transition shares a physical edge, uses face-local shading, and lands flat. Geometry resets between transitions rather than forcing six rectangular viewports into a fixed prism.
 
 ## GitHub Pages
 

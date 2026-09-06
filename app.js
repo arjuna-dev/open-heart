@@ -23,22 +23,14 @@
   let flatMode = prefersReducedMotion.matches || !supports3d;
   let currentFace = 0;
   let rafId = 0;
-  let lastPose = '';
-
-  const poses = [
-    { x: 0, y: 0 },
-    { x: 0, y: -90 },
-    { x: 0, y: -180 },
-    { x: 0, y: -270 },
-    { x: -90, y: -270 },
-    { x: 90, y: -270 },
-  ];
+  const faces = [...prism.querySelectorAll('.face')];
 
   const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
   function applyFlatMode() {
     body.classList.toggle('is-flat', flatMode);
     flatSelect.checked = flatMode;
+    faces.forEach(face => { face.inert = false; });
     if (flatMode) {
       scene.classList.remove('is-transitioning');
       scene.dataset.face = String(currentFace);
@@ -56,37 +48,38 @@
     scene.dataset.face = String(index);
   }
 
-  function poseForProgress(progress) {
-    const safeProgress = clamp(progress, 0, 5);
-    const segment = Math.min(Math.floor(safeProgress), poses.length - 2);
-    const local = safeProgress - segment;
-    const from = poses[segment];
-    const to = poses[segment + 1];
-    return {
-      x: from.x + (to.x - from.x) * local,
-      y: from.y + (to.y - from.y) * local,
-      segment,
-      local,
-    };
-  }
-
   function updatePose() {
     rafId = 0;
-    if (flatMode) return;
+    if (flatMode) {
+      const nearest = faces.reduce((best, face, i) => Math.abs(face.getBoundingClientRect().top) < Math.abs(faces[best].getBoundingClientRect().top) ? i : best, 0);
+      currentFace = nearest;
+      updateNav(nearest);
+      return;
+    }
     const viewportHeight = window.visualViewport?.height || window.innerHeight;
     const trackTop = track.getBoundingClientRect().top + window.scrollY;
     const maxScroll = Math.max(track.offsetHeight - viewportHeight, 1);
     const progress = clamp((window.scrollY - trackTop) / maxScroll, 0, 1) * 5;
-    const pose = poseForProgress(progress);
+    const segment = Math.min(Math.floor(progress), 4);
+    const local = progress - segment;
+    // Give each page a flat reading interval. Each pair shares a physical edge.
+    const t = clamp((local - 0.18) / 0.64, 0, 1);
+    const angle = t * 90;
+    const vertical = segment < 3;
+    const depth = (vertical ? scene.clientHeight : scene.clientWidth) / 2;
+    const rotation = vertical ? `rotateX(${angle}deg)` : `rotateY(${-angle}deg)`;
+    prism.style.transform = `translateZ(${-depth}px) ${rotation}`;
+    faces.forEach((face, i) => {
+      const outgoing = i === segment;
+      const incoming = i === segment + 1;
+      face.style.visibility = outgoing || incoming ? 'visible' : 'hidden';
+      face.inert = i !== (t < 0.5 ? segment : segment + 1);
+      face.style.transform = outgoing ? `translateZ(${depth}px)` : incoming ? `${vertical ? 'rotateX(-90deg)' : 'rotateY(90deg)'} translateZ(${depth}px)` : 'none';
+      face.style.setProperty('--shade', String(outgoing ? 0.42 * t : 0.5 * (1 - t)));
+      face.style.setProperty('--shade-direction', vertical ? (outgoing ? 'to bottom' : 'to top') : (outgoing ? 'to right' : 'to left'));
+    });
     const nextFace = clamp(Math.round(progress), 0, 5);
-    const transform = `rotateX(${pose.x}deg) rotateY(${pose.y}deg)`;
-    const inTransition = pose.local > 0.08 && pose.local < 0.92;
-
-    if (transform !== lastPose) {
-      prism.style.transform = transform;
-      lastPose = transform;
-    }
-    scene.classList.toggle('is-transitioning', inTransition);
+    scene.classList.toggle('is-transitioning', t > 0 && t < 1);
     scene.style.setProperty('--face-progress', progress.toFixed(3));
     if (nextFace !== currentFace) {
       currentFace = nextFace;
@@ -127,6 +120,7 @@
   flatSelect.addEventListener('change', (event) => {
     flatMode = event.target.checked;
     applyFlatMode();
+    goToFace(currentFace);
     requestPoseUpdate();
   });
 
@@ -136,7 +130,7 @@
   window.addEventListener('resize', requestPoseUpdate, { passive: true });
   window.visualViewport?.addEventListener('resize', requestPoseUpdate, { passive: true });
   prefersReducedMotion.addEventListener?.('change', (event) => {
-    flatMode = event.matches || !supports3d || flatSelect.checked;
+    flatMode = event.matches || !supports3d;
     applyFlatMode();
     requestPoseUpdate();
   });
