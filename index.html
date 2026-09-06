@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en" data-palette="cyan-brick" data-asset="ink-01">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#F3EDDE" />
+    <meta name="description" content="open:heart is a Copenhagen vegetarian place for curious eating and original plant-based creations." />
+    <title>open:heart - try the impossible on a plate</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#content">Skip to content</a>
+
+    <header class="topbar" aria-label="Site header">
+      <a class="wordmark" href="#face-0" aria-label="open:heart, start of site">
+        <span class="wordmark__open">open</span><span class="wordmark__colon">:</span><span class="wordmark__heart">heart</span>
+      </a>
+      <div class="topbar__right">
+        <p class="site-note">vegetarian / almost all vegan</p>
+        <details class="developer-panel">
+          <summary>developer view <span aria-hidden="true">+</span></summary>
+          <div class="developer-panel__body">
+            <label for="palette-select">colour recipe</label>
+            <select id="palette-select" name="palette">
+              <option value="cyan-brick">Cyan + brick red</option>
+              <option value="powder-signal">Powder blue + signal red</option>
+              <option value="cobalt-terracotta">Cobalt + terracotta</option>
+              <option value="botanical-oxblood">Botanical green + oxblood</option>
+              <option value="charcoal-signal">Charcoal + signal red</option>
+              <option value="electric-carbon">Electric blue + carbon</option>
+              <option value="mint-charcoal">Mint green + charcoal</option>
+              <option value="mono-royal">Mono / royal blue</option>
+              <option value="mono-botanical">Mono / botanical green</option>
+              <option value="mono-terracotta">Mono / terracotta</option>
+              <option value="mono-aubergine">Mono / aubergine</option>
+            </select>
+            <label for="asset-select">image plate</label>
+            <select id="asset-select" name="asset">
+              <option value="ink-01">Plate 01 / cyan study</option>
+              <option value="ink-02">Plate 02 / generated menu print</option>
+              <option value="ink-03">Plate 03 / Gemini city + dance</option>
+            </select>
+            <label class="developer-panel__check">
+              <input type="checkbox" id="flat-select" />
+              <span>flat reading mode</span>
+            </label>
+            <p class="developer-panel__hint">Prototype controls stay visible while the visual system is in motion.</p>
+          </div>
+        </details>
+      </div>
+    </header>
+
+    <main id="content" class="experience">
+      <nav class="face-nav" aria-label="Explore open:heart">
+        <span class="face-nav__label">turn the page</span>
+        <div class="face-nav__buttons" role="list">
+          <button class="face-button is-current" type="button" data-face="0" aria-label="Go to welcome face" aria-current="true"><span>01</span></button>
+          <button class="face-button" type="button" data-face="1" aria-label="Go to menu face"><span>02</span></button>
+          <button class="face-button" type="button" data-face="2" aria-label="Go to ritual face"><span>03</span></button>
+          <button class="face-button" type="button" data-face="3" aria-label="Go to Copenhagen face"><span>04</span></button>
+          <button class="face-button" type="button" data-face="4" aria-label="Go to people face"><span>05</span></button>
+          <button class="face-button" type="button" data-face="5" aria-label="Go to invitation face"><span>06</span></button>
+        </div>
+      </nav>
+
+      <div class="scroll-track" id="scroll-track">
+        <div class="scene" id="scene" data-face="0">
+          <div class="scene__grain" aria-hidden="true"></div>
+          <div class="prism" id="prism">
+            <section class="face face--front" id="face-0" data-face="0" aria-labelledby="face-0-title">
+              <div class="face__inner face__inner--hero">
+                <div class="hero-copy">
+                  <p class="eyebrow"><span class="eyebrow__mark"></span> a place for the curious</p>
+                  <h1 id="face-0-title">Try the impossible <em>on a plate.</em></h1>
+                  <p class="hero-lede">open:heart is a vegetarian place for original plant-based creations. Start with vegan eggs Benedict, stay for the feeling that imagination can become something real, generous, and delicious.</p>
+                  <div class="hero-actions">
+                    <button class="ink-button" type="button" data-face-target="1">see what is on the table <span aria-hidden="true">↗</span></button>
+                    <span class="hero-actions__note">concept / work in progress</span>
+                  </div>
+                </div>
+                <div class="hero-art art-frame art-frame--large">
+                  <img class="asset-image asset-image--menu" src="assets/menu-sheet.svg" alt="A two-ink print of a vegetarian breakfast spread with eggs Benedict, fries, open sandwiches, sauces, beer, pie, and cauliflower wings." />
+                  <span class="registration registration--one" aria-hidden="true"></span>
+                  <span class="registration registration--two" aria-hidden="true"></span>
+                </div>
+                <p class="hero-side-note">slow mornings<br />bright plates<br />good company</p>
+              </div>
+              <div class="face__footer"><span>copenhagen / maybe</span><span>scroll to rotate</span></div>
+            </section>
+
+            <section class="face face--right" id="face-1" data-face="1" aria-labelledby="face-1-title">
+              <div class="face__inner face__inner--menu">
+                <div class="section-heading">
+                  <p class="eyebrow"><span class="eyebrow__mark"></span> a working menu</p>
+                  <h2 id="face-1-title">On the table.</h2>
+                  <p>Familiar shapes, plant-based detours, and sauces that deserve their own spoon.</p>
+                </div>
+                <div class="menu-layout">
+                  <ul class="menu-list" aria-label="Tentative menu items">
+                    <li><span class="menu-number">01</span><span>vegan eggs Benedict</span><span class="menu-tag">morning</span></li>
+                    <li><span class="menu-number">02</span><span>vegan salmon open sandwich</span><span class="menu-tag">open face</span></li>
+                    <li><span class="menu-number">03</span><span>Greek salad open sandwich</span><span class="menu-tag">bright</span></li>
+                    <li><span class="menu-number">04</span><span>breaded cauliflower BBQ no-chicken wings</span><span class="menu-tag">crunch</span></li>
+                    <li><span class="menu-number">05</span><span>French fries + special sauces</span><span class="menu-tag">share</span></li>
+                    <li><span class="menu-number">06</span><span>avocado key lime pie</span><span class="menu-tag">sweet</span></li>
+                    <li><span class="menu-number">07</span><span>licorice beer</span><span class="menu-tag">curious</span></li>
+                  </ul>
+                  <div class="menu-annotation">
+                    <p class="annotation-title">the sauce drawer</p>
+                    <p>chipotle mayo<br />chimichurri<br />pesto<br />yogurt dill</p>
+                    <span class="annotation-line" aria-hidden="true"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="face__footer"><span>nothing too precious</span><span>01 / 06</span></div>
+            </section>
+
+            <section class="face face--back" id="face-2" data-face="2" aria-labelledby="face-2-title">
+              <div class="face__inner face__inner--ritual">
+                <div class="ritual-copy">
+                  <p class="eyebrow"><span class="eyebrow__mark"></span> creation is the point</p>
+                  <h2 id="face-2-title">A new idea can be<br /><em>something you taste.</em></h2>
+                  <p>We believe the human mind can connect with something deeper through making and sharing. A plate can be a small proof that care, curiosity, and invention are worth following.</p>
+                  <div class="ritual-notes">
+                    <span><b>01</b> open the door</span>
+                    <span><b>02</b> pour something warm</span>
+                    <span><b>03</b> pass the good thing</span>
+                  </div>
+                </div>
+                <div class="coffee-art art-frame">
+                  <div class="coffee-cup" aria-hidden="true"><span></span></div>
+                  <span class="coffee-steam coffee-steam--one" aria-hidden="true"></span>
+                  <span class="coffee-steam coffee-steam--two" aria-hidden="true"></span>
+                  <p class="coffee-art__caption">a little wonder, served warm</p>
+                </div>
+              </div>
+              <div class="face__footer"><span>take your time</span><span>02 / 06</span></div>
+            </section>
+
+            <section class="face face--left" id="face-3" data-face="3" aria-labelledby="face-3-title">
+              <div class="face__inner face__inner--city">
+                <div class="city-copy">
+                  <p class="eyebrow"><span class="eyebrow__mark"></span> a copenhagen point of view</p>
+                  <h2 id="face-3-title">A little room<br /><em>for the city.</em></h2>
+                  <p>Maybe a corner near the water. Maybe a neighborhood street where the first bike bell meets the smell of toast. The address is still a question.</p>
+                  <span class="city-stamp">COPENHAGEN<br /><b>CPH / 55°40'N</b></span>
+                </div>
+                <div class="city-art art-frame art-frame--wide">
+                  <img class="asset-image asset-image--city" src="assets/nyhavn.svg" alt="A four-ink editorial print of colorful Copenhagen waterfront houses by the canal." />
+                </div>
+              </div>
+              <div class="face__footer"><span>address / open question</span><span>03 / 06</span></div>
+            </section>
+
+            <section class="face face--top" id="face-4" data-face="4" aria-labelledby="face-4-title">
+              <div class="face__inner face__inner--people">
+                <div class="people-copy">
+                  <p class="eyebrow"><span class="eyebrow__mark"></span> made for passing it on</p>
+                  <h2 id="face-4-title">Bring your people.<br /><em>Bring your dog.</em></h2>
+                  <p>A table can be a small public square. A place for neighbors, early birds, visiting friends, and the animal who always gets the last fry.</p>
+                  <button class="ink-button ink-button--light" type="button" data-face-target="5">keep the idea moving <span aria-hidden="true">↗</span></button>
+                </div>
+                <div class="people-art art-frame art-frame--wide">
+                  <img class="asset-image asset-image--dance" src="assets/dance.svg" alt="A two-ink editorial print of humans and animals dancing together in a line." />
+                </div>
+              </div>
+              <div class="face__footer"><span>no one eats alone</span><span>04 / 06</span></div>
+            </section>
+
+            <section class="face face--bottom" id="face-5" data-face="5" aria-labelledby="face-5-title">
+              <div class="face__inner face__inner--invite">
+                <div class="invite-copy">
+                  <p class="eyebrow"><span class="eyebrow__mark"></span> not open yet</p>
+                  <h2 id="face-5-title">Help us find<br /><em>the right morning.</em></h2>
+                  <p>Tell us what would make you leave the house for breakfast. We are collecting small clues before we choose a street, a room, or a date.</p>
+                  <form class="interest-form" id="interest-form">
+                    <label class="sr-only" for="email">Email address</label>
+                    <input id="email" name="email" type="email" autocomplete="email" placeholder="your email, if you want in" required />
+                    <button class="ink-button" type="submit">leave a small hello <span aria-hidden="true">↗</span></button>
+                  </form>
+                  <p class="form-note" id="form-note" role="status">No spam. Just a note when the idea moves.</p>
+                </div>
+                <div class="invite-mark" aria-hidden="true">
+                  <span class="invite-mark__heart">♥</span>
+                  <span class="invite-mark__circle"></span>
+                  <span class="invite-mark__word">open:heart</span>
+                </div>
+              </div>
+              <div class="face__footer"><span>thank you for looking</span><span>05 / 06</span></div>
+            </section>
+          </div>
+          <div class="scene__shade" aria-hidden="true"></div>
+          <div class="scene__edge" aria-hidden="true"></div>
+        </div>
+
+        <div class="scroll-step" data-step="0"></div>
+        <div class="scroll-step" data-step="1"></div>
+        <div class="scroll-step" data-step="2"></div>
+        <div class="scroll-step" data-step="3"></div>
+        <div class="scroll-step" data-step="4"></div>
+        <div class="scroll-step" data-step="5"></div>
+      </div>
+    </main>
+
+    <noscript>
+      <div class="no-script-note">JavaScript is off, so the six pages are shown in a simple reading order.</div>
+    </noscript>
+    <script src="app.js" defer></script>
+  </body>
+</html>
