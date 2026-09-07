@@ -99,3 +99,17 @@ body:not(.is-flat) #scroll-track{height:600svh}body:not(.is-flat) #scene{positio
   .layout-reference .topbar nav{display:none}
   .layout-reference .logo{font-size:12vw;gap:8vw}
 }
+
+/* In 3D mode the page-turn controls stay reachable while the scene moves underneath. */
+body:not(.is-flat) .reference-chrome{position:fixed;inset:auto 2.4vw 22px;display:flex;align-items:end;justify-content:space-between;gap:24px;z-index:90;font:10px var(--mono);text-transform:uppercase;color:var(--accent);pointer-events:none}
+body:not(.is-flat) .reference-chrome>div{pointer-events:auto}
+body:not(.is-flat) .logo{pointer-events:auto}
+body:not(.is-flat) .reference-chrome{background:transparent;border:0;padding:0;color:var(--ink)}
+body:not(.is-flat) .reference-chrome>div,body:not(.is-flat) .reference-hint{background:var(--paper);border:1px solid var(--line);padding:8px 10px}
+@media(min-width:801px){
+  body:not(.is-flat) .hero-intro{margin-top:82px}
+}
+@media(max-width:800px){
+  body:not(.is-flat) .reference-chrome{inset:auto 6vw 16px}
+  body:not(.is-flat) .hero-intro{margin-top:28px}
+}

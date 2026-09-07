@@ -36,6 +36,8 @@ Source: https://en.wikisource.org/wiki/The_Complete_Works_of_Swami_Vivekananda/V
 
 The supplied Pretext demo page includes text reflow around moving objects and organic text shapes. The actual library's primary source is https://github.com/chenglou/pretext . Its line-by-line layout is suitable for computing text inside a changing leaf silhouette; it is not itself a shape or animation engine.
 
+The CSS 3D experiment keeps page movement at the document level. Wheel input is routed past the individual face scroll containers, transformed inactive faces have pointer hit testing disabled, and the fixed page pager remains available while the prism rotates. This keeps the experiment discoverable without making the default simple-scroll view carry its chrome.
+
 Implemented treatment: one generous leaf silhouette made from readable lines, with Pretext measuring and reflowing the lines and a slight contour response to pointer movement. The poem is also available in ordinary reading order through a plain-text toggle and remains readable when reduced motion is requested. No auto-scattering words or motion is required to read it. Keep the study visually subordinate until the poem and visual direction are approved.
 
 Reference: https://pretextjs.dev/pretext-demo

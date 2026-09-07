@@ -98,7 +98,11 @@
     body.classList.toggle('is-flat', flatMode);
     flatSelect.checked = flatMode;
     if (referenceHint) referenceHint.textContent = flatMode ? 'Scroll to explore' : 'Scroll to rotate';
-    faces.forEach(face => { face.inert = false; });
+    faces.forEach(face => {
+      face.inert = false;
+      face.removeAttribute('inert');
+      face.style.pointerEvents = flatMode ? '' : 'none';
+    });
     if (flatMode) {
       scene.classList.remove('is-transitioning');
       scene.dataset.face = String(currentFace);
@@ -131,17 +135,21 @@
     const segment = Math.min(Math.floor(progress), 4);
     const local = progress - segment;
     // Give each page a flat reading interval. Each pair shares a physical edge.
-    const t = clamp((local - 0.18) / 0.64, 0, 1);
+    const t = clamp((local - 0.1) / 0.8, 0, 1);
     const angle = t * 90;
     const vertical = segment < 3;
     const depth = (vertical ? scene.clientHeight : scene.clientWidth) / 2;
     const rotation = vertical ? `rotateX(${angle}deg)` : `rotateY(${-angle}deg)`;
     prism.style.transform = `translateZ(${-depth}px) ${rotation}`;
+    const interactiveFace = t < 0.5 ? segment : segment + 1;
     faces.forEach((face, i) => {
       const outgoing = i === segment;
       const incoming = i === segment + 1;
-      face.style.visibility = outgoing || incoming ? 'visible' : 'hidden';
-      face.inert = i !== (t < 0.5 ? segment : segment + 1);
+      const visible = outgoing || incoming;
+      face.style.visibility = visible ? 'visible' : 'hidden';
+      face.inert = !visible;
+      face.toggleAttribute('inert', !visible);
+      face.style.pointerEvents = i === interactiveFace ? 'auto' : 'none';
       face.style.transform = outgoing ? `translateZ(${depth}px)` : incoming ? `${vertical ? 'rotateX(-90deg)' : 'rotateY(90deg)'} translateZ(${depth}px)` : 'none';
       face.style.setProperty('--shade', String(outgoing ? 0.42 * t : 0.5 * (1 - t)));
       face.style.setProperty('--shade-direction', vertical ? (outgoing ? 'to bottom' : 'to top') : (outgoing ? 'to right' : 'to left'));
@@ -170,6 +178,35 @@
     const top = track.offsetTop + ((track.offsetHeight - (window.visualViewport?.height || window.innerHeight)) * target) / 5;
     window.scrollTo({ top, behavior: prefersReducedMotion.matches ? 'auto' : 'smooth' });
   }
+
+  function route3dWheel(event) {
+    if (flatMode || event.defaultPrevented || event.ctrlKey || event.metaKey || !event.deltaY) return;
+    const target = event.target instanceof Element ? event.target : null;
+    if (target?.closest('.developer-panel')) return;
+    event.preventDefault();
+    window.scrollBy(0, event.deltaY);
+  }
+
+  window.addEventListener('wheel', route3dWheel, { passive: false, capture: true });
+
+  const faceHashMap = new Map([
+    ['#face-0', 0],
+    ['#story', 1],
+    ['#menu', 2],
+    ['#atmosphere', 3],
+    ['#visit', 4]
+  ]);
+  document.querySelectorAll('a[href^="#"]').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      if (flatMode) return;
+      const hash = link.getAttribute('href');
+      const target = faceHashMap.get(hash);
+      if (target === undefined) return;
+      event.preventDefault();
+      window.history.replaceState(null, '', hash);
+      goToFace(target);
+    });
+  });
 
   function applyComposition(mode = 'print-room') {
     const reference = mode === 'centered-pair';

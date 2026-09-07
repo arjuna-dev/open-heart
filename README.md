@@ -75,6 +75,8 @@ Then open [http://localhost:4173/](http://localhost:4173/).
 
 The page also remains readable as a normal document when JavaScript is disabled, when reduced motion is requested, or when **Developer view > Simple scroll (no 3D)** is enabled. CSS 3D mode connects adjacent full-viewport sections with shared physical edges, local shading, and separate poses for the final two sections.
 
+In CSS 3D mode, wheel and trackpad movement advances the outer page sequence even when the pointer is over face content. Only the front face receives pointer interaction, so links and text selection remain usable. The fixed **Turn the page** pager is available in 3D and centered reference modes; it stays hidden in the default simple-scroll view.
+
 ## Repository map
 
 - [`index.html`](index.html) contains the landing page faces, menu content, and developer controls.
