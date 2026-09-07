@@ -7,9 +7,9 @@
   const faceButtons = [...document.querySelectorAll('.face-button')];
   const faceTargets = [...document.querySelectorAll('[data-face-target]')];
   const paletteSelect = document.querySelector('#palette-select');
-  const assetSelect = document.querySelector('#asset-select');
   const flatSelect = document.querySelector('#flat-select');
-  const layoutSelect = document.querySelector('#layout-select');
+  const compositionSelect = document.querySelector('#composition-select');
+  const referenceHint = document.querySelector('#reference-hint');
   const interestForm = document.querySelector('#interest-form');
   const formNote = document.querySelector('#form-note');
 
@@ -18,47 +18,25 @@
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
   const categoryAssets = {
-    benedict: {
-      chatgpt: 'assets/posters/chatgpt/01-avocado-benedict.png',
-      gemini: 'assets/posters/gemini/01-avocado-benedict.jpg'
-    },
-    sandwiches: {
-      chatgpt: 'assets/posters/chatgpt/03-vegan-salmon.png',
-      gemini: 'assets/posters/gemini/03-vegan-salmon.jpg'
-    },
-    salads: {
-      chatgpt: 'assets/posters/chatgpt/06-vegan-caesar.png',
-      gemini: 'assets/posters/gemini/06-vegan-caesar.jpg'
-    },
-    entrees: {
-      chatgpt: 'assets/posters/chatgpt/07-bbq-cauliflower.png',
-      gemini: 'assets/posters/gemini/07-bbq-cauliflower.jpg'
-    },
-    sauces: {
-      chatgpt: 'assets/posters/chatgpt/08-five-sauces.png',
-      gemini: 'assets/posters/gemini/08-five-sauces.jpg'
-    },
-    desserts: {
-      chatgpt: 'assets/posters/chatgpt/09-avocado-key-lime-pie.png',
-      gemini: 'assets/posters/gemini/09-avocado-key-lime-pie.jpg'
-    },
-    drinks: {
-      chatgpt: 'assets/posters/chatgpt/10-something-warm.png',
-      gemini: 'assets/posters/gemini/10-something-warm.jpg'
-    }
+    benedict: 'assets/posters/chatgpt/01-avocado-benedict.png',
+    sandwiches: 'assets/posters/chatgpt/03-vegan-salmon.png',
+    salads: 'assets/posters/chatgpt/06-vegan-caesar.png',
+    entrees: 'assets/posters/chatgpt/07-bbq-cauliflower.png',
+    sauces: 'assets/posters/chatgpt/08-five-sauces.png',
+    desserts: 'assets/menu/key-lime-chatgpt.png',
+    drinks: 'assets/posters/chatgpt/10-something-warm.png'
   };
 
-  function applyCategoryAssets(provider = 'chatgpt') {
+  function applyCategoryAssets() {
     document.querySelectorAll('[data-category-art]').forEach((figure) => {
       const asset = categoryAssets[figure.dataset.categoryArt];
       const image = figure.querySelector('img');
-      const src = asset?.[provider] || asset?.chatgpt;
-      if (!src || !image) return;
-      image.src = src;
+      if (!asset || !image) return;
+      image.src = asset;
     });
   }
 
-  applyCategoryAssets('chatgpt');
+  applyCategoryAssets();
 
   const categoryTabs = [...document.querySelectorAll('[data-category-tab]')];
   const categorySlides = [...document.querySelectorAll('[data-category-slide]')];
@@ -98,7 +76,7 @@
   };
   const startCategoryAutoplay = () => {
     if (categoryTimer || prefersReducedMotion.matches || categorySlides.length < 2) return;
-    categoryTimer = window.setInterval(() => showCategory(activeCategory + 1), 6500);
+    categoryTimer = window.setInterval(() => showCategory(activeCategory + 1), 4200);
   };
   menuSwitcher?.addEventListener('mouseenter', stopCategoryAutoplay);
   menuSwitcher?.addEventListener('mouseleave', startCategoryAutoplay);
@@ -119,6 +97,7 @@
   function applyFlatMode() {
     body.classList.toggle('is-flat', flatMode);
     flatSelect.checked = flatMode;
+    if (referenceHint) referenceHint.textContent = flatMode ? 'Scroll to explore' : 'Scroll to rotate';
     faces.forEach(face => { face.inert = false; });
     if (flatMode) {
       scene.classList.remove('is-transitioning');
@@ -192,13 +171,13 @@
     window.scrollTo({ top, behavior: prefersReducedMotion.matches ? 'auto' : 'smooth' });
   }
 
-  function applyLayout(layout = 'print-room') {
-    const quiet = layout === 'quiet-sheets';
-    body.classList.toggle('layout-quiet', quiet);
-    root.dataset.layout = quiet ? 'quiet-sheets' : 'print-room';
+  function applyComposition(mode = 'print-room') {
+    const reference = mode === 'centered-pair';
+    body.classList.toggle('layout-reference', reference);
+    root.dataset.composition = reference ? 'centered-pair' : 'print-room';
   }
 
-  layoutSelect?.addEventListener('change', (event) => applyLayout(event.target.value));
+  compositionSelect?.addEventListener('change', (event) => applyComposition(event.target.value));
 
   const pretextStage = document.querySelector('#pretext-stage');
   const pretextLines = document.querySelector('#pretext-lines');
@@ -302,14 +281,6 @@
     document.querySelector('meta[name="theme-color"]')?.setAttribute('content', getComputedStyle(root).getPropertyValue('--paper').trim());
   });
 
-  assetSelect.addEventListener('change', (event) => {
-    const asset = event.target.value;
-    root.dataset.asset = asset;
-    const hero = document.querySelector('#hero-image');
-    if (hero) hero.src = asset === 'gemini' ? 'assets/posters/gemini/01-avocado-benedict.jpg' : 'assets/posters/chatgpt/01-avocado-benedict.png';
-    applyCategoryAssets(asset);
-  });
-
   flatSelect.addEventListener('change', (event) => {
     flatMode = event.target.checked;
     applyFlatMode();
@@ -328,10 +299,6 @@
     if (!event.matches) startCategoryAutoplay();
     applyFlatMode();
     requestPoseUpdate();
-  });
-
-  document.querySelector('#logo-select')?.addEventListener('change', event => {
-    body.classList.toggle('logo-stacked', event.target.value === 'stacked');
   });
 
   interestForm?.addEventListener('submit', (event) => {
@@ -363,7 +330,7 @@
     button.blur();
   });
 
-  applyLayout(layoutSelect?.value || 'print-room');
+  applyComposition(compositionSelect?.value || 'print-room');
   applyFlatMode();
   requestPoseUpdate();
 })();

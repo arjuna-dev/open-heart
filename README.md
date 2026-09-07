@@ -19,6 +19,8 @@ The project is not selling breakfast as a category. It is exploring the experien
 
 The local prototype is a six-section story with a menu area, developer controls, palette experiments, and a print-room archive. Normal scrolling is the default. The page also includes a CSS 3D prism experiment for the six full-viewport faces.
 
+The production hero is locked to the strongest ChatGPT menu artwork, and the developer menu exposes only four deliberate web recipes: Cyan + brick red, Electric blue + carbon, Mono / aubergine, and Mono / electric blue. The poster archive still preserves the paired ChatGPT and Gemini experiments for review, but the live page does not switch generated providers.
+
 The intended information hierarchy is:
 
 1. A clear invitation to discover a plant-based creation.
@@ -77,7 +79,7 @@ The page also remains readable as a normal document when JavaScript is disabled,
 
 - [`index.html`](index.html) contains the landing page faces, menu content, and developer controls.
 - [`styles.css`](styles.css) contains the print system, palette recipes, responsive layout, and CSS 3D geometry.
-- [`app.js`](app.js) handles scroll poses, simple-scroll mode, palette switching, provider asset switching, the auto-rotating category carousel, layout switching, and the Pretext study.
+- [`app.js`](app.js) handles scroll poses, simple-scroll mode, palette switching, the auto-rotating category carousel, composition switching, and the Pretext study.
 - [`menu.json`](menu.json) is the working menu inventory and remains a hypothesis.
 - [`EXPLORATION.md`](EXPLORATION.md) records the design and asset decisions from this pass.
 - [`AGENTS.md`](AGENTS.md) is the project agent story and decision guardrail.
@@ -91,11 +93,10 @@ The repository includes a GitHub Actions workflow for the static site. A push to
 
 The **Studio controls** menu can compare:
 
-1. The full print-room layout and the quieter sparse-section layout based on the earlier successful design.
-2. The exact palette swatches, including one-ink recipes and two-ink recipes.
-3. The accepted poster selection against the ChatGPT and Gemini versions.
-4. The horizontal and stacked oversized O and H wordmark studies.
-5. Normal scrolling against the CSS 3D experiment.
+1. The four approved web ink recipes, including two-ink and strict mono-color directions.
+2. The full print-room editorial composition against a developer-only centered-pair composition based on the supplied sparse reference.
+3. The baseline Open Heart wordmark with its oversized O and H.
+4. Normal scrolling against the CSS 3D experiment.
 
 Useful next decisions are the final typeface, which poster pair leads each category, and which practical restaurant details replace the current concept fields. Only then should the hosted ChatGPT Sites version replace or accompany the static prototype.
 

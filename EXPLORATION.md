@@ -14,7 +14,7 @@ Generated posters are visual studies. Rebuild approved typography as live access
 
 The current content structure is a compact introduction, ONE auto-rotating menu carousel whose slides are categories, an atmosphere study with the interactive text treatment, and concise find-us/contact/hours/language fields. No invented dog policy, manifesto or repeated menu-only pages. Real address and hours should replace the concept fields before launch.
 
-The developer menu includes two layout directions. `Print room / full editorial` uses the more expressive composition. `Quiet sheets / original structure` returns to the earlier successful direction: alternating paper and color sections, generous empty space, and a small centered story with copy on the left and an image on the right.
+The developer menu includes two composition directions. `Print room / full editorial` is the production direction. `Centered pair / reference` is a developer-only sparse study based on the supplied reference: large empty fields, a small left copy block, a right-hand image, and fixed studio chrome. The baseline Open Heart wordmark is used in both modes.
 
 ## Generation and review
 
