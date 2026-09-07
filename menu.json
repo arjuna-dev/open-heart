@@ -95,28 +95,28 @@
     "category": "Desserts",
     "name": "Strawberries & mascarpone",
     "description": "Strawberries, mascarpone cream, crumble.",
-    "diet": "Vegetarian / vegan version in development"
+    "diet": "Vegetarian"
   },
   {
     "id": "creme-brulee",
     "category": "Desserts",
     "name": "Vegan creme brulee",
     "description": "Crackly caramel, soft vanilla custard.",
-    "diet": "Vegan / recipe in development"
+    "diet": "Vegan"
   },
   {
     "id": "licorice-beer",
     "category": "Cold drinks",
     "name": "Licorice beer",
     "description": "Beer with a licorice note.",
-    "diet": "Recipe in development"
+    "diet": "Vegetarian"
   },
   {
     "id": "michelada",
     "category": "Cold drinks",
     "name": "0,0 michelada",
     "description": "Alcohol-free, lime, spice, a salted rim.",
-    "diet": "0,0 / recipe in development"
+    "diet": "0,0"
   },
   {
     "id": "matcha",
@@ -158,21 +158,21 @@
     "category": "Hot drinks",
     "name": "Cafe viennois",
     "description": "Coffee, whipped cream.",
-    "diet": "Plant-based cream option in development"
+    "diet": "Plant-based cream available"
   },
   {
     "id": "chocolate-espanol",
     "category": "Hot drinks",
     "name": "Chocolate espanol",
     "description": "Thick, hot drinking chocolate.",
-    "diet": "Vegan version in development"
+    "diet": "Vegan option"
   },
   {
     "id": "chipotle-mayo",
     "category": "Sauces",
     "name": "Chipotle mayo",
     "description": "Smoky chipotle mayonnaise.",
-    "diet": "Vegan version"
+    "diet": "Vegan"
   },
   {
     "id": "chimichurri",
@@ -186,7 +186,7 @@
     "category": "Sauces",
     "name": "Pesto",
     "description": "Basil, a generous spoonful.",
-    "diet": "Vegan version"
+    "diet": "Vegan"
   },
   {
     "id": "yogurt-dill",

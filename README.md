@@ -17,29 +17,31 @@ The project is not selling breakfast as a category. It is exploring the experien
 
 ## Landing page
 
-The local prototype is a six-section story with a menu area, developer controls, palette experiments, and a print-room archive. The current page includes a first pass of the content and menu data, but it is still a design instrument rather than a finished restaurant website.
+The local prototype is a six-section story with a menu area, developer controls, palette experiments, and a print-room archive. Normal scrolling is the default. The page also includes a CSS 3D prism experiment for the six full-viewport faces.
 
 The intended information hierarchy is:
 
 1. A clear invitation to discover a plant-based creation.
 2. Vegan eggs Benedict as the memorable proof point.
-3. A menu carousel whose slides are menu sections, rather than a separate page for every category.
+3. One automatically rotating menu carousel whose slides are menu sections, rather than a separate page for every category. Each category has one poster image and a text carousel of dishes.
 4. Atmosphere and Copenhagen references used as visual context, not unsupported location claims.
-5. Dummy opening hours, contact, find-us, and language sections for layout testing only.
+5. Opening hours, contact, find-us, and language areas that can be filled with final restaurant details.
 6. A lightweight action such as feedback, an interest list, or following the concept.
 
 ## Image collection
 
-The asset archive contains **41 files**:
+The repository now contains a paired poster set of **20 accepted assets**:
 
-- 25 current studies
-- 1 study under review
-- 10 rejected attempts retained for comparison
-- 5 legacy files kept for historical reference
+- 10 ChatGPT posters in [`assets/posters/chatgpt/`](assets/posters/chatgpt/)
+- 10 Gemini posters in [`assets/posters/gemini/`](assets/posters/gemini/)
+- 2 rejected poster attempts in [`assets/posters/rejected/`](assets/posters/rejected/)
 
-The current and review sets include menu studies for Benedict variations, sandwiches, salads, cauliflower wings, fries, desserts, michelada, hot drinks, Copenhagen architecture, and people or animals holding hands. The generated studies were made through both the ChatGPT and Gemini browser interfaces, with the supplied fish and rooster poster references used during the exploration.
+The poster subjects cover the signature Benedicts, sandwiches, salads, cauliflower wings, sauces, desserts, and drinks. Every poster in the accepted batch was generated through the integrated in-app Browser with a source image attached to the prompt. The paired set uses one or two intentional inks plus paper, consistent type direction, and no CSS recoloring. Earlier menu, Copenhagen, and human-animal studies remain in the wider catalog for comparison.
+
+The wider catalog currently contains 45 current studies, one review item, five legacy references, and rejected comparison files. The poster count above refers only to the new accepted pair set.
 
 Open the local print room at [`studio.html`](studio.html) to browse the catalog and see which studies are current, under review, rejected, or legacy. The machine-readable inventory is [`assets/catalog.json`](assets/catalog.json).
+The generation brief and complete poster index are in [`assets/posters/README.md`](assets/posters/README.md).
 
 The weak legacy SVG experiments are intentionally not part of the current visual system:
 
@@ -55,9 +57,9 @@ The earlier, simpler alternating-section design is preserved on the branch [`arc
 
 ## Poem and interactive text
 
-The poem idea remains an experiment, not approved landing-page copy. The candidate text is Swami Vivekananda's *To a Friend*, which speaks about love across humans, animals, and other living beings. The source and the exact edition or translation should be checked before publishing.
+The atmosphere section includes an optional interactive text study based on Swami Vivekananda's *To a Friend*, which speaks about love across humans, animals, and other living beings. The source and the exact edition or translation should be checked before publishing.
 
-The likely technical experiment is to use [Pretext](https://pretextjs.dev/pretext-demo) for text measurement and reflow around an animated or shaped object. Pretext is a layout engine, so the shape, interaction, and motion would still belong to our own page layer. Keep the poem optional and subordinate to the food and place experience.
+The page loads [Pretext](https://pretextjs.dev/pretext-demo) for line measurement and reflow inside a leaf-shaped composition, with a local fallback, pointer response, plain-reading toggle, and reduced-motion support. Pretext is a layout engine, so the shape and interaction belong to our own page layer. The poem remains optional and subordinate to the food and place experience.
 
 ## Run locally
 
@@ -75,7 +77,7 @@ The page also remains readable as a normal document when JavaScript is disabled,
 
 - [`index.html`](index.html) contains the landing page faces, menu content, and developer controls.
 - [`styles.css`](styles.css) contains the print system, palette recipes, responsive layout, and CSS 3D geometry.
-- [`app.js`](app.js) handles scroll poses, simple-scroll mode, palette switching, asset switching, and menu controls.
+- [`app.js`](app.js) handles scroll poses, simple-scroll mode, palette switching, provider asset switching, the auto-rotating category carousel, layout switching, and the Pretext study.
 - [`menu.json`](menu.json) is the working menu inventory and remains a hypothesis.
 - [`EXPLORATION.md`](EXPLORATION.md) records the design and asset decisions from this pass.
 - [`AGENTS.md`](AGENTS.md) is the project agent story and decision guardrail.
@@ -85,13 +87,17 @@ The page also remains readable as a normal document when JavaScript is disabled,
 
 The repository includes a GitHub Actions workflow for the static site. A push to `main` triggers the deployment once GitHub Pages is configured to use GitHub Actions.
 
-## Useful next decisions
+## Developer comparisons
 
-1. Choose the strongest wordmark type direction while keeping the oversized O and H ratio.
-2. Refactor the menu into one category carousel with a clear active-category cue.
-3. Decide which current image studies deserve cleanup, redraw, or live HTML type over the generated artwork.
-4. Test the short landing-page story with a few people and record what they remember.
-5. Only then decide whether a hosted ChatGPT Sites version should replace or accompany the static prototype.
+The **Studio controls** menu can compare:
+
+1. The full print-room layout and the quieter sparse-section layout based on the earlier successful design.
+2. The exact palette swatches, including one-ink recipes and two-ink recipes.
+3. The accepted poster selection against the ChatGPT and Gemini versions.
+4. The horizontal and stacked oversized O and H wordmark studies.
+5. Normal scrolling against the CSS 3D experiment.
+
+Useful next decisions are the final typeface, which poster pair leads each category, and which practical restaurant details replace the current concept fields. Only then should the hosted ChatGPT Sites version replace or accompany the static prototype.
 
 ## Working principles
 

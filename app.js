@@ -9,63 +9,63 @@
   const paletteSelect = document.querySelector('#palette-select');
   const assetSelect = document.querySelector('#asset-select');
   const flatSelect = document.querySelector('#flat-select');
-  const menuImage = document.querySelector('.asset-image--menu');
-  const cityImage = document.querySelector('.asset-image--city');
-  const danceImage = document.querySelector('.asset-image--dance');
-  const coffeeArt = document.querySelector('.coffee-art');
+  const layoutSelect = document.querySelector('#layout-select');
   const interestForm = document.querySelector('#interest-form');
   const formNote = document.querySelector('#form-note');
-
-  const dishAssets = {
-    'benedict-avocado': 'assets/menu/benedict-avocado-chatgpt.png',
-    'benedict-lime': 'assets/menu/benedict-lime-chatgpt.png',
-    'benedict-chipotle': 'assets/menu/benedict-chipotle-chatgpt.png',
-    'salmon-sandwich': 'assets/menu/salmon-chatgpt-variant.png',
-    'pulled-sandwich': 'assets/menu/pulled-chatgpt.png',
-    'mango-salad': 'assets/menu/mango-gemini.jpg',
-    'caesar-salad': 'assets/menu/caesar-chatgpt.png',
-    'protein-salad': 'assets/menu/protein-gemini.jpg',
-    'cauliflower-wings': 'assets/menu/cauliflower-chatgpt.png',
-    'fries-rosemary': 'assets/menu/fries-rosemary-chatgpt.png',
-    'key-lime-pie': 'assets/menu/key-lime-chatgpt.png',
-    'strawberries-cream': 'assets/menu/strawberries-chatgpt.png'
-  };
-
-  const dishGeminiAssets = {
-    'benedict-avocado': 'assets/menu/benedict-avocado-gemini.jpg',
-    'benedict-lime': 'assets/menu/benedict-lime-gemini.jpg',
-    'pulled-sandwich': 'assets/menu/pulled-gemini.jpg',
-    'mango-salad': 'assets/menu/mango-gemini.jpg',
-    'caesar-salad': 'assets/menu/caesar-gemini.jpg',
-    'protein-salad': 'assets/menu/protein-gemini.jpg',
-    'cauliflower-wings': 'assets/menu/cauliflower-gemini.jpg',
-    'fries-rosemary': 'assets/menu/fries-rosemary-gemini.jpg',
-    'strawberries-cream': 'assets/menu/strawberries-gemini.jpg'
-  };
 
   body.classList.add('js-ready');
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-  function applyDishAssets(provider = 'selected') {
-    document.querySelectorAll('.dish[data-item]').forEach((dish) => {
-      const selected = dishAssets[dish.dataset.item];
-      const src = provider === 'gemini' ? (dishGeminiAssets[dish.dataset.item] || selected) : selected;
-      const image = dish.querySelector('img');
-      const figure = dish.querySelector('.dish-art');
-      if (!src || !image || !figure) return;
+  const categoryAssets = {
+    benedict: {
+      chatgpt: 'assets/posters/chatgpt/01-avocado-benedict.png',
+      gemini: 'assets/posters/gemini/01-avocado-benedict.jpg'
+    },
+    sandwiches: {
+      chatgpt: 'assets/posters/chatgpt/03-vegan-salmon.png',
+      gemini: 'assets/posters/gemini/03-vegan-salmon.jpg'
+    },
+    salads: {
+      chatgpt: 'assets/posters/chatgpt/06-vegan-caesar.png',
+      gemini: 'assets/posters/gemini/06-vegan-caesar.jpg'
+    },
+    entrees: {
+      chatgpt: 'assets/posters/chatgpt/07-bbq-cauliflower.png',
+      gemini: 'assets/posters/gemini/07-bbq-cauliflower.jpg'
+    },
+    sauces: {
+      chatgpt: 'assets/posters/chatgpt/08-five-sauces.png',
+      gemini: 'assets/posters/gemini/08-five-sauces.jpg'
+    },
+    desserts: {
+      chatgpt: 'assets/posters/chatgpt/09-avocado-key-lime-pie.png',
+      gemini: 'assets/posters/gemini/09-avocado-key-lime-pie.jpg'
+    },
+    drinks: {
+      chatgpt: 'assets/posters/chatgpt/10-something-warm.png',
+      gemini: 'assets/posters/gemini/10-something-warm.jpg'
+    }
+  };
+
+  function applyCategoryAssets(provider = 'chatgpt') {
+    document.querySelectorAll('[data-category-art]').forEach((figure) => {
+      const asset = categoryAssets[figure.dataset.categoryArt];
+      const image = figure.querySelector('img');
+      const src = asset?.[provider] || asset?.chatgpt;
+      if (!src || !image) return;
       image.src = src;
-      figure.hidden = false;
     });
   }
 
-  applyDishAssets();
+  applyCategoryAssets('chatgpt');
 
   const categoryTabs = [...document.querySelectorAll('[data-category-tab]')];
   const categorySlides = [...document.querySelectorAll('[data-category-slide]')];
   const categoryCount = document.querySelector('#menu-category-count');
   const categoryPrevious = document.querySelector('#menu-category-prev');
   const categoryNext = document.querySelector('#menu-category-next');
+  const menuSwitcher = document.querySelector('.menu-switcher');
   let activeCategory = 0;
 
   function showCategory(index) {
@@ -90,6 +90,23 @@
   categoryPrevious?.addEventListener('click', () => showCategory(activeCategory - 1));
   categoryNext?.addEventListener('click', () => showCategory(activeCategory + 1));
   showCategory(0);
+
+  let categoryTimer = 0;
+  const stopCategoryAutoplay = () => {
+    if (categoryTimer) window.clearInterval(categoryTimer);
+    categoryTimer = 0;
+  };
+  const startCategoryAutoplay = () => {
+    if (categoryTimer || prefersReducedMotion.matches || categorySlides.length < 2) return;
+    categoryTimer = window.setInterval(() => showCategory(activeCategory + 1), 6500);
+  };
+  menuSwitcher?.addEventListener('mouseenter', stopCategoryAutoplay);
+  menuSwitcher?.addEventListener('mouseleave', startCategoryAutoplay);
+  menuSwitcher?.addEventListener('focusin', stopCategoryAutoplay);
+  menuSwitcher?.addEventListener('focusout', (event) => {
+    if (!menuSwitcher.contains(event.relatedTarget)) startCategoryAutoplay();
+  });
+  startCategoryAutoplay();
 
   const supports3d = CSS.supports('transform-style', 'preserve-3d') && CSS.supports('perspective', '1px');
   let flatMode = flatSelect.checked || prefersReducedMotion.matches || !supports3d;
@@ -175,6 +192,111 @@
     window.scrollTo({ top, behavior: prefersReducedMotion.matches ? 'auto' : 'smooth' });
   }
 
+  function applyLayout(layout = 'print-room') {
+    const quiet = layout === 'quiet-sheets';
+    body.classList.toggle('layout-quiet', quiet);
+    root.dataset.layout = quiet ? 'quiet-sheets' : 'print-room';
+  }
+
+  layoutSelect?.addEventListener('change', (event) => applyLayout(event.target.value));
+
+  const pretextStage = document.querySelector('#pretext-stage');
+  const pretextLines = document.querySelector('#pretext-lines');
+  const pretextToggle = document.querySelector('#pretext-toggle');
+  const pretextStatus = document.querySelector('#pretext-status');
+  const poemText = 'In Devas, beasts, birds, insects, and in worms,\nThis Prema dwells. Who loves all beings without distinction,\nHe indeed is worshipping best his God.';
+  let pretextApi = null;
+  let pretextPlain = false;
+
+  function renderPretextFallback(width, lineHeight) {
+    const words = poemText.replaceAll('\n', ' ').split(/\s+/);
+    const lines = [];
+    let line = '';
+    words.forEach((word) => {
+      const candidate = line ? `${line} ${word}` : word;
+      if (candidate.length > 28 && line) {
+        lines.push(line);
+        line = word;
+      } else {
+        line = candidate;
+      }
+    });
+    if (line) lines.push(line);
+    return lines.map((text, i) => ({ text, width: width * (0.55 + 0.4 * Math.sin(Math.PI * ((i + 0.5) / lines.length))), y: i * lineHeight }));
+  }
+
+  function renderPretext() {
+    if (!pretextStage || !pretextLines || pretextPlain) return;
+    const stageWidth = pretextStage.clientWidth;
+    if (!stageWidth) return;
+    const lineHeight = window.innerWidth < 800 ? 22 : 27;
+    const bodyStyle = getComputedStyle(pretextLines);
+    const canvasFont = `${bodyStyle.fontWeight} ${bodyStyle.fontSize} ${bodyStyle.fontFamily}`;
+    const prepared = pretextApi?.prepareWithSegments(poemText, canvasFont, { whiteSpace: 'pre-wrap' });
+    const maxWidth = Math.max(220, stageWidth - 36);
+    const lines = [];
+    let cursor = { segmentIndex: 0, graphemeIndex: 0 };
+    let safety = 0;
+    while (prepared && safety < 40) {
+      const y = lines.length * lineHeight;
+      const t = lines.length / 8;
+      const width = maxWidth * (0.48 + 0.47 * Math.sin(Math.PI * Math.min(t, 1)));
+      const next = pretextApi.layoutNextLine(prepared, cursor, width);
+      if (!next) break;
+      lines.push({ text: next.text, width, y });
+      cursor = next.end;
+      safety += 1;
+    }
+    const resolved = lines.length ? lines : renderPretextFallback(maxWidth, lineHeight);
+    pretextLines.replaceChildren(...resolved.map((entry) => {
+      const line = document.createElement('span');
+      line.textContent = entry.text;
+      line.style.width = `${entry.width}px`;
+      line.style.left = `calc(50% - ${entry.width / 2}px)`;
+      line.style.top = `${entry.y}px`;
+      return line;
+    }));
+    pretextLines.style.height = `${Math.max(170, resolved.length * lineHeight + 10)}px`;
+  }
+
+  function setPretextPlain(plain) {
+    pretextPlain = plain;
+    if (!pretextStage || !pretextLines) return;
+    pretextStage.dataset.plain = String(plain);
+    pretextToggle?.setAttribute('aria-pressed', String(plain));
+    if (pretextToggle) pretextToggle.textContent = plain ? 'Shape the lines' : 'Read plainly';
+    if (pretextStatus) pretextStatus.textContent = plain ? 'Plain reading mode.' : (pretextApi ? 'Pretext layout active.' : 'Reading shape fallback active.');
+    if (plain) {
+      pretextLines.textContent = poemText;
+      pretextLines.style.height = 'auto';
+    } else {
+      renderPretext();
+    }
+  }
+
+  pretextToggle?.addEventListener('click', () => setPretextPlain(!pretextPlain));
+  pretextStage?.addEventListener('pointermove', (event) => {
+    const rect = pretextStage.getBoundingClientRect();
+    const x = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
+    const y = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
+    pretextStage.style.setProperty('--shape-x', `${x.toFixed(3)}deg`);
+    pretextStage.style.setProperty('--shape-y', `${y.toFixed(3)}deg`);
+  });
+  pretextStage?.addEventListener('pointerleave', () => {
+    pretextStage.style.setProperty('--shape-x', '0deg');
+    pretextStage.style.setProperty('--shape-y', '0deg');
+  });
+  if (pretextStage) {
+    import('https://esm.sh/@chenglou/pretext@0.0.8?bundle').then((module) => {
+      pretextApi = module;
+      if (pretextStatus) pretextStatus.textContent = 'Pretext layout active.';
+      renderPretext();
+    }).catch(() => {
+      if (pretextStatus) pretextStatus.textContent = 'Reading shape fallback active.';
+      renderPretext();
+    });
+  }
+
   paletteSelect.addEventListener('change', (event) => {
     root.dataset.palette = event.target.value;
     document.querySelector('meta[name="theme-color"]')?.setAttribute('content', getComputedStyle(root).getPropertyValue('--paper').trim());
@@ -184,9 +306,8 @@
     const asset = event.target.value;
     root.dataset.asset = asset;
     const hero = document.querySelector('#hero-image');
-    if (hero) hero.src = asset === 'gemini' ? 'assets/menu/benedict-avocado-gemini.jpg' : 'assets/menu/benedict-avocado-chatgpt.png';
-    applyDishAssets(asset);
-    coffeeArt?.classList.toggle('coffee-art--generated', asset === 'ink-03');
+    if (hero) hero.src = asset === 'gemini' ? 'assets/posters/gemini/01-avocado-benedict.jpg' : 'assets/posters/chatgpt/01-avocado-benedict.png';
+    applyCategoryAssets(asset);
   });
 
   flatSelect.addEventListener('change', (event) => {
@@ -199,10 +320,12 @@
   faceButtons.forEach((button) => button.addEventListener('click', () => goToFace(button.dataset.face)));
   faceTargets.forEach((button) => button.addEventListener('click', () => goToFace(button.dataset.faceTarget)));
   window.addEventListener('scroll', requestPoseUpdate, { passive: true });
-  window.addEventListener('resize', requestPoseUpdate, { passive: true });
+  window.addEventListener('resize', () => { requestPoseUpdate(); renderPretext(); }, { passive: true });
   window.visualViewport?.addEventListener('resize', requestPoseUpdate, { passive: true });
   prefersReducedMotion.addEventListener?.('change', (event) => {
     flatMode = event.matches || !supports3d;
+    stopCategoryAutoplay();
+    if (!event.matches) startCategoryAutoplay();
     applyFlatMode();
     requestPoseUpdate();
   });
@@ -240,6 +363,7 @@
     button.blur();
   });
 
+  applyLayout(layoutSelect?.value || 'print-room');
   applyFlatMode();
   requestPoseUpdate();
 })();
