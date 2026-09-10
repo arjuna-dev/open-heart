@@ -96,10 +96,12 @@ The repository includes a GitHub Actions workflow for the static site. A push to
 The **Studio controls** menu can compare:
 
 1. The four approved web ink recipes, including two-ink and strict mono-color directions.
-2. A centered-pair SMALL composition against a slightly more open centered-pair reference composition based on the supplied sparse study.
+2. A centered-pair SMALL composition against a visibly more open centered-pair reference composition based on the supplied sparse study. The distinction is preserved on desktop and mobile.
 3. The baseline Open Heart wordmark with its oversized O and H.
 4. The full category carousel against a much smaller ultra-minimal three-group menu or a menu constrained to the same centered-pair SMALL system as the other sections.
 5. Normal scrolling against the CSS 3D experiment.
+
+The previous full-editorial composition has been removed from both the controls and the stylesheet.
 
 Useful next decisions are the final typeface, which poster pair leads each category, and which practical restaurant details replace the current concept fields. Only then should the hosted ChatGPT Sites version replace or accompany the static prototype.
 
