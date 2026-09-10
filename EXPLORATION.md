@@ -14,7 +14,9 @@ Generated posters are visual studies. Rebuild approved typography as live access
 
 The current content structure is a compact introduction, ONE auto-rotating menu carousel whose slides are categories, an atmosphere study with the interactive text treatment, and concise find-us/contact/hours/language fields. No invented dog policy, manifesto or repeated menu-only pages. Real address and hours should replace the concept fields before launch.
 
-The developer menu includes two composition directions. `Print room / full editorial` is the production direction. `Centered pair / reference` is a developer-only sparse study based on the supplied reference: large empty fields, a small left copy block, a right-hand image, and fixed studio chrome. The baseline Open Heart wordmark is used in both modes.
+The developer menu includes two sparse composition directions. `Centered pair SMALL` is the tighter working direction, with a smaller central copy and image group. `Centered pair / reference` gives the group more room while preserving the supplied sparse study: large empty fields, a small left copy block, a right-hand image, and fixed studio chrome. The baseline Open Heart wordmark is used in both modes.
+
+The menu presentation can also switch from the image-led category carousel to an ultra-minimal text list. That study keeps the automatic rotation but consolidates the tabs into Benedict + sandwiches, entrees + sauces, and drinks + desserts.
 
 ## Generation and review
 

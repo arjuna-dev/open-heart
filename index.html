@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#FAFAF7">
   <meta name="description" content="Open Heart. A vegetarian place for original plant-based creations.">
   <title>Open Heart | Food and coffee</title>
-  <link rel="stylesheet" href="styles.css?v=3d-fix-4">
+  <link rel="stylesheet" href="styles.css?v=menu-modes-1">
 </head>
 <body class="is-flat">
   <a class="skip-link" href="#content">Skip to menu</a>
@@ -31,15 +31,21 @@
 
         <label for="composition-select">Composition mode</label>
         <select id="composition-select">
-          <option value="print-room">Print room / full editorial</option>
+          <option value="centered-pair-small" selected>Centered pair SMALL</option>
           <option value="centered-pair">Centered pair / reference</option>
+        </select>
+
+        <label for="menu-mode-select">Menu presentation</label>
+        <select id="menu-mode-select">
+          <option value="carousel" selected>Category carousel</option>
+          <option value="minimal-list">Ultra-minimal text list</option>
         </select>
 
         <label class="check">
           <input type="checkbox" id="flat-select" checked>
           Normal scrolling
         </label>
-        <p>Uncheck for the CSS 3D experiment. Image inks stay faithful to their generation recipe.</p>
+        <p>Uncheck for the CSS 3D experiment. Image inks stay faithful to their generation recipe. The menu list keeps three larger groups for comparison.</p>
         <a href="studio.html">View the asset archive -></a>
       </div>
     </details>
@@ -207,6 +213,59 @@
                   </section>
                 </div>
               </section>
+
+              <section class="minimal-menu" id="minimal-menu" aria-labelledby="minimal-menu-title" hidden>
+                <div class="minimal-menu__heading">
+                  <p class="section-kicker">At the table</p>
+                  <h2 id="minimal-menu-title">Open Heart, on the plate.</h2>
+                  <p class="minimal-menu__note">A short list of things worth making room for.</p>
+                </div>
+                <div class="minimal-menu__tabs" role="tablist" aria-label="Minimal menu groups">
+                  <button type="button" role="tab" id="minimal-tab-benedict" aria-selected="true" aria-controls="minimal-slide-benedict" data-minimal-tab="benedict">01 Benedict + sandwiches</button>
+                  <button type="button" role="tab" id="minimal-tab-entrees" aria-selected="false" aria-controls="minimal-slide-entrees" data-minimal-tab="entrees">02 Entrees + sauces</button>
+                  <button type="button" role="tab" id="minimal-tab-drinks" aria-selected="false" aria-controls="minimal-slide-drinks" data-minimal-tab="drinks">03 Drinks + desserts</button>
+                </div>
+                <div class="minimal-menu__viewport">
+                  <section class="minimal-menu__slide" id="minimal-slide-benedict" role="tabpanel" data-minimal-slide="benedict" aria-labelledby="minimal-tab-benedict">
+                    <ol class="minimal-menu__list">
+                      <li class="minimal-menu__item"><span>01</span><div><h3>Avocado Benedict</h3><p>Avocado, vegan egg, vegan hollandaise.</p></div></li>
+                      <li class="minimal-menu__item"><span>02</span><div><h3>Lime pickle Benedict</h3><p>Spiced peas, coriander hollandaise.</p></div></li>
+                      <li class="minimal-menu__item"><span>03</span><div><h3>Chipotle Benedict</h3><p>Charred corn, black beans, lime.</p></div></li>
+                      <li class="minimal-menu__item"><span>04</span><div><h3>Vegan salmon open sandwich</h3><p>Plant-based salmon, open-faced.</p></div></li>
+                      <li class="minimal-menu__item"><span>05</span><div><h3>Veggie pulled sandwich</h3><p>Pulled mushrooms, sharp slaw, BBQ sauce.</p></div></li>
+                    </ol>
+                  </section>
+                  <section class="minimal-menu__slide" id="minimal-slide-entrees" role="tabpanel" data-minimal-slide="entrees" aria-labelledby="minimal-tab-entrees" hidden>
+                    <ol class="minimal-menu__list">
+                      <li class="minimal-menu__item"><span>01</span><div><h3>BBQ no-chicken wings</h3><p>Breaded cauliflower, BBQ sauce.</p></div></li>
+                      <li class="minimal-menu__item"><span>02</span><div><h3>Plain fries</h3><p>Crisp potatoes, salt.</p></div></li>
+                      <li class="minimal-menu__item"><span>03</span><div><h3>Spicy fries</h3><p>Chilli-dusted potatoes.</p></div></li>
+                      <li class="minimal-menu__item"><span>04</span><div><h3>Rosemary fries</h3><p>Potatoes, rosemary, salt.</p></div></li>
+                      <li class="minimal-menu__item"><span>05</span><div><h3>Chipotle mayo</h3><p>Smoky, creamy, bright.</p></div></li>
+                      <li class="minimal-menu__item"><span>06</span><div><h3>Chimichurri</h3><p>Herbs, oil, a sharp finish.</p></div></li>
+                      <li class="minimal-menu__item"><span>07</span><div><h3>Pesto</h3><p>Basil, a generous spoonful.</p></div></li>
+                      <li class="minimal-menu__item"><span>08</span><div><h3>Yogurt dill</h3><p>Cool yogurt, fresh dill.</p></div></li>
+                      <li class="minimal-menu__item"><span>09</span><div><h3>Melted vegan cheese</h3><p>Warm, melted, plant-based.</p></div></li>
+                    </ol>
+                  </section>
+                  <section class="minimal-menu__slide" id="minimal-slide-drinks" role="tabpanel" data-minimal-slide="drinks" aria-labelledby="minimal-tab-drinks" hidden>
+                    <ol class="minimal-menu__list">
+                      <li class="minimal-menu__item"><span>01</span><div><h3>Matcha</h3><p>Whisked matcha.</p></div></li>
+                      <li class="minimal-menu__item"><span>02</span><div><h3>Hojicha</h3><p>Roasted Japanese green tea.</p></div></li>
+                      <li class="minimal-menu__item"><span>03</span><div><h3>Espresso</h3><p>Small, dark, concentrated.</p></div></li>
+                      <li class="minimal-menu__item"><span>04</span><div><h3>Cappuccino</h3><p>Espresso, steamed milk, soft foam.</p></div></li>
+                      <li class="minimal-menu__item"><span>05</span><div><h3>Decadent Earl Grey</h3><p>Vanilla, honey, milk.</p></div></li>
+                      <li class="minimal-menu__item"><span>06</span><div><h3>Cafe viennois</h3><p>Coffee, whipped cream.</p></div></li>
+                      <li class="minimal-menu__item"><span>07</span><div><h3>Chocolate espanol</h3><p>Thick, hot drinking chocolate.</p></div></li>
+                      <li class="minimal-menu__item"><span>08</span><div><h3>Licorice beer</h3><p>Beer with a licorice note.</p></div></li>
+                      <li class="minimal-menu__item"><span>09</span><div><h3>0,0 michelada</h3><p>Alcohol-free, lime, spice.</p></div></li>
+                      <li class="minimal-menu__item"><span>10</span><div><h3>Avocado key-lime pie</h3><p>Sharp lime, crisp crumb base.</p></div></li>
+                      <li class="minimal-menu__item"><span>11</span><div><h3>Strawberries and mascarpone-cream</h3><p>Strawberries, cream, crumble.</p></div></li>
+                      <li class="minimal-menu__item"><span>12</span><div><h3>Vegan creme brulee</h3><p>Vanilla custard, crackly caramel.</p></div></li>
+                    </ol>
+                  </section>
+                </div>
+              </section>
             </div>
           </section>
 
@@ -300,6 +359,6 @@
     </aside>
   </main>
 
-  <script src="app.js?v=3d-fix-4" defer></script>
+  <script src="app.js?v=menu-modes-1" defer></script>
 </body>
 </html>

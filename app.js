@@ -9,6 +9,7 @@
   const paletteSelect = document.querySelector('#palette-select');
   const flatSelect = document.querySelector('#flat-select');
   const compositionSelect = document.querySelector('#composition-select');
+  const menuModeSelect = document.querySelector('#menu-mode-select');
   const referenceHint = document.querySelector('#reference-hint');
   const interestForm = document.querySelector('#interest-form');
   const formNote = document.querySelector('#form-note');
@@ -44,7 +45,12 @@
   const categoryPrevious = document.querySelector('#menu-category-prev');
   const categoryNext = document.querySelector('#menu-category-next');
   const menuSwitcher = document.querySelector('.menu-switcher');
+  const minimalMenu = document.querySelector('#minimal-menu');
+  const minimalTabs = [...document.querySelectorAll('[data-minimal-tab]')];
+  const minimalSlides = [...document.querySelectorAll('[data-minimal-slide]')];
   let activeCategory = 0;
+  let activeMinimalGroup = 0;
+  let minimalMenuMode = false;
 
   function showCategory(index) {
     if (!categorySlides.length) return;
@@ -69,22 +75,60 @@
   categoryNext?.addEventListener('click', () => showCategory(activeCategory + 1));
   showCategory(0);
 
+  function showMinimalGroup(index) {
+    if (!minimalSlides.length) return;
+    activeMinimalGroup = (index + minimalSlides.length) % minimalSlides.length;
+    minimalSlides.forEach((slide, i) => {
+      const isActive = i === activeMinimalGroup;
+      slide.hidden = !isActive;
+      slide.classList.toggle('is-active', isActive);
+      slide.setAttribute('aria-hidden', String(!isActive));
+    });
+    minimalTabs.forEach((tab, i) => {
+      const isActive = i === activeMinimalGroup;
+      tab.setAttribute('aria-selected', String(isActive));
+      tab.tabIndex = isActive ? 0 : -1;
+      tab.classList.toggle('is-active', isActive);
+    });
+  }
+
+  minimalTabs.forEach((tab, index) => tab.addEventListener('click', () => showMinimalGroup(index)));
+  showMinimalGroup(0);
+
   let categoryTimer = 0;
   const stopCategoryAutoplay = () => {
     if (categoryTimer) window.clearInterval(categoryTimer);
     categoryTimer = 0;
   };
   const startCategoryAutoplay = () => {
-    if (categoryTimer || prefersReducedMotion.matches || categorySlides.length < 2) return;
-    categoryTimer = window.setInterval(() => showCategory(activeCategory + 1), 4200);
+    const slides = minimalMenuMode ? minimalSlides : categorySlides;
+    if (categoryTimer || prefersReducedMotion.matches || slides.length < 2) return;
+    categoryTimer = window.setInterval(() => {
+      if (minimalMenuMode) showMinimalGroup(activeMinimalGroup + 1);
+      else showCategory(activeCategory + 1);
+    }, 4200);
   };
-  menuSwitcher?.addEventListener('mouseenter', stopCategoryAutoplay);
-  menuSwitcher?.addEventListener('mouseleave', startCategoryAutoplay);
-  menuSwitcher?.addEventListener('focusin', stopCategoryAutoplay);
-  menuSwitcher?.addEventListener('focusout', (event) => {
-    if (!menuSwitcher.contains(event.relatedTarget)) startCategoryAutoplay();
+  [menuSwitcher, minimalMenu].filter(Boolean).forEach((menuRegion) => {
+    menuRegion.addEventListener('mouseenter', stopCategoryAutoplay);
+    menuRegion.addEventListener('mouseleave', startCategoryAutoplay);
+    menuRegion.addEventListener('focusin', stopCategoryAutoplay);
+    menuRegion.addEventListener('focusout', (event) => {
+      if (!menuRegion.contains(event.relatedTarget)) startCategoryAutoplay();
+    });
   });
   startCategoryAutoplay();
+
+  function applyMenuMode(mode = 'carousel') {
+    minimalMenuMode = mode === 'minimal-list';
+    body.classList.toggle('menu-minimal', minimalMenuMode);
+    root.dataset.menuMode = minimalMenuMode ? 'minimal-list' : 'carousel';
+    if (menuSwitcher) menuSwitcher.hidden = minimalMenuMode;
+    if (minimalMenu) minimalMenu.hidden = !minimalMenuMode;
+    stopCategoryAutoplay();
+    startCategoryAutoplay();
+  }
+
+  menuModeSelect?.addEventListener('change', (event) => applyMenuMode(event.target.value));
 
   const supports3d = CSS.supports('transform-style', 'preserve-3d') && CSS.supports('perspective', '1px');
   let flatMode = flatSelect.checked || prefersReducedMotion.matches || !supports3d;
@@ -208,10 +252,12 @@
     });
   });
 
-  function applyComposition(mode = 'print-room') {
-    const reference = mode === 'centered-pair';
+  function applyComposition(mode = 'centered-pair-small') {
+    const small = mode === 'centered-pair-small';
+    const reference = small || mode === 'centered-pair';
     body.classList.toggle('layout-reference', reference);
-    root.dataset.composition = reference ? 'centered-pair' : 'print-room';
+    body.classList.toggle('layout-reference-small', small);
+    root.dataset.composition = small ? 'centered-pair-small' : 'centered-pair';
   }
 
   compositionSelect?.addEventListener('change', (event) => applyComposition(event.target.value));
@@ -367,7 +413,8 @@
     button.blur();
   });
 
-  applyComposition(compositionSelect?.value || 'print-room');
+  applyComposition(compositionSelect?.value || 'centered-pair-small');
+  applyMenuMode(menuModeSelect?.value || 'carousel');
   applyFlatMode();
   requestPoseUpdate();
 })();
