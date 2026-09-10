@@ -75,13 +75,14 @@ Then open [http://localhost:4173/](http://localhost:4173/).
 
 The page also remains readable as a normal document when JavaScript is disabled, when reduced motion is requested, or when **Developer view > Simple scroll (no 3D)** is enabled. In the default centered-pair SMALL composition, every non-menu section uses the same 300-pixel text column and 300-pixel image column. CSS 3D mode connects every adjacent full-viewport section with the same vertical turn, shared physical edges, and local shading.
 
-In CSS 3D mode, the first short wheel or trackpad gesture triggers one 900-millisecond vertical turn with gentle sine easing. A landed face leaves the transformed 3D scene and becomes a true flat reading surface, so links, controls, and text selection remain reliable. If a face is taller than the viewport, as the full menu can be, wheel input scrolls that face first and turns to the next page only after reaching its edge. The fixed **Turn the page** pager remains available in 3D and centered reference modes; it stays hidden in the default simple-scroll view.
+In CSS 3D mode, the first wheel or trackpad delta moves the turn immediately. There is no scroll-behavior queue and no artificial opening pause. Ten percent of the face span is the commit threshold: a smaller nudge settles back to the current face, while a larger nudge completes one smooth 720-millisecond vertical turn. A landed face leaves the transformed 3D scene and becomes a true flat reading surface, so links, controls, and text selection remain reliable. If a face is taller than the viewport, as the full menu can be, wheel input scrolls that face first and turns to the next face only after reaching its edge. The fixed **Turn the page** pager remains available in 3D and centered reference modes; it stays hidden in the default simple-scroll view.
 
 ## Repository map
 
 - [`index.html`](index.html) contains the landing page faces, menu content, and developer controls.
 - [`styles.css`](styles.css) contains the print system, palette recipes, responsive layout, and CSS 3D geometry.
-- [`app.js`](app.js) handles scroll poses, simple-scroll mode, palette switching, the auto-rotating menu presentations, composition switching, and the Pretext study.
+- [`app.js`](app.js) handles scroll poses, simple-scroll mode, palette switching, the auto-rotating menu presentations, GSAP carousel experiments, composition switching, and the Pretext study.
+- [`assets/vendor/gsap.min.js`](assets/vendor/gsap.min.js) is the vendored GSAP core used by the carousel studies, so local previews and GitHub Pages use the same animation engine.
 - [`menu.json`](menu.json) is the working menu inventory and remains a hypothesis.
 - [`EXPLORATION.md`](EXPLORATION.md) records the design and asset decisions from this pass.
 - [`AGENTS.md`](AGENTS.md) is the project agent story and decision guardrail.
@@ -99,7 +100,8 @@ The **Studio controls** menu can compare:
 2. A centered-pair SMALL composition against a visibly more open centered-pair reference composition based on the supplied sparse study. The distinction is preserved on desktop and mobile.
 3. The baseline Open Heart wordmark with its oversized O and H.
 4. The full category carousel against a much smaller ultra-minimal three-group menu or a menu constrained to the same centered-pair SMALL system as the other sections.
-5. Normal scrolling against the CSS 3D experiment.
+5. GSAP carousel motion: slide left and right, fade in and out, or no animation.
+6. Normal scrolling against the CSS 3D experiment.
 
 The previous full-editorial composition has been removed from both the controls and the stylesheet.
 

@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#FAFAF7">
   <meta name="description" content="Open Heart. A vegetarian place for original plant-based creations.">
   <title>Open Heart | Food and coffee</title>
-  <link rel="stylesheet" href="styles.css?v=vertical-turns-1">
+  <link rel="stylesheet" href="styles.css?v=gesture-carousel-1">
 </head>
 <body class="is-flat">
   <a class="skip-link" href="#content">Skip to menu</a>
@@ -39,6 +39,13 @@
         <select id="menu-mode-select">
           <option value="carousel" selected>Category carousel</option>
           <option value="minimal-list">Ultra-minimal text list</option>
+        </select>
+
+        <label for="carousel-animation-select">Carousel animation</label>
+        <select id="carousel-animation-select">
+          <option value="slide" selected>Slide left / right</option>
+          <option value="fade">Fade in / out</option>
+          <option value="none">No animation</option>
         </select>
 
         <label class="check">
@@ -109,6 +116,7 @@
                     <h2 id="menu-title">Find your next favorite.</h2>
                   </div>
                   <div class="category-controls">
+                    <span id="menu-category-current" class="carousel-current" aria-live="polite">01 / Benedict</span>
                     <span id="menu-category-count" class="carousel-count" aria-live="polite">01 / 07</span>
                     <button type="button" id="menu-category-prev" aria-label="Previous menu section">Previous</button>
                     <button type="button" id="menu-category-next" aria-label="Next menu section">Next</button>
@@ -399,6 +407,7 @@
     </aside>
   </main>
 
-  <script src="app.js?v=vertical-turns-1" defer></script>
+  <script src="assets/vendor/gsap.min.js"></script>
+  <script src="app.js?v=gesture-carousel-1"></script>
 </body>
 </html>

@@ -11,6 +11,7 @@
   const compositionSelect = document.querySelector('#composition-select');
   const menuModeSelect = document.querySelector('#menu-mode-select');
   const menuPairSelect = document.querySelector('#menu-pair-select');
+  const carouselAnimationSelect = document.querySelector('#carousel-animation-select');
   const referenceHint = document.querySelector('#reference-hint');
   const interestForm = document.querySelector('#interest-form');
   const formNote = document.querySelector('#form-note');
@@ -45,6 +46,8 @@
   const categoryCount = document.querySelector('#menu-category-count');
   const categoryPrevious = document.querySelector('#menu-category-prev');
   const categoryNext = document.querySelector('#menu-category-next');
+  const categoryCurrent = document.querySelector('#menu-category-current');
+  const categoryViewport = document.querySelector('.category-viewport');
   const menuSwitcher = document.querySelector('.menu-switcher');
   const minimalMenu = document.querySelector('#minimal-menu');
   const minimalTabs = [...document.querySelectorAll('[data-minimal-tab]')];
@@ -59,6 +62,8 @@
   let activeMinimalGroup = 0;
   let minimalMenuMode = false;
   let pairedMenuMode = false;
+  let carouselAnimationMode = carouselAnimationSelect?.value || 'slide';
+  let categoryAnimation = null;
 
   function renderPairedCategory(index) {
     const slide = categorySlides[index];
@@ -96,29 +101,103 @@
     });
   }
 
-  function showCategory(index) {
-    if (!categorySlides.length) return;
-    activeCategory = (index + categorySlides.length) % categorySlides.length;
+  function finishCategoryAnimation() {
+    if (categoryAnimation) {
+      categoryAnimation.kill();
+      categoryAnimation = null;
+    }
     categorySlides.forEach((slide, i) => {
       const isActive = i === activeCategory;
       slide.hidden = !isActive;
       slide.classList.toggle('is-active', isActive);
       slide.setAttribute('aria-hidden', String(!isActive));
+      slide.inert = !isActive;
+      slide.toggleAttribute('inert', !isActive);
+      ['transform', 'opacity', 'position', 'inset', 'width'].forEach((property) => slide.style.removeProperty(property));
     });
+    categoryViewport?.classList.remove('is-animating');
+    categoryViewport?.style.removeProperty('height');
+  }
+
+  function updateCategoryState(index) {
+    const label = categoryTabs[index]?.textContent.replace(/^\d+\s*/, '').trim() || categorySlides[index]?.dataset.categorySlide || '';
+    const category = categorySlides[index]?.dataset.categorySlide || '';
     categoryTabs.forEach((tab, i) => {
-      const isActive = i === activeCategory;
+      const isActive = i === index;
       tab.setAttribute('aria-selected', String(isActive));
+      tab.setAttribute('aria-current', isActive ? 'page' : 'false');
       tab.tabIndex = isActive ? 0 : -1;
       tab.classList.toggle('is-active', isActive);
     });
-    if (categoryCount) categoryCount.textContent = `${String(activeCategory + 1).padStart(2, '0')} / ${String(categorySlides.length).padStart(2, '0')}`;
+    if (categoryCount) categoryCount.textContent = `${String(index + 1).padStart(2, '0')} / ${String(categorySlides.length).padStart(2, '0')}`;
+    if (categoryCurrent) categoryCurrent.textContent = `${String(index + 1).padStart(2, '0')} / ${label}`;
+    menuSwitcher?.setAttribute('data-active-category', category);
+  }
+
+  function showCategory(index, { animate = true } = {}) {
+    if (!categorySlides.length) return;
+    finishCategoryAnimation();
+    const previous = activeCategory;
+    activeCategory = (index + categorySlides.length) % categorySlides.length;
+    updateCategoryState(activeCategory);
     renderPairedCategory(activeCategory);
+    if (!animate || previous === activeCategory || carouselAnimationMode === 'none' || prefersReducedMotion.matches || !window.gsap || !categoryViewport) {
+      finishCategoryAnimation();
+      return;
+    }
+
+    const outgoing = categorySlides[previous];
+    const incoming = categorySlides[activeCategory];
+    categorySlides.forEach((slide, i) => {
+      const isInTransition = i === previous || i === activeCategory;
+      slide.hidden = !isInTransition;
+      slide.classList.toggle('is-active', i === activeCategory);
+      slide.setAttribute('aria-hidden', String(i !== activeCategory));
+      slide.inert = i !== activeCategory;
+      slide.toggleAttribute('inert', i !== activeCategory);
+      if (isInTransition) {
+        slide.style.position = 'absolute';
+        slide.style.inset = '0 auto auto 0';
+        slide.style.width = '100%';
+      }
+    });
+    const outgoingHeight = outgoing.offsetHeight;
+    const incomingHeight = incoming.offsetHeight;
+    categoryViewport.classList.add('is-animating');
+    categoryViewport.style.height = `${Math.max(500, outgoingHeight, incomingHeight)}px`;
+
+    if (carouselAnimationMode === 'fade') {
+      window.gsap.set(outgoing, { opacity: 1, x: 0 });
+      window.gsap.set(incoming, { opacity: 0, x: 0 });
+      categoryAnimation = window.gsap.timeline({
+        onComplete: () => {
+          categoryAnimation = null;
+          finishCategoryAnimation();
+        }
+      });
+      categoryAnimation
+        .to(outgoing, { opacity: 0, duration: 0.24, ease: 'power1.out' }, 0)
+        .to(incoming, { opacity: 1, duration: 0.42, ease: 'power1.inOut' }, 0.16);
+      return;
+    }
+
+    window.gsap.set(outgoing, { opacity: 1, xPercent: 0 });
+    window.gsap.set(incoming, { opacity: 1, xPercent: 100 });
+    categoryAnimation = window.gsap.timeline({
+      onComplete: () => {
+        categoryAnimation = null;
+        finishCategoryAnimation();
+      }
+    });
+    categoryAnimation
+      .to(outgoing, { xPercent: -100, duration: 0.62, ease: 'power2.inOut' }, 0)
+      .to(incoming, { xPercent: 0, duration: 0.62, ease: 'power2.inOut' }, 0);
   }
 
   categoryTabs.forEach((tab, index) => tab.addEventListener('click', () => showCategory(index)));
   categoryPrevious?.addEventListener('click', () => showCategory(activeCategory - 1));
   categoryNext?.addEventListener('click', () => showCategory(activeCategory + 1));
-  showCategory(0);
+  showCategory(0, { animate: false });
 
   function showMinimalGroup(index) {
     if (!minimalSlides.length) return;
@@ -152,16 +231,8 @@
     categoryTimer = window.setInterval(() => {
       if (minimalMenuMode) showMinimalGroup(activeMinimalGroup + 1);
       else showCategory(activeCategory + 1);
-    }, 4200);
+    }, 3600);
   };
-  [menuSwitcher, minimalMenu, pairedMenu].filter(Boolean).forEach((menuRegion) => {
-    menuRegion.addEventListener('mouseenter', stopCategoryAutoplay);
-    menuRegion.addEventListener('mouseleave', startCategoryAutoplay);
-    menuRegion.addEventListener('focusin', stopCategoryAutoplay);
-    menuRegion.addEventListener('focusout', (event) => {
-      if (!menuRegion.contains(event.relatedTarget)) startCategoryAutoplay();
-    });
-  });
   startCategoryAutoplay();
 
   function applyMenuMode(mode = 'carousel') {
@@ -173,12 +244,19 @@
     if (menuSwitcher) menuSwitcher.hidden = minimalMenuMode || pairedMenuMode;
     if (minimalMenu) minimalMenu.hidden = !minimalMenuMode;
     if (pairedMenu) pairedMenu.hidden = !pairedMenuMode;
+    finishCategoryAnimation();
     stopCategoryAutoplay();
     startCategoryAutoplay();
   }
 
   menuModeSelect?.addEventListener('change', (event) => applyMenuMode(event.target.value));
   menuPairSelect?.addEventListener('change', () => applyMenuMode(menuModeSelect?.value || 'carousel'));
+  carouselAnimationSelect?.addEventListener('change', (event) => {
+    carouselAnimationMode = event.target.value;
+    root.dataset.carouselAnimation = carouselAnimationMode;
+    finishCategoryAnimation();
+  });
+  root.dataset.carouselAnimation = carouselAnimationMode;
 
   const supports3d = CSS.supports('transform-style', 'preserve-3d') && CSS.supports('perspective', '1px');
   let flatMode = flatSelect.checked || prefersReducedMotion.matches || !supports3d;
@@ -190,6 +268,7 @@
 
   function applyFlatMode() {
     body.classList.toggle('is-flat', flatMode);
+    root.style.scrollBehavior = flatMode ? '' : 'auto';
     flatSelect.checked = flatMode;
     if (referenceHint) referenceHint.textContent = flatMode ? 'Scroll to explore' : 'Scroll to rotate';
     faces.forEach(face => {
@@ -232,9 +311,10 @@
     const progress = clamp((window.scrollY - trackTop) / maxScroll, 0, 1) * 5;
     const segment = Math.min(Math.floor(progress), 4);
     const local = progress - segment;
-    // Give each page a flat reading interval. Each pair shares a physical edge.
-    const t = clamp((local - 0.1) / 0.8, 0, 1);
-    const restingFace = t === 0 ? segment : t === 1 ? segment + 1 : -1;
+    // Wheel input owns the first part of the turn. There is no artificial dead zone.
+    const t = clamp(local, 0, 1);
+    const edgeEpsilon = 0.0005;
+    const restingFace = local <= edgeEpsilon ? segment : local >= 1 - edgeEpsilon ? segment + 1 : -1;
     scene.style.setProperty('--face-progress', progress.toFixed(3));
     if (restingFace >= 0) {
       scene.classList.add('is-resting');
@@ -286,11 +366,24 @@
   let turnRafId = 0;
   let turnInProgress = false;
 
-  function animateTurnTo(top) {
+  function getScrollMetrics() {
+    const viewportHeight = window.visualViewport?.height || window.innerHeight;
+    const trackTop = track.getBoundingClientRect().top + window.scrollY;
+    const maxScroll = Math.max(track.offsetHeight - viewportHeight, 1);
+    return { trackTop, maxScroll, pageSpan: maxScroll / 5 };
+  }
+
+  function getFaceScrollTop(index, metrics = getScrollMetrics()) {
+    return metrics.trackTop + metrics.pageSpan * clamp(Number(index), 0, 5);
+  }
+
+  function animateTurnTo(top, duration = 720) {
     cancelAnimationFrame(turnRafId);
+    root.style.scrollBehavior = 'auto';
     if (prefersReducedMotion.matches) {
       turnInProgress = false;
       window.scrollTo({ top, behavior: 'auto' });
+      requestPoseUpdate();
       return;
     }
     const start = window.scrollY;
@@ -302,7 +395,6 @@
       return;
     }
     const startedAt = performance.now();
-    const duration = 900;
     turnInProgress = true;
     const step = (now) => {
       const progress = clamp((now - startedAt) / duration, 0, 1);
@@ -329,20 +421,34 @@
       document.querySelector(`#face-${target}`)?.scrollIntoView({ behavior: 'auto', block: 'start' });
       return;
     }
-    const top = track.offsetTop + ((track.offsetHeight - (window.visualViewport?.height || window.innerHeight)) * target) / 5;
+    const top = getFaceScrollTop(target);
     animateTurnTo(top);
   }
 
-  let wheelAccumulator = 0;
+  const wheelCommitThreshold = 0.1;
+  let wheelDirection = 0;
+  let wheelBaseScroll = 0;
+  let wheelTargetFace = -1;
   let wheelGestureLocked = false;
   let wheelReleaseTimer = 0;
 
-  function armWheelRelease() {
+  function resetWheelGesture() {
+    wheelDirection = 0;
+    wheelBaseScroll = 0;
+    wheelTargetFace = -1;
+  }
+
+  function armWheelRelease(delay = 180) {
     window.clearTimeout(wheelReleaseTimer);
     wheelReleaseTimer = window.setTimeout(() => {
-      wheelAccumulator = 0;
+      if (!turnInProgress && wheelDirection) {
+        const returnTop = getFaceScrollTop(currentFace);
+        resetWheelGesture();
+        animateTurnTo(returnTop, 220);
+      }
       wheelGestureLocked = false;
-    }, 160);
+      resetWheelGesture();
+    }, delay);
   }
 
   function route3dWheel(event) {
@@ -356,7 +462,7 @@
         : event.deltaY;
     if (turnInProgress) {
       event.preventDefault();
-      armWheelRelease();
+      armWheelRelease(900);
       return;
     }
     const faceScroller = target?.closest('.face__inner');
@@ -367,14 +473,29 @@
       if (canScrollInside) return;
     }
     event.preventDefault();
-    armWheelRelease();
     if (wheelGestureLocked) return;
-    wheelAccumulator += normalizedDelta;
-    if (Math.abs(wheelAccumulator) < 1) return;
-    wheelGestureLocked = true;
-    const direction = wheelAccumulator > 0 ? 1 : -1;
-    wheelAccumulator = 0;
-    goToFace(currentFace + direction);
+    const direction = normalizedDelta > 0 ? 1 : -1;
+    if (!wheelDirection || direction !== wheelDirection) {
+      wheelDirection = direction;
+      wheelBaseScroll = getFaceScrollTop(currentFace);
+      wheelTargetFace = clamp(currentFace + direction, 0, 5);
+    }
+    if (wheelTargetFace === currentFace) {
+      armWheelRelease();
+      return;
+    }
+    const metrics = getScrollMetrics();
+    const nextScroll = clamp(window.scrollY + normalizedDelta, metrics.trackTop, metrics.trackTop + metrics.maxScroll);
+    window.scrollTo({ top: nextScroll, behavior: 'auto' });
+    requestPoseUpdate();
+    armWheelRelease();
+    if (Math.abs(nextScroll - wheelBaseScroll) >= metrics.pageSpan * wheelCommitThreshold) {
+      const destination = getFaceScrollTop(wheelTargetFace, metrics);
+      resetWheelGesture();
+      wheelGestureLocked = true;
+      armWheelRelease(900);
+      animateTurnTo(destination);
+    }
   }
 
   document.addEventListener('wheel', route3dWheel, { passive: false, capture: true });

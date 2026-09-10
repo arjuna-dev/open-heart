@@ -277,6 +277,18 @@ body:not(.is-flat) #face-2 .face__inner{align-items:flex-start;padding-top:max(1
 .minimal-menu__item h3{font-size:clamp(15px,1.35vw,18px);line-height:1.08;margin-bottom:3px}
 .minimal-menu__item p{font-size:8px;line-height:1.35}
 
+/* Keep the active menu page visible in both the tab rail and the counter. */
+.carousel-current{border:1px solid var(--line);padding:8px 10px;font:10px var(--mono);text-transform:uppercase;white-space:nowrap}
+.category-tabs button{position:relative}
+.category-tabs button.is-active::after,.category-tabs button[aria-selected=true]::after{content:'';position:absolute;left:10px;right:10px;bottom:3px;height:2px;background:currentColor}
+.category-viewport{position:relative}
+.category-viewport.is-animating{overflow:hidden}
+
+/* All non-menu SMALL faces share one vertical center. Menu keeps its reading start. */
+.layout-reference .face:not(#face-2)>.face__inner{padding-block:clamp(100px,11vh,150px);align-items:center}
+body:not(.is-flat) .layout-reference .face:not(#face-2)>.face__inner{padding-block:100px;align-items:center}
+body:not(.is-flat) .layout-reference .face:not(#face-2)>.face__inner.closing{align-items:center}
+
 @media(max-width:800px){
   .layout-reference .pair-layout{display:block;width:min(330px,100%);margin-inline:auto}
   .layout-reference .pair-copy{width:100%;max-width:330px}
