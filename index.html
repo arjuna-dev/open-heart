@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#FAFAF7">
   <meta name="description" content="Open Heart. A vegetarian place for original plant-based creations.">
   <title>Open Heart | Food and coffee</title>
-  <link rel="stylesheet" href="styles.css?v=menu-modes-1">
+  <link rel="stylesheet" href="styles.css?v=pair-system-2">
 </head>
 <body class="is-flat">
   <a class="skip-link" href="#content">Skip to menu</a>
@@ -42,6 +42,11 @@
         </select>
 
         <label class="check">
+          <input type="checkbox" id="menu-pair-select">
+          Match SMALL pair on menu
+        </label>
+
+        <label class="check">
           <input type="checkbox" id="flat-select" checked>
           Normal scrolling
         </label>
@@ -57,35 +62,37 @@
         <div id="prism">
           <section class="face hero" id="face-0">
             <div class="face__inner">
-              <div class="hero-copy">
-                <p class="edition">Original plant-based food and coffee</p>
-                <h1 class="logo" aria-label="Open Heart">
-                  <span><b>O</b>pen</span>
-                  <span><b>H</b>eart</span>
-                </h1>
-                <div class="hero-intro">
-                  <p>Open Heart is a vegetarian place for original plant-based creations. Start with vegan eggs Benedict, stay for the feeling that imagination can become something real, generous, and delicious.</p>
-                  <a class="text-link" href="#story">See the signature -></a>
+              <div class="pair-layout hero-layout">
+                <div class="hero-copy pair-copy">
+                  <p class="edition">Original plant-based food and coffee</p>
+                  <h1 class="logo" aria-label="Open Heart">
+                    <span><b>O</b>pen</span>
+                    <span><b>H</b>eart</span>
+                  </h1>
+                  <div class="hero-intro">
+                    <p>Open Heart is a vegetarian place for original plant-based creations. Start with vegan eggs Benedict, stay for the feeling that imagination can become something real, generous, and delicious.</p>
+                    <a class="text-link" href="#story">See the signature -></a>
+                  </div>
                 </div>
+                <figure class="hero-print pair-print">
+                  <img id="hero-image" src="assets/menu-chatgpt.png" width="1122" height="1402" alt="A two-ink illustrated table of Open Heart dishes, including vegan eggs Benedict, fries, drinks and dessert">
+                </figure>
               </div>
-              <figure class="hero-print">
-                <img id="hero-image" src="assets/menu-chatgpt.png" width="1122" height="1402" alt="A two-ink illustrated table of Open Heart dishes, including vegan eggs Benedict, fries, drinks and dessert">
-              </figure>
               <span class="hero-index">01 / OPEN HEART</span>
             </div>
           </section>
 
           <section class="face" id="face-1">
             <div class="face__inner" id="story">
-              <p class="section-kicker">The signature</p>
-              <div class="story-layout">
-                <div class="story-copy">
+              <div class="story-layout pair-layout">
+                <div class="story-copy pair-copy">
+                  <p class="section-kicker">The signature</p>
                   <h2>One familiar shape, remade.</h2>
                   <p>A familiar shape, remade with enough nerve to become new. Vegan eggs Benedict with avocado, lime pickle, or chipotle: three invitations to discover what a plant-based plate can do.</p>
                   <p>Then follow the thread through bright salads, open sandwiches, serious sauces, and drinks that make staying feel like part of the order.</p>
                   <a class="text-link" href="#menu">Explore the menu -></a>
                 </div>
-                <figure class="feature-print">
+                <figure class="feature-print pair-print">
                   <img src="assets/posters/chatgpt/02-lime-pickle-benedict.png" width="1086" height="1448" alt="Lime pickle Benedict in a two-ink green and red editorial print">
                   <figcaption>01 / lime pickle Benedict</figcaption>
                 </figure>
@@ -266,19 +273,40 @@
                   </section>
                 </div>
               </section>
+
+              <section class="paired-menu pair-layout" id="paired-menu" aria-labelledby="paired-menu-title" hidden>
+                <div class="paired-menu__copy pair-copy">
+                  <p class="section-kicker">At the table</p>
+                  <h2 id="paired-menu-title">The signature, in three directions.</h2>
+                  <ol class="paired-menu__items" id="paired-menu-items" aria-live="polite"></ol>
+                  <div class="paired-menu__tabs" role="tablist" aria-label="Paired menu categories">
+                    <button type="button" role="tab" data-paired-tab="0" aria-label="Benedict" aria-selected="true">01</button>
+                    <button type="button" role="tab" data-paired-tab="1" aria-label="Sandwiches" aria-selected="false">02</button>
+                    <button type="button" role="tab" data-paired-tab="2" aria-label="Salads" aria-selected="false">03</button>
+                    <button type="button" role="tab" data-paired-tab="3" aria-label="Entrees" aria-selected="false">04</button>
+                    <button type="button" role="tab" data-paired-tab="4" aria-label="Sauces" aria-selected="false">05</button>
+                    <button type="button" role="tab" data-paired-tab="5" aria-label="Desserts" aria-selected="false">06</button>
+                    <button type="button" role="tab" data-paired-tab="6" aria-label="Drinks" aria-selected="false">07</button>
+                  </div>
+                </div>
+                <figure class="paired-menu__print pair-print">
+                  <img id="paired-menu-image" src="assets/posters/chatgpt/01-avocado-benedict.png" width="1086" height="1448" alt="Benedict menu poster in a controlled two-ink print">
+                  <figcaption id="paired-menu-caption">01 / Benedict</figcaption>
+                </figure>
+              </section>
             </div>
           </section>
 
           <section class="face" id="face-3">
             <div class="face__inner atmosphere" id="atmosphere">
-              <p class="section-kicker">A Copenhagen point of view</p>
-              <div class="atmosphere-grid">
-                <div class="atmosphere-copy">
+              <div class="atmosphere-grid pair-layout">
+                <div class="atmosphere-copy pair-copy">
+                  <p class="section-kicker">A Copenhagen point of view</p>
                   <h2>A place people remember by taste.</h2>
                   <p>Open Heart brings a little theatre to the everyday table: plates that reward curiosity, coffee that invites another ten minutes, and a room with enough space for an unusual idea to land.</p>
                   <p>Copenhagen gives the idea its rhythm: clear light, quick bicycles, long coffee, and a city that knows how to make a small room feel like a destination.</p>
                 </div>
-                <figure class="panel-print panel-print--city">
+                <figure class="panel-print panel-print--city pair-print">
                   <img src="assets/studies/nyhavn-gemini.jpg" width="768" height="1024" alt="Copenhagen harbor houses rendered as a limited-color print">
                   <figcaption>02 / Nyhavn</figcaption>
                 </figure>
@@ -300,44 +328,56 @@
 
           <section class="face" id="face-4">
             <div class="face__inner" id="visit">
-              <p class="section-kicker">Come by</p>
-              <div class="visit-layout">
-                <div>
+              <div class="visit-layout pair-layout">
+                <div class="visit-copy pair-copy">
+                  <p class="section-kicker">Come by</p>
                   <h2>Make a day of it.</h2>
                   <p class="visit-lead">Come for the plate you cannot quite explain. Stay for the coffee, the second sauce, and the people at the next table.</p>
+                  <div class="visit-grid">
+                    <div class="info-block"><span>Find us</span><strong>Copenhagen</strong><small>A table worth crossing the city for.</small></div>
+                    <div class="info-block"><span>Opening hours</span><strong>Morning to late afternoon</strong><small>Come for the first pour, stay for the last good bite.</small></div>
+                    <div class="info-block"><span>Say hello</span><strong>hello@openheart.place</strong><small>Write us a note.</small></div>
+                    <div class="info-block"><span>Language</span><strong>English / Dansk</strong><small>Choose your language.</small></div>
+                  </div>
+                  <form class="interest-form" id="interest-form">
+                    <label for="email">Be first through the door.</label>
+                    <div><input id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required><button type="submit">Leave a small hello</button></div>
+                    <small id="form-note">First invitations, menu drops, and opening news.</small>
+                  </form>
                 </div>
-                <div class="visit-grid">
-                  <div class="info-block"><span>Find us</span><strong>Copenhagen</strong><small>A table worth crossing the city for.</small></div>
-                  <div class="info-block"><span>Opening hours</span><strong>Morning to late afternoon</strong><small>Come for the first pour, stay for the last good bite.</small></div>
-                  <div class="info-block"><span>Say hello</span><strong>hello@openheart.place</strong><small>Write us a note.</small></div>
-                  <div class="info-block"><span>Language</span><strong>English / Dansk</strong><small>Choose your language.</small></div>
-                </div>
+                <figure class="visit-print pair-print">
+                  <img src="assets/studies/dance-chatgpt.png" width="768" height="1024" alt="Humans and animals holding hands in a one-ink green print">
+                  <figcaption>04 / hand in hand</figcaption>
+                </figure>
               </div>
-              <form class="interest-form" id="interest-form">
-                <label for="email">Be first through the door.</label>
-                <div><input id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required><button type="submit">Leave a small hello</button></div>
-                <small id="form-note">First invitations, menu drops, and opening news.</small>
-              </form>
             </div>
           </section>
 
           <section class="face" id="face-5">
             <div class="face__inner closing">
-              <div class="warm-ritual">
-                <span><b>01</b> open the door</span>
-                <span><b>02</b> pour something warm</span>
-                <span><b>03</b> pass the good thing</span>
+              <div class="closing-layout pair-layout">
+                <div class="closing-copy pair-copy">
+                  <p class="section-kicker">Open Heart</p>
+                  <h2>Something original to taste.</h2>
+                  <p>Come curious. Leave with something you did not know you were looking for.</p>
+                  <div class="warm-ritual">
+                    <span><b>01</b> open the door</span>
+                    <span><b>02</b> pour something warm</span>
+                    <span><b>03</b> pass the good thing</span>
+                  </div>
+                  <a class="text-link" href="#face-0">Start again -></a>
+                  <footer>
+                    <span class="small-wordmark">Open Heart</span>
+                    <p>Original plant-based food.<br>Good coffee. A table for curiosity.</p>
+                    <button id="share-button" type="button">Share the menu</button>
+                    <span id="share-status" role="status"></span>
+                  </footer>
+                </div>
+                <figure class="closing-print pair-print">
+                  <img src="assets/posters/chatgpt/10-something-warm.png" width="1086" height="1448" alt="Something warm in a cyan and brick red two-ink poster">
+                  <figcaption>05 / something warm</figcaption>
+                </figure>
               </div>
-              <div class="closing-mark" aria-hidden="true">O / H</div>
-              <h2>Something original to taste.</h2>
-              <p>Come curious. Leave with something you did not know you were looking for.</p>
-              <a class="text-link" href="#face-0">Start again -></a>
-              <footer>
-                <span class="small-wordmark">Open Heart</span>
-                <p>Original plant-based food.<br>Good coffee. A table for curiosity.</p>
-                <button id="share-button" type="button">Share the menu</button>
-                <span id="share-status" role="status"></span>
-              </footer>
             </div>
           </section>
         </div>
@@ -359,6 +399,6 @@
     </aside>
   </main>
 
-  <script src="app.js?v=menu-modes-1" defer></script>
+  <script src="app.js?v=pair-system-2" defer></script>
 </body>
 </html>

@@ -14,9 +14,9 @@ Generated posters are visual studies. Rebuild approved typography as live access
 
 The current content structure is a compact introduction, ONE auto-rotating menu carousel whose slides are categories, an atmosphere study with the interactive text treatment, and concise find-us/contact/hours/language fields. No invented dog policy, manifesto or repeated menu-only pages. Real address and hours should replace the concept fields before launch.
 
-The developer menu includes two sparse composition directions. `Centered pair SMALL` is the tighter working direction, with a smaller central copy and image group. `Centered pair / reference` gives the group more room while preserving the supplied sparse study: large empty fields, a small left copy block, a right-hand image, and fixed studio chrome. The baseline Open Heart wordmark is used in both modes.
+The developer menu includes two sparse composition directions. `Centered pair SMALL` is the tighter working direction, with an exact 300-pixel copy column and exact 300-pixel image column shared by every non-menu face. Pages differ in content, not in their core pair geometry. `Centered pair / reference` gives the group more room while preserving the supplied sparse study: large empty fields, a small left copy block, a right-hand image, and fixed studio chrome. The baseline Open Heart wordmark is used in both modes.
 
-The menu presentation can also switch from the image-led category carousel to an ultra-minimal text list. That study keeps the automatic rotation but consolidates the tabs into Benedict + sandwiches, entrees + sauces, and drinks + desserts.
+The menu presentation can also switch from the image-led category carousel to an ultra-minimal text list. That study uses deliberately tiny list typography and consolidates the tabs into Benedict + sandwiches, entrees + sauces, and drinks + desserts. A separate checkbox places the current category inside the exact centered-pair SMALL constraints, with one text column and one image column.
 
 ## Generation and review
 
@@ -38,7 +38,7 @@ Source: https://en.wikisource.org/wiki/The_Complete_Works_of_Swami_Vivekananda/V
 
 The supplied Pretext demo page includes text reflow around moving objects and organic text shapes. The actual library's primary source is https://github.com/chenglou/pretext . Its line-by-line layout is suitable for computing text inside a changing leaf silhouette; it is not itself a shape or animation engine.
 
-The CSS 3D experiment keeps page movement at the document level. Wheel input is routed past the individual face scroll containers, transformed inactive faces have pointer hit testing disabled, and the fixed page pager remains available while the prism rotates. This keeps the experiment discoverable without making the default simple-scroll view carry its chrome.
+The CSS 3D experiment keeps page movement at the document level. A short wheel or trackpad gesture now advances exactly one face, while transformed inactive faces have pointer hit testing disabled and the fixed page pager remains available. The shorter virtual track removes the previous high threshold without changing the six-face geometry.
 
 Implemented treatment: one generous leaf silhouette made from readable lines, with Pretext measuring and reflowing the lines and a slight contour response to pointer movement. The poem is also available in ordinary reading order through a plain-text toggle and remains readable when reduced motion is requested. No auto-scattering words or motion is required to read it. Keep the study visually subordinate until the poem and visual direction are approved.
 

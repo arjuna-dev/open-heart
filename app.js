@@ -10,6 +10,7 @@
   const flatSelect = document.querySelector('#flat-select');
   const compositionSelect = document.querySelector('#composition-select');
   const menuModeSelect = document.querySelector('#menu-mode-select');
+  const menuPairSelect = document.querySelector('#menu-pair-select');
   const referenceHint = document.querySelector('#reference-hint');
   const interestForm = document.querySelector('#interest-form');
   const formNote = document.querySelector('#form-note');
@@ -48,9 +49,52 @@
   const minimalMenu = document.querySelector('#minimal-menu');
   const minimalTabs = [...document.querySelectorAll('[data-minimal-tab]')];
   const minimalSlides = [...document.querySelectorAll('[data-minimal-slide]')];
+  const pairedMenu = document.querySelector('#paired-menu');
+  const pairedMenuTitle = document.querySelector('#paired-menu-title');
+  const pairedMenuItems = document.querySelector('#paired-menu-items');
+  const pairedMenuImage = document.querySelector('#paired-menu-image');
+  const pairedMenuCaption = document.querySelector('#paired-menu-caption');
+  const pairedTabs = [...document.querySelectorAll('[data-paired-tab]')];
   let activeCategory = 0;
   let activeMinimalGroup = 0;
   let minimalMenuMode = false;
+  let pairedMenuMode = false;
+
+  function renderPairedCategory(index) {
+    const slide = categorySlides[index];
+    if (!slide || !pairedMenuItems) return;
+    const category = slide.dataset.categorySlide;
+    const label = categoryTabs[index]?.textContent.replace(/^\d+\s*/, '') || category;
+    const heading = slide.querySelector('.menu-slide-head p')?.textContent || label;
+    const dishes = [...slide.querySelectorAll('.dish')];
+
+    if (pairedMenuTitle) pairedMenuTitle.textContent = heading;
+    pairedMenuItems.replaceChildren(...dishes.map((dish, dishIndex) => {
+      const item = document.createElement('li');
+      item.className = 'paired-menu__item';
+      const number = document.createElement('span');
+      number.textContent = String(dishIndex + 1).padStart(2, '0');
+      const copy = document.createElement('div');
+      const title = document.createElement('h3');
+      title.textContent = dish.querySelector('h3')?.textContent || '';
+      const description = document.createElement('p');
+      description.textContent = dish.querySelector('p')?.textContent || '';
+      copy.append(title, description);
+      item.append(number, copy);
+      return item;
+    }));
+
+    const asset = categoryAssets[category];
+    if (pairedMenuImage && asset) pairedMenuImage.src = asset;
+    if (pairedMenuImage) pairedMenuImage.alt = `${label} menu poster in a controlled print`;
+    if (pairedMenuCaption) pairedMenuCaption.textContent = `${String(index + 1).padStart(2, '0')} / ${label}`;
+    pairedTabs.forEach((tab, tabIndex) => {
+      const isActive = tabIndex === index;
+      tab.setAttribute('aria-selected', String(isActive));
+      tab.tabIndex = isActive ? 0 : -1;
+      tab.classList.toggle('is-active', isActive);
+    });
+  }
 
   function showCategory(index) {
     if (!categorySlides.length) return;
@@ -68,6 +112,7 @@
       tab.classList.toggle('is-active', isActive);
     });
     if (categoryCount) categoryCount.textContent = `${String(activeCategory + 1).padStart(2, '0')} / ${String(categorySlides.length).padStart(2, '0')}`;
+    renderPairedCategory(activeCategory);
   }
 
   categoryTabs.forEach((tab, index) => tab.addEventListener('click', () => showCategory(index)));
@@ -93,6 +138,7 @@
   }
 
   minimalTabs.forEach((tab, index) => tab.addEventListener('click', () => showMinimalGroup(index)));
+  pairedTabs.forEach((tab, index) => tab.addEventListener('click', () => showCategory(index)));
   showMinimalGroup(0);
 
   let categoryTimer = 0;
@@ -108,7 +154,7 @@
       else showCategory(activeCategory + 1);
     }, 4200);
   };
-  [menuSwitcher, minimalMenu].filter(Boolean).forEach((menuRegion) => {
+  [menuSwitcher, minimalMenu, pairedMenu].filter(Boolean).forEach((menuRegion) => {
     menuRegion.addEventListener('mouseenter', stopCategoryAutoplay);
     menuRegion.addEventListener('mouseleave', startCategoryAutoplay);
     menuRegion.addEventListener('focusin', stopCategoryAutoplay);
@@ -119,16 +165,20 @@
   startCategoryAutoplay();
 
   function applyMenuMode(mode = 'carousel') {
-    minimalMenuMode = mode === 'minimal-list';
+    pairedMenuMode = Boolean(menuPairSelect?.checked);
+    minimalMenuMode = !pairedMenuMode && mode === 'minimal-list';
     body.classList.toggle('menu-minimal', minimalMenuMode);
-    root.dataset.menuMode = minimalMenuMode ? 'minimal-list' : 'carousel';
-    if (menuSwitcher) menuSwitcher.hidden = minimalMenuMode;
+    body.classList.toggle('menu-paired', pairedMenuMode);
+    root.dataset.menuMode = pairedMenuMode ? 'paired-small' : minimalMenuMode ? 'minimal-list' : 'carousel';
+    if (menuSwitcher) menuSwitcher.hidden = minimalMenuMode || pairedMenuMode;
     if (minimalMenu) minimalMenu.hidden = !minimalMenuMode;
+    if (pairedMenu) pairedMenu.hidden = !pairedMenuMode;
     stopCategoryAutoplay();
     startCategoryAutoplay();
   }
 
   menuModeSelect?.addEventListener('change', (event) => applyMenuMode(event.target.value));
+  menuPairSelect?.addEventListener('change', () => applyMenuMode(menuModeSelect?.value || 'carousel'));
 
   const supports3d = CSS.supports('transform-style', 'preserve-3d') && CSS.supports('perspective', '1px');
   let flatMode = flatSelect.checked || prefersReducedMotion.matches || !supports3d;
@@ -211,6 +261,27 @@
     if (!rafId) rafId = requestAnimationFrame(updatePose);
   }
 
+  let turnRafId = 0;
+
+  function animateTurnTo(top) {
+    cancelAnimationFrame(turnRafId);
+    if (prefersReducedMotion.matches) {
+      window.scrollTo({ top, behavior: 'auto' });
+      return;
+    }
+    const start = window.scrollY;
+    const distance = top - start;
+    const startedAt = performance.now();
+    const duration = 140;
+    const step = (now) => {
+      const progress = clamp((now - startedAt) / duration, 0, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      window.scrollTo(0, start + distance * eased);
+      if (progress < 1) turnRafId = requestAnimationFrame(step);
+    };
+    turnRafId = requestAnimationFrame(step);
+  }
+
   function goToFace(index) {
     const target = clamp(Number(index), 0, 5);
     currentFace = target;
@@ -220,7 +291,19 @@
       return;
     }
     const top = track.offsetTop + ((track.offsetHeight - (window.visualViewport?.height || window.innerHeight)) * target) / 5;
-    window.scrollTo({ top, behavior: prefersReducedMotion.matches ? 'auto' : 'smooth' });
+    animateTurnTo(top);
+  }
+
+  let wheelAccumulator = 0;
+  let wheelGestureLocked = false;
+  let wheelReleaseTimer = 0;
+
+  function armWheelRelease() {
+    window.clearTimeout(wheelReleaseTimer);
+    wheelReleaseTimer = window.setTimeout(() => {
+      wheelAccumulator = 0;
+      wheelGestureLocked = false;
+    }, 160);
   }
 
   function route3dWheel(event) {
@@ -228,7 +311,19 @@
     const target = event.target instanceof Element ? event.target : null;
     if (target?.closest('.developer-panel')) return;
     event.preventDefault();
-    window.scrollBy(0, event.deltaY);
+    armWheelRelease();
+    if (wheelGestureLocked) return;
+    const normalizedDelta = event.deltaMode === WheelEvent.DOM_DELTA_LINE
+      ? event.deltaY * 16
+      : event.deltaMode === WheelEvent.DOM_DELTA_PAGE
+        ? event.deltaY * window.innerHeight
+        : event.deltaY;
+    wheelAccumulator += normalizedDelta;
+    if (Math.abs(wheelAccumulator) < 1) return;
+    wheelGestureLocked = true;
+    const direction = wheelAccumulator > 0 ? 1 : -1;
+    wheelAccumulator = 0;
+    goToFace(currentFace + direction);
   }
 
   window.addEventListener('wheel', route3dWheel, { passive: false, capture: true });

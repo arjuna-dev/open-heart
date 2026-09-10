@@ -25,7 +25,7 @@ The intended information hierarchy is:
 
 1. A clear invitation to discover a plant-based creation.
 2. Vegan eggs Benedict as the memorable proof point.
-3. One automatically rotating menu carousel whose slides are menu sections, rather than a separate page for every category. Each category has one poster image and a text carousel of dishes. A developer-only ultra-minimal menu presentation consolidates this into Benedict + sandwiches, entrees + sauces, and drinks + desserts.
+3. One automatically rotating menu carousel whose slides are menu sections, rather than a separate page for every category. Each category has one poster image and a text carousel of dishes. Developer options can instead show either an ultra-minimal three-group text list or the active category inside the same centered-pair SMALL structure used by the rest of the page.
 4. Atmosphere and Copenhagen references used as visual context, not unsupported location claims.
 5. Opening hours, contact, find-us, and language areas that can be filled with final restaurant details.
 6. A lightweight action such as feedback, an interest list, or following the concept.
@@ -73,9 +73,9 @@ python3 -m http.server 4173
 
 Then open [http://localhost:4173/](http://localhost:4173/).
 
-The page also remains readable as a normal document when JavaScript is disabled, when reduced motion is requested, or when **Developer view > Simple scroll (no 3D)** is enabled. CSS 3D mode connects adjacent full-viewport sections with shared physical edges, local shading, and separate poses for the final two sections.
+The page also remains readable as a normal document when JavaScript is disabled, when reduced motion is requested, or when **Developer view > Simple scroll (no 3D)** is enabled. In the default centered-pair SMALL composition, every non-menu section uses the same 300-pixel text column and 300-pixel image column. CSS 3D mode connects adjacent full-viewport sections with shared physical edges, local shading, and separate poses for the final two sections.
 
-In CSS 3D mode, wheel and trackpad movement advances the outer page sequence even when the pointer is over face content. Only the front face receives pointer interaction, so links and text selection remain usable. The fixed **Turn the page** pager is available in 3D and centered reference modes; it stays hidden in the default simple-scroll view.
+In CSS 3D mode, one short wheel or trackpad gesture advances exactly one face, even when the pointer is over face content. Only the front face receives pointer interaction, so links and text selection remain usable. The fixed **Turn the page** pager is available in 3D and centered reference modes; it stays hidden in the default simple-scroll view.
 
 ## Repository map
 
@@ -98,7 +98,7 @@ The **Studio controls** menu can compare:
 1. The four approved web ink recipes, including two-ink and strict mono-color directions.
 2. A centered-pair SMALL composition against a slightly more open centered-pair reference composition based on the supplied sparse study.
 3. The baseline Open Heart wordmark with its oversized O and H.
-4. The full category carousel against the developer-only ultra-minimal three-group menu.
+4. The full category carousel against a much smaller ultra-minimal three-group menu or a menu constrained to the same centered-pair SMALL system as the other sections.
 5. Normal scrolling against the CSS 3D experiment.
 
 Useful next decisions are the final typeface, which poster pair leads each category, and which practical restaurant details replace the current concept fields. Only then should the hosted ChatGPT Sites version replace or accompany the static prototype.
