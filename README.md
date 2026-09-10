@@ -73,9 +73,9 @@ python3 -m http.server 4173
 
 Then open [http://localhost:4173/](http://localhost:4173/).
 
-The page also remains readable as a normal document when JavaScript is disabled, when reduced motion is requested, or when **Developer view > Simple scroll (no 3D)** is enabled. In the default centered-pair SMALL composition, every non-menu section uses the same 300-pixel text column and 300-pixel image column. CSS 3D mode connects adjacent full-viewport sections with shared physical edges, local shading, and separate poses for the final two sections.
+The page also remains readable as a normal document when JavaScript is disabled, when reduced motion is requested, or when **Developer view > Simple scroll (no 3D)** is enabled. In the default centered-pair SMALL composition, every non-menu section uses the same 300-pixel text column and 300-pixel image column. CSS 3D mode connects every adjacent full-viewport section with the same vertical turn, shared physical edges, and local shading.
 
-In CSS 3D mode, one short wheel or trackpad gesture advances exactly one face, even when the pointer is over face content. Only the front face receives pointer interaction, so links and text selection remain usable. The fixed **Turn the page** pager is available in 3D and centered reference modes; it stays hidden in the default simple-scroll view.
+In CSS 3D mode, the first short wheel or trackpad gesture triggers one 900-millisecond vertical turn with gentle sine easing. A landed face leaves the transformed 3D scene and becomes a true flat reading surface, so links, controls, and text selection remain reliable. If a face is taller than the viewport, as the full menu can be, wheel input scrolls that face first and turns to the next page only after reaching its edge. The fixed **Turn the page** pager remains available in 3D and centered reference modes; it stays hidden in the default simple-scroll view.
 
 ## Repository map
 

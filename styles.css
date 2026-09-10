@@ -212,6 +212,11 @@ body:not(.is-flat) .reference-chrome>div,body:not(.is-flat) .reference-hint{back
 
 /* One shared pair system now governs every non-menu face in SMALL mode. */
 body:not(.is-flat) #scroll-track{height:300svh}
+body:not(.is-flat) #scene{overscroll-behavior:none}
+body:not(.is-flat) #scene.is-resting{perspective:none}
+body:not(.is-flat) #scene.is-resting #prism{transform-style:flat}
+body:not(.is-flat) #scene.is-resting .face{backface-visibility:visible;user-select:text}
+body:not(.is-flat) #face-2 .face__inner{align-items:flex-start;padding-top:max(110px,12vh);padding-bottom:100px}
 .layout-reference .hero .face__inner{display:flex;align-items:center;justify-content:center}
 .layout-reference .pair-layout{display:grid;grid-template-columns:minmax(280px,390px) minmax(260px,430px);gap:clamp(48px,8vw,140px);align-items:center;width:min(980px,100%);margin-inline:auto;min-height:0}
 .layout-reference .pair-copy{width:100%;max-width:390px;align-self:center}

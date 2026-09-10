@@ -198,7 +198,11 @@
       face.style.pointerEvents = flatMode ? '' : 'none';
     });
     if (flatMode) {
+      cancelAnimationFrame(turnRafId);
+      turnRafId = 0;
+      turnInProgress = false;
       scene.classList.remove('is-transitioning');
+      scene.classList.remove('is-resting');
       scene.dataset.face = String(currentFace);
       updateNav(currentFace);
     }
@@ -230,10 +234,29 @@
     const local = progress - segment;
     // Give each page a flat reading interval. Each pair shares a physical edge.
     const t = clamp((local - 0.1) / 0.8, 0, 1);
+    const restingFace = t === 0 ? segment : t === 1 ? segment + 1 : -1;
+    scene.style.setProperty('--face-progress', progress.toFixed(3));
+    if (restingFace >= 0) {
+      scene.classList.add('is-resting');
+      scene.classList.remove('is-transitioning');
+      prism.style.transform = 'none';
+      faces.forEach((face, i) => {
+        const isCurrent = i === restingFace;
+        face.style.visibility = isCurrent ? 'visible' : 'hidden';
+        face.inert = !isCurrent;
+        face.toggleAttribute('inert', !isCurrent);
+        face.style.pointerEvents = isCurrent ? 'auto' : 'none';
+        face.style.transform = 'none';
+        face.style.setProperty('--shade', '0');
+      });
+      currentFace = restingFace;
+      updateNav(restingFace);
+      return;
+    }
+    scene.classList.remove('is-resting');
     const angle = t * 90;
-    const vertical = segment < 3;
-    const depth = (vertical ? scene.clientHeight : scene.clientWidth) / 2;
-    const rotation = vertical ? `rotateX(${angle}deg)` : `rotateY(${-angle}deg)`;
+    const depth = scene.clientHeight / 2;
+    const rotation = `rotateX(${angle}deg)`;
     prism.style.transform = `translateZ(${-depth}px) ${rotation}`;
     const interactiveFace = t < 0.5 ? segment : segment + 1;
     faces.forEach((face, i) => {
@@ -244,13 +267,12 @@
       face.inert = !visible;
       face.toggleAttribute('inert', !visible);
       face.style.pointerEvents = i === interactiveFace ? 'auto' : 'none';
-      face.style.transform = outgoing ? `translateZ(${depth}px)` : incoming ? `${vertical ? 'rotateX(-90deg)' : 'rotateY(90deg)'} translateZ(${depth}px)` : 'none';
+      face.style.transform = outgoing ? `translateZ(${depth}px)` : incoming ? `rotateX(-90deg) translateZ(${depth}px)` : 'none';
       face.style.setProperty('--shade', String(outgoing ? 0.42 * t : 0.5 * (1 - t)));
-      face.style.setProperty('--shade-direction', vertical ? (outgoing ? 'to bottom' : 'to top') : (outgoing ? 'to right' : 'to left'));
+      face.style.setProperty('--shade-direction', outgoing ? 'to bottom' : 'to top');
     });
     const nextFace = clamp(Math.round(progress), 0, 5);
     scene.classList.toggle('is-transitioning', t > 0 && t < 1);
-    scene.style.setProperty('--face-progress', progress.toFixed(3));
     if (nextFace !== currentFace) {
       currentFace = nextFace;
       updateNav(currentFace);
@@ -262,22 +284,38 @@
   }
 
   let turnRafId = 0;
+  let turnInProgress = false;
 
   function animateTurnTo(top) {
     cancelAnimationFrame(turnRafId);
     if (prefersReducedMotion.matches) {
+      turnInProgress = false;
       window.scrollTo({ top, behavior: 'auto' });
       return;
     }
     const start = window.scrollY;
     const distance = top - start;
+    if (Math.abs(distance) < 0.5) {
+      turnInProgress = false;
+      window.scrollTo({ top, behavior: 'auto' });
+      requestPoseUpdate();
+      return;
+    }
     const startedAt = performance.now();
-    const duration = 140;
+    const duration = 900;
+    turnInProgress = true;
     const step = (now) => {
       const progress = clamp((now - startedAt) / duration, 0, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
+      const eased = -(Math.cos(Math.PI * progress) - 1) / 2;
       window.scrollTo(0, start + distance * eased);
-      if (progress < 1) turnRafId = requestAnimationFrame(step);
+      if (progress < 1) {
+        turnRafId = requestAnimationFrame(step);
+      } else {
+        turnRafId = 0;
+        turnInProgress = false;
+        window.scrollTo({ top, behavior: 'auto' });
+        requestPoseUpdate();
+      }
     };
     turnRafId = requestAnimationFrame(step);
   }
@@ -286,6 +324,7 @@
     const target = clamp(Number(index), 0, 5);
     currentFace = target;
     updateNav(target);
+    faces[target]?.querySelector('.face__inner')?.scrollTo({ top: 0, behavior: 'auto' });
     if (flatMode) {
       document.querySelector(`#face-${target}`)?.scrollIntoView({ behavior: 'auto', block: 'start' });
       return;
@@ -307,17 +346,29 @@
   }
 
   function route3dWheel(event) {
-    if (flatMode || event.defaultPrevented || event.ctrlKey || event.metaKey || !event.deltaY) return;
+    if (flatMode || event.ctrlKey || event.metaKey || !event.deltaY) return;
     const target = event.target instanceof Element ? event.target : null;
     if (target?.closest('.developer-panel')) return;
-    event.preventDefault();
-    armWheelRelease();
-    if (wheelGestureLocked) return;
     const normalizedDelta = event.deltaMode === WheelEvent.DOM_DELTA_LINE
       ? event.deltaY * 16
       : event.deltaMode === WheelEvent.DOM_DELTA_PAGE
         ? event.deltaY * window.innerHeight
         : event.deltaY;
+    if (turnInProgress) {
+      event.preventDefault();
+      armWheelRelease();
+      return;
+    }
+    const faceScroller = target?.closest('.face__inner');
+    if (faceScroller && faceScroller.scrollHeight > faceScroller.clientHeight + 1) {
+      const atTop = faceScroller.scrollTop <= 1;
+      const atBottom = faceScroller.scrollTop + faceScroller.clientHeight >= faceScroller.scrollHeight - 1;
+      const canScrollInside = normalizedDelta < 0 ? !atTop : !atBottom;
+      if (canScrollInside) return;
+    }
+    event.preventDefault();
+    armWheelRelease();
+    if (wheelGestureLocked) return;
     wheelAccumulator += normalizedDelta;
     if (Math.abs(wheelAccumulator) < 1) return;
     wheelGestureLocked = true;
@@ -326,7 +377,7 @@
     goToFace(currentFace + direction);
   }
 
-  window.addEventListener('wheel', route3dWheel, { passive: false, capture: true });
+  document.addEventListener('wheel', route3dWheel, { passive: false, capture: true });
 
   const faceHashMap = new Map([
     ['#face-0', 0],

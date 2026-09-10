@@ -21,6 +21,7 @@ The likely first public artifact is a landing page created and hosted with ChatG
 - The offer is vegetarian food and coffee, with almost every menu item intended to be vegan.
 - Vegan eggs Benedict is the signature proof point, with avocado, lime pickle, and chipotle directions under exploration.
 - Normal scrolling is the default. The CSS 3D prism remains a developer experiment.
+- Every 3D transition turns vertically. Landed faces return to a flat 2D reading state so text selection and controls remain dependable, and overflow within a face scrolls before the next page turn.
 - The menu belongs in one automatically rotating category carousel. Its normal slides are Benedict, sandwiches, salads, entrees, sauces, desserts, and drinks. Developer options can show a deliberately tiny ultra-minimal list or place the active category inside the centered-pair SMALL system.
 - Centered-pair SMALL is one shared layout system: every non-menu face uses the same 300-pixel text column and 300-pixel image column. Page-specific styling should not change those core dimensions.
 - Open Heart is still a concept name and wordmark direction. The oversized O and H ratio is being kept while the typeface remains open.
