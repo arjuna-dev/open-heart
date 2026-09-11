@@ -8,6 +8,7 @@
   const faceTargets = [...document.querySelectorAll('[data-face-target]')];
   const paletteSelect = document.querySelector('#palette-select');
   const flatSelect = document.querySelector('#flat-select');
+  const shadowSelect = document.querySelector('#shadow-select');
   const compositionSelect = document.querySelector('#composition-select');
   const menuModeSelect = document.querySelector('#menu-mode-select');
   const menuPairSelect = document.querySelector('#menu-pair-select');
@@ -521,6 +522,14 @@
 
   const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
+  let shadowsEnabled = shadowSelect?.checked !== false;
+
+  function applyShadowMode() {
+    scene.classList.toggle('no-3d-shadows', !shadowsEnabled);
+    scene.dataset.shadows = shadowsEnabled ? 'on' : 'off';
+    if (shadowSelect) shadowSelect.checked = shadowsEnabled;
+  }
+
   function applyFlatMode() {
     body.classList.toggle('is-flat', flatMode);
     root.style.scrollBehavior = flatMode ? '' : 'auto';
@@ -606,7 +615,8 @@
       face.style.pointerEvents = visible ? 'auto' : 'none';
       face.setAttribute('aria-hidden', String(!visible));
       face.style.transform = outgoing ? `translateZ(${depth}px)` : incoming ? `rotateX(-90deg) translateZ(${depth}px)` : 'none';
-      face.style.setProperty('--shade', String(outgoing ? 0.42 * t : 0.5 * (1 - t)));
+      const shade = shadowsEnabled ? outgoing ? 0.42 * t : 0.5 * (1 - t) : 0;
+      face.style.setProperty('--shade', String(shade));
       face.style.setProperty('--shade-direction', outgoing ? 'to bottom' : 'to top');
     });
     const nextFace = clamp(Math.round(progress), 0, 5);
@@ -921,6 +931,12 @@
     requestPoseUpdate();
   });
 
+  shadowSelect?.addEventListener('change', (event) => {
+    shadowsEnabled = event.target.checked;
+    applyShadowMode();
+    requestPoseUpdate();
+  });
+
   faceButtons.forEach((button) => button.addEventListener('click', () => goToFace(button.dataset.face)));
   faceTargets.forEach((button) => button.addEventListener('click', () => goToFace(button.dataset.faceTarget)));
   window.addEventListener('scroll', requestPoseUpdate, { passive: true });
@@ -973,6 +989,7 @@
 
   applyComposition(compositionSelect?.value || 'centered-pair-small');
   applyMenuMode(menuModeSelect?.value || 'carousel');
+  applyShadowMode();
   applyFlatMode();
   document.fonts?.ready.then(stabilizeCategoryViewport);
   document.fonts?.ready.then(stabilizeMinimalViewport);

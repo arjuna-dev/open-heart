@@ -102,6 +102,7 @@ The **Studio controls** menu can compare:
 4. The full category carousel against a much smaller ultra-minimal three-group menu with two category columns and a print, or a menu constrained to the same centered-pair SMALL system as the other sections.
 5. GSAP carousel motion in all menu presentations: slide left and right, fade in and out, or no animation. Selecting a category or dish pauses autoplay until Play is chosen.
 6. An unchecked-by-default **3D scrolling** control. Checking it enables the CSS 3D experiment; leaving it unchecked keeps normal document scrolling.
+7. A checked-by-default **3D shadows** control. Disable it to compare the 3D geometry without animated face shading.
 
 The previous full-editorial composition has been removed from both the controls and the stylesheet.
 
