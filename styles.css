@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Work+Sans:wght@400;500;600;700&display=swap');
 :root{--paper:#FAFAF7;--ink:#159DDA;--accent:#B64032;--field:#B64032;--deep:#159DDA;--field-text:#FAFAF7;--text:var(--ink);--serif:'Newsreader',Georgia,serif;--sans:'Work Sans',Arial,sans-serif;--mono:'DM Mono',monospace;--line:color-mix(in srgb,var(--ink) 25%,var(--paper))}
-html[data-palette=cyan-brick]{--ink:#159DDA;--accent:#B64032;--field:#B64032;--deep:#159DDA;--text:#B64032}
+html[data-palette=cyan-brick]{--ink:#159DDA;--accent:#B64032;--field:#159DDA;--deep:#B64032;--text:#B64032}
 html[data-palette=electric-carbon]{--ink:#173AE3;--accent:#242321;--field:#173AE3;--deep:#242321;--text:#173AE3}
 html[data-palette=mono-aubergine]{--ink:#63365F;--accent:var(--ink);--field:var(--ink);--deep:var(--ink);--text:var(--ink)}
 html[data-palette=mono-electric]{--ink:#173AE3;--accent:var(--ink);--field:var(--ink);--deep:var(--ink);--text:var(--ink)}
@@ -148,11 +148,11 @@ body:not(.is-flat) .reference-chrome>div,body:not(.is-flat) .reference-hint{back
 .minimal-menu__item h3{font:500 clamp(24px,2.6vw,36px)/1.05 var(--serif);letter-spacing:-.035em;margin:0 0 7px}
 .minimal-menu__item p{font:11px/1.45 var(--mono);text-transform:uppercase;margin:0;opacity:.78}
 
-/* Face 2 is an ink-led field, so its rules preserve contrast in strict mono palettes. */
-#face-2 .minimal-menu__heading,#face-2 .category-heading{border-color:color-mix(in srgb,var(--field-text) 65%,transparent)}
-#face-2 .category-tabs{border-color:color-mix(in srgb,var(--field-text) 50%,transparent)}
-#face-2 .category-tabs button{border-color:color-mix(in srgb,var(--field-text) 50%,transparent)}
-#face-2 .category-tabs button.is-active,#face-2 .category-tabs button[aria-selected=true]{background:var(--paper);color:var(--field);border-color:var(--paper)}
+/* Face 2 is paper, so controls use the active ink instead of white-on-white states. */
+#face-2 .minimal-menu__heading,#face-2 .category-heading{border-color:var(--line)}
+#face-2 .category-tabs,#face-2 .minimal-menu__tabs{border-color:var(--line)}
+#face-2 .category-tabs button,#face-2 .minimal-menu__tabs button{border-color:var(--line)}
+#face-2 .category-tabs button.is-active,#face-2 .category-tabs button[aria-selected=true],#face-2 .minimal-menu__tabs button.is-active,#face-2 .minimal-menu__tabs button[aria-selected=true]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 
 @media(max-width:800px){
   body{overflow-x:hidden}
@@ -313,3 +313,19 @@ body:not(.is-flat) .layout-reference .face:not(#face-2)>.face__inner.closing{ali
   .reference-chrome__label,.reference-hint{display:none}
   .reference-pager .face-button{width:44px;height:44px}
 }
+
+/* Cyan and brick alternate as fields while paper faces keep cyan headings. */
+html[data-palette=cyan-brick] .face:nth-child(odd) h1,
+html[data-palette=cyan-brick] .face:nth-child(odd) h2,
+html[data-palette=cyan-brick] .face:nth-child(odd) h3{color:var(--ink)}
+
+/* Rotation controls stay visible in every menu presentation. */
+[data-carousel-autoplay-toggle]{border:1px solid var(--line);background:transparent;color:inherit;padding:8px 11px;font:10px var(--mono);text-transform:uppercase}
+.minimal-menu__controls{display:flex;justify-content:flex-end;margin-top:16px}
+.minimal-menu__tabs{margin-top:10px;border-color:var(--line)}
+.minimal-menu__tabs button{position:relative;border-color:var(--line)}
+.minimal-menu__tabs button.is-active::after,.minimal-menu__tabs button[aria-selected=true]::after{content:'';position:absolute;left:10px;right:10px;bottom:4px;height:2px;background:currentColor}
+.paired-menu__autoplay{margin-top:14px}
+
+/* A measured, persistent viewport prevents carousel motion from shifting the page. */
+.category-viewport{position:relative;overflow:hidden;min-height:500px}

@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#FAFAF7">
   <meta name="description" content="Open Heart. A vegetarian place for original plant-based creations.">
   <title>Open Heart | Food and coffee</title>
-  <link rel="stylesheet" href="styles.css?v=gesture-carousel-1">
+  <link rel="stylesheet" href="styles.css?v=menu-controls-2">
 </head>
 <body class="is-flat">
   <a class="skip-link" href="#content">Skip to menu</a>
@@ -54,10 +54,9 @@
         </label>
 
         <label class="check">
-          <input type="checkbox" id="flat-select" checked>
-          Normal scrolling
+          <input type="checkbox" id="flat-select">
+          3D scrolling
         </label>
-        <p>Uncheck for the CSS 3D experiment. Image inks stay faithful to their generation recipe. The menu list keeps three larger groups for comparison.</p>
         <a href="studio.html">View the asset archive -></a>
       </div>
     </details>
@@ -109,21 +108,20 @@
 
           <section class="face" id="face-2">
             <div class="face__inner" id="menu">
-              <section class="menu-switcher" aria-labelledby="menu-title">
+              <section class="menu-switcher" aria-labelledby="menu-title" aria-roledescription="carousel" data-carousel-region>
                 <div class="category-heading">
                   <div>
                     <p class="section-kicker">At the table</p>
-                    <h2 id="menu-title">Find your next favorite.</h2>
+                    <h2 id="menu-title">Menu</h2>
                   </div>
                   <div class="category-controls">
+                    <button type="button" data-carousel-autoplay-toggle aria-label="Pause automatic menu rotation">Pause</button>
                     <span id="menu-category-current" class="carousel-current" aria-live="polite">01 / Benedict</span>
                     <span id="menu-category-count" class="carousel-count" aria-live="polite">01 / 07</span>
                     <button type="button" id="menu-category-prev" aria-label="Previous menu section">Previous</button>
                     <button type="button" id="menu-category-next" aria-label="Next menu section">Next</button>
                   </div>
                 </div>
-                <p class="menu-note">A table set for the unexpected.</p>
-
                 <div class="category-tabs" role="tablist" aria-label="Menu sections">
                   <button type="button" role="tab" id="menu-tab-benedict" aria-selected="true" aria-controls="menu-slide-benedict" data-category-tab="benedict">01 Benedict</button>
                   <button type="button" role="tab" id="menu-tab-sandwiches" aria-selected="false" aria-controls="menu-slide-sandwiches" data-category-tab="sandwiches">02 Sandwiches</button>
@@ -136,7 +134,6 @@
 
                 <div class="category-viewport">
                   <section class="menu-slide" id="menu-slide-benedict" role="tabpanel" data-category-slide="benedict" aria-labelledby="menu-tab-benedict">
-                    <div class="menu-slide-head"><p>The signature, in three directions.</p><small>Avocado, lime pickle, or chipotle.</small></div>
                     <div class="menu-slide-content">
                       <figure class="category-art" data-category-art="benedict"><img src="assets/posters/chatgpt/01-avocado-benedict.png" width="1086" height="1448" alt="Avocado Benedict in a controlled two-ink editorial print"></figure>
                       <div class="carousel dish-carousel" tabindex="0" aria-label="Benedict menu items">
@@ -148,7 +145,6 @@
                   </section>
 
                   <section class="menu-slide" id="menu-slide-sandwiches" role="tabpanel" data-category-slide="sandwiches" aria-labelledby="menu-tab-sandwiches">
-                    <div class="menu-slide-head"><p>Open-faced, fully committed.</p><small>Salmon, pulled mushrooms, sharp crunch.</small></div>
                     <div class="menu-slide-content">
                       <figure class="category-art" data-category-art="sandwiches"><img src="assets/posters/chatgpt/03-vegan-salmon.png" width="1086" height="1448" alt="Vegan salmon open sandwich in a controlled two-ink editorial print"></figure>
                       <div class="carousel dish-carousel" tabindex="0" aria-label="Sandwich menu items">
@@ -159,7 +155,6 @@
                   </section>
 
                   <section class="menu-slide" id="menu-slide-salads" role="tabpanel" data-category-slide="salads" aria-labelledby="menu-tab-salads">
-                    <div class="menu-slide-head"><p>Bright, generous, full of contrast.</p><small>Avocado, mango, Caesar, and protein.</small></div>
                     <div class="menu-slide-content">
                       <figure class="category-art" data-category-art="salads"><img src="assets/posters/chatgpt/06-vegan-caesar.png" width="1086" height="1448" alt="Vegan Caesar in a controlled two-ink editorial print"></figure>
                       <div class="carousel dish-carousel" tabindex="0" aria-label="Salad menu items">
@@ -171,7 +166,6 @@
                   </section>
 
                   <section class="menu-slide" id="menu-slide-entrees" role="tabpanel" data-category-slide="entrees" aria-labelledby="menu-tab-entrees">
-                    <div class="menu-slide-head"><p>Crisp things for the table.</p><small>Cauliflower wings, fries, something to dip.</small></div>
                     <div class="menu-slide-content">
                       <figure class="category-art" data-category-art="entrees"><img src="assets/posters/chatgpt/07-bbq-cauliflower.png" width="1086" height="1448" alt="BBQ cauliflower wings in a controlled two-ink editorial print"></figure>
                       <div class="carousel dish-carousel" tabindex="0" aria-label="Entree menu items">
@@ -184,7 +178,6 @@
                   </section>
 
                   <section class="menu-slide" id="menu-slide-sauces" role="tabpanel" data-category-slide="sauces" aria-labelledby="menu-tab-sauces">
-                    <div class="menu-slide-head"><p>Five ways to change the plate.</p><small>Chipotle, herbs, basil, dill, melted cheese.</small></div>
                     <div class="menu-slide-content">
                       <figure class="category-art" data-category-art="sauces"><img src="assets/posters/chatgpt/08-five-sauces.png" width="1086" height="1448" alt="Five sauces in a controlled two-ink editorial print"></figure>
                       <div class="carousel dish-carousel" tabindex="0" aria-label="Sauce menu items">
@@ -198,7 +191,6 @@
                   </section>
 
                   <section class="menu-slide" id="menu-slide-desserts" role="tabpanel" data-category-slide="desserts" aria-labelledby="menu-tab-desserts">
-                    <div class="menu-slide-head"><p>End on a bright note.</p><small>Lime, berries, cream, and crackling sugar.</small></div>
                     <div class="menu-slide-content">
                       <figure class="category-art" data-category-art="desserts"><img src="assets/menu/key-lime-chatgpt.png" width="768" height="1024" alt="Avocado key-lime pie in a controlled two-ink editorial print"></figure>
                       <div class="carousel dish-carousel" tabindex="0" aria-label="Dessert menu items">
@@ -210,7 +202,6 @@
                   </section>
 
                   <section class="menu-slide" id="menu-slide-drinks" role="tabpanel" data-category-slide="drinks" aria-labelledby="menu-tab-drinks">
-                    <div class="menu-slide-head"><p>Stay for the second pour.</p><small>Matcha, espresso, chocolate, and 0,0.</small></div>
                     <div class="menu-slide-content">
                       <figure class="category-art" data-category-art="drinks"><img src="assets/posters/chatgpt/10-something-warm.png" width="1086" height="1448" alt="Something warm in a controlled two-ink editorial print"></figure>
                       <div class="carousel dish-carousel" tabindex="0" aria-label="Drink menu items">
@@ -229,11 +220,13 @@
                 </div>
               </section>
 
-              <section class="minimal-menu" id="minimal-menu" aria-labelledby="minimal-menu-title" hidden>
+              <section class="minimal-menu" id="minimal-menu" aria-labelledby="minimal-menu-title" aria-roledescription="carousel" data-carousel-region hidden>
                 <div class="minimal-menu__heading">
                   <p class="section-kicker">At the table</p>
-                  <h2 id="minimal-menu-title">Open Heart, on the plate.</h2>
-                  <p class="minimal-menu__note">A short list of things worth making room for.</p>
+                  <h2 id="minimal-menu-title">Menu</h2>
+                </div>
+                <div class="minimal-menu__controls">
+                  <button type="button" data-carousel-autoplay-toggle aria-label="Pause automatic menu rotation">Pause</button>
                 </div>
                 <div class="minimal-menu__tabs" role="tablist" aria-label="Minimal menu groups">
                   <button type="button" role="tab" id="minimal-tab-benedict" aria-selected="true" aria-controls="minimal-slide-benedict" data-minimal-tab="benedict">01 Benedict + sandwiches</button>
@@ -282,10 +275,11 @@
                 </div>
               </section>
 
-              <section class="paired-menu pair-layout" id="paired-menu" aria-labelledby="paired-menu-title" hidden>
+              <section class="paired-menu pair-layout" id="paired-menu" aria-labelledby="paired-menu-title" aria-roledescription="carousel" data-carousel-region hidden>
                 <div class="paired-menu__copy pair-copy">
                   <p class="section-kicker">At the table</p>
                   <h2 id="paired-menu-title">The signature, in three directions.</h2>
+                  <button class="paired-menu__autoplay" type="button" data-carousel-autoplay-toggle aria-label="Pause automatic menu rotation">Pause</button>
                   <ol class="paired-menu__items" id="paired-menu-items" aria-live="polite"></ol>
                   <div class="paired-menu__tabs" role="tablist" aria-label="Paired menu categories">
                     <button type="button" role="tab" data-paired-tab="0" aria-label="Benedict" aria-selected="true">01</button>
@@ -408,6 +402,6 @@
   </main>
 
   <script src="assets/vendor/gsap.min.js"></script>
-  <script src="app.js?v=gesture-carousel-1"></script>
+  <script src="app.js?v=menu-controls-2"></script>
 </body>
 </html>

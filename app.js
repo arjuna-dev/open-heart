@@ -58,6 +58,8 @@
   const pairedMenuImage = document.querySelector('#paired-menu-image');
   const pairedMenuCaption = document.querySelector('#paired-menu-caption');
   const pairedTabs = [...document.querySelectorAll('[data-paired-tab]')];
+  const carouselRegions = [...document.querySelectorAll('[data-carousel-region]')];
+  const autoplayButtons = [...document.querySelectorAll('[data-carousel-autoplay-toggle]')];
   let activeCategory = 0;
   let activeMinimalGroup = 0;
   let minimalMenuMode = false;
@@ -101,6 +103,28 @@
     });
   }
 
+  function stabilizeCategoryViewport() {
+    if (!categoryViewport || menuSwitcher?.hidden || categoryViewport.clientWidth < 1) return;
+    let maximumHeight = 500;
+    categorySlides.forEach((slide) => {
+      const wasHidden = slide.hidden;
+      const savedStyle = slide.getAttribute('style');
+      slide.hidden = false;
+      slide.style.position = 'absolute';
+      slide.style.inset = '0 auto auto 0';
+      slide.style.width = '100%';
+      slide.style.visibility = 'hidden';
+      slide.style.pointerEvents = 'none';
+      slide.style.transform = 'none';
+      slide.style.opacity = '1';
+      maximumHeight = Math.max(maximumHeight, slide.offsetHeight);
+      slide.hidden = wasHidden;
+      if (savedStyle === null) slide.removeAttribute('style');
+      else slide.setAttribute('style', savedStyle);
+    });
+    categoryViewport.style.height = `${Math.ceil(maximumHeight)}px`;
+  }
+
   function finishCategoryAnimation() {
     if (categoryAnimation) {
       categoryAnimation.kill();
@@ -116,7 +140,6 @@
       ['transform', 'opacity', 'position', 'inset', 'width'].forEach((property) => slide.style.removeProperty(property));
     });
     categoryViewport?.classList.remove('is-animating');
-    categoryViewport?.style.removeProperty('height');
   }
 
   function updateCategoryState(index) {
@@ -161,10 +184,7 @@
         slide.style.width = '100%';
       }
     });
-    const outgoingHeight = outgoing.offsetHeight;
-    const incomingHeight = incoming.offsetHeight;
     categoryViewport.classList.add('is-animating');
-    categoryViewport.style.height = `${Math.max(500, outgoingHeight, incomingHeight)}px`;
 
     if (carouselAnimationMode === 'fade') {
       window.gsap.set(outgoing, { opacity: 1, x: 0 });
@@ -198,6 +218,7 @@
   categoryPrevious?.addEventListener('click', () => showCategory(activeCategory - 1));
   categoryNext?.addEventListener('click', () => showCategory(activeCategory + 1));
   showCategory(0, { animate: false });
+  stabilizeCategoryViewport();
 
   function showMinimalGroup(index) {
     if (!minimalSlides.length) return;
@@ -211,6 +232,8 @@
     minimalTabs.forEach((tab, i) => {
       const isActive = i === activeMinimalGroup;
       tab.setAttribute('aria-selected', String(isActive));
+      if (isActive) tab.setAttribute('aria-current', 'page');
+      else tab.removeAttribute('aria-current');
       tab.tabIndex = isActive ? 0 : -1;
       tab.classList.toggle('is-active', isActive);
     });
@@ -221,18 +244,78 @@
   showMinimalGroup(0);
 
   let categoryTimer = 0;
+  let autoplayPausedByUser = false;
+  let autoplayStoppedByFocus = false;
+  let autoplayPausedByHover = false;
+  let autoplayExplicitlyStarted = false;
+
+  function syncAutoplayControls() {
+    const isPlaying = Boolean(categoryTimer);
+    autoplayButtons.forEach((button) => {
+      button.textContent = isPlaying ? 'Pause' : 'Play';
+      button.setAttribute('aria-label', isPlaying ? 'Pause automatic menu rotation' : 'Start automatic menu rotation');
+    });
+    [categoryCurrent, categoryCount, pairedMenuItems].forEach((region) => {
+      region?.setAttribute('aria-live', isPlaying ? 'off' : 'polite');
+    });
+  }
+
   const stopCategoryAutoplay = () => {
     if (categoryTimer) window.clearInterval(categoryTimer);
     categoryTimer = 0;
+    syncAutoplayControls();
   };
   const startCategoryAutoplay = () => {
     const slides = minimalMenuMode ? minimalSlides : categorySlides;
-    if (categoryTimer || prefersReducedMotion.matches || slides.length < 2) return;
+    const interactionPaused = autoplayStoppedByFocus || autoplayPausedByHover;
+    if (categoryTimer || autoplayPausedByUser || document.hidden || prefersReducedMotion.matches || slides.length < 2 || (interactionPaused && !autoplayExplicitlyStarted)) {
+      syncAutoplayControls();
+      return;
+    }
     categoryTimer = window.setInterval(() => {
       if (minimalMenuMode) showMinimalGroup(activeMinimalGroup + 1);
       else showCategory(activeCategory + 1);
-    }, 3600);
+    }, 5600);
+    syncAutoplayControls();
   };
+
+  autoplayButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      if (categoryTimer) {
+        autoplayPausedByUser = true;
+        autoplayExplicitlyStarted = false;
+        stopCategoryAutoplay();
+        return;
+      }
+      autoplayPausedByUser = false;
+      autoplayStoppedByFocus = false;
+      autoplayPausedByHover = false;
+      autoplayExplicitlyStarted = true;
+      startCategoryAutoplay();
+    });
+  });
+
+  carouselRegions.forEach((region) => {
+    region.addEventListener('focusin', () => {
+      if (autoplayExplicitlyStarted) return;
+      autoplayStoppedByFocus = true;
+      stopCategoryAutoplay();
+    });
+    region.addEventListener('pointerenter', () => {
+      if (autoplayExplicitlyStarted) return;
+      autoplayPausedByHover = true;
+      stopCategoryAutoplay();
+    });
+    region.addEventListener('pointerleave', () => {
+      autoplayPausedByHover = false;
+      startCategoryAutoplay();
+    });
+  });
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stopCategoryAutoplay();
+    else startCategoryAutoplay();
+  });
   startCategoryAutoplay();
 
   function applyMenuMode(mode = 'carousel') {
@@ -245,6 +328,7 @@
     if (minimalMenu) minimalMenu.hidden = !minimalMenuMode;
     if (pairedMenu) pairedMenu.hidden = !pairedMenuMode;
     finishCategoryAnimation();
+    window.requestAnimationFrame(stabilizeCategoryViewport);
     stopCategoryAutoplay();
     startCategoryAutoplay();
   }
@@ -259,7 +343,7 @@
   root.dataset.carouselAnimation = carouselAnimationMode;
 
   const supports3d = CSS.supports('transform-style', 'preserve-3d') && CSS.supports('perspective', '1px');
-  let flatMode = flatSelect.checked || prefersReducedMotion.matches || !supports3d;
+  let flatMode = !flatSelect.checked || prefersReducedMotion.matches || !supports3d;
   let currentFace = 0;
   let rafId = 0;
   const faces = [...prism.querySelectorAll('.face')];
@@ -269,7 +353,7 @@
   function applyFlatMode() {
     body.classList.toggle('is-flat', flatMode);
     root.style.scrollBehavior = flatMode ? '' : 'auto';
-    flatSelect.checked = flatMode;
+    flatSelect.checked = !flatMode;
     if (referenceHint) referenceHint.textContent = flatMode ? 'Scroll to explore' : 'Scroll to rotate';
     faces.forEach(face => {
       face.inert = false;
@@ -632,7 +716,7 @@
   });
 
   flatSelect.addEventListener('change', (event) => {
-    flatMode = event.target.checked;
+    flatMode = !event.target.checked || prefersReducedMotion.matches || !supports3d;
     applyFlatMode();
     goToFace(currentFace);
     requestPoseUpdate();
@@ -641,7 +725,12 @@
   faceButtons.forEach((button) => button.addEventListener('click', () => goToFace(button.dataset.face)));
   faceTargets.forEach((button) => button.addEventListener('click', () => goToFace(button.dataset.faceTarget)));
   window.addEventListener('scroll', requestPoseUpdate, { passive: true });
-  window.addEventListener('resize', () => { requestPoseUpdate(); renderPretext(); }, { passive: true });
+  window.addEventListener('resize', () => {
+    finishCategoryAnimation();
+    stabilizeCategoryViewport();
+    requestPoseUpdate();
+    renderPretext();
+  }, { passive: true });
   window.visualViewport?.addEventListener('resize', requestPoseUpdate, { passive: true });
   prefersReducedMotion.addEventListener?.('change', (event) => {
     flatMode = event.matches || !supports3d;
@@ -683,5 +772,7 @@
   applyComposition(compositionSelect?.value || 'centered-pair-small');
   applyMenuMode(menuModeSelect?.value || 'carousel');
   applyFlatMode();
+  document.fonts?.ready.then(stabilizeCategoryViewport);
+  window.addEventListener('load', stabilizeCategoryViewport, { once: true });
   requestPoseUpdate();
 })();
