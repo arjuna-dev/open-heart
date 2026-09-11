@@ -642,7 +642,7 @@
       turnInProgress = false;
       window.scrollTo({ top, behavior: 'auto' });
       updatePose();
-      maybeReleaseCommittedWheelGesture();
+      resetWheelGesture();
       return;
     }
     const start = window.scrollY;
@@ -651,7 +651,7 @@
       turnInProgress = false;
       window.scrollTo({ top, behavior: 'auto' });
       updatePose();
-      maybeReleaseCommittedWheelGesture();
+      resetWheelGesture();
       return;
     }
     const startedAt = performance.now();
@@ -668,7 +668,9 @@
         turnInProgress = false;
         window.scrollTo({ top, behavior: 'auto' });
         updatePose();
-        maybeReleaseCommittedWheelGesture();
+        // Release exactly when this face lands. Any later wheel delta can
+        // begin the next face immediately, even if the visitor keeps scrolling.
+        resetWheelGesture();
       }
     };
     turnRafId = requestAnimationFrame(step);
@@ -693,7 +695,6 @@
   let wheelBaseScroll = 0;
   let wheelTargetFace = -1;
   let wheelGestureCommitted = false;
-  let wheelGestureIdle = true;
   let wheelReleaseTimer = 0;
 
   function resetWheelGesture() {
@@ -701,20 +702,15 @@
     wheelBaseScroll = 0;
     wheelTargetFace = -1;
     wheelGestureCommitted = false;
-    wheelGestureIdle = true;
-  }
-
-  function maybeReleaseCommittedWheelGesture() {
-    if (wheelGestureCommitted && wheelGestureIdle && !turnInProgress) resetWheelGesture();
   }
 
   function armWheelRelease(delay = wheelGestureIdleDelay) {
     window.clearTimeout(wheelReleaseTimer);
-    wheelGestureIdle = false;
     wheelReleaseTimer = window.setTimeout(() => {
-      wheelGestureIdle = true;
       if (wheelGestureCommitted) {
-        maybeReleaseCommittedWheelGesture();
+        // The active turn owns all deltas until it lands. The completion
+        // callback releases the gesture so continued scrolling can proceed.
+        if (!turnInProgress) resetWheelGesture();
         return;
       }
       const shouldSettle = !turnInProgress && wheelDirection;
@@ -734,9 +730,8 @@
         ? event.deltaY * window.innerHeight
         : event.deltaY;
 
-    // One continuous wheel gesture owns one adjacent face. Consume the
-    // remaining momentum after it commits so a trackpad tail cannot skip a
-    // second face. The gesture unlocks after a short input pause.
+    // One active turn owns one adjacent face. Consume the remaining momentum
+    // while it is moving so a trackpad tail cannot skip a second face.
     if (wheelGestureCommitted) {
       event.preventDefault();
       armWheelRelease();
