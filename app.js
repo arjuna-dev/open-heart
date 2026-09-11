@@ -11,7 +11,6 @@
   const shadowSelect = document.querySelector('#shadow-select');
   const compositionSelect = document.querySelector('#composition-select');
   const menuModeSelect = document.querySelector('#menu-mode-select');
-  const menuPairSelect = document.querySelector('#menu-pair-select');
   const carouselAnimationSelect = document.querySelector('#carousel-animation-select');
   const referenceHint = document.querySelector('#reference-hint');
   const interestForm = document.querySelector('#interest-form');
@@ -484,11 +483,11 @@
   startCategoryAutoplay();
 
   function applyMenuMode(mode = 'carousel') {
-    pairedMenuMode = Boolean(menuPairSelect?.checked);
-    minimalMenuMode = !pairedMenuMode && mode === 'minimal-list';
+    pairedMenuMode = mode === 'paired-small';
+    minimalMenuMode = mode === 'minimal-list';
     body.classList.toggle('menu-minimal', minimalMenuMode);
     body.classList.toggle('menu-paired', pairedMenuMode);
-    root.dataset.menuMode = pairedMenuMode ? 'paired-small' : minimalMenuMode ? 'minimal-list' : 'carousel';
+    root.dataset.menuMode = mode;
     if (menuSwitcher) menuSwitcher.hidden = minimalMenuMode || pairedMenuMode;
     if (minimalMenu) minimalMenu.hidden = !minimalMenuMode;
     if (pairedMenu) pairedMenu.hidden = !pairedMenuMode;
@@ -504,7 +503,6 @@
   }
 
   menuModeSelect?.addEventListener('change', (event) => applyMenuMode(event.target.value));
-  menuPairSelect?.addEventListener('change', () => applyMenuMode(menuModeSelect?.value || 'carousel'));
   carouselAnimationSelect?.addEventListener('change', (event) => {
     carouselAnimationMode = event.target.value;
     root.dataset.carouselAnimation = carouselAnimationMode;
@@ -530,15 +528,42 @@
     if (shadowSelect) shadowSelect.checked = shadowsEnabled;
   }
 
+  function setFaceState(face, { visible, interactive, resting = false }) {
+    face.style.visibility = visible ? 'visible' : 'hidden';
+    face.toggleAttribute('inert', !interactive);
+    if ('inert' in face) face.inert = !interactive;
+    face.setAttribute('aria-hidden', String(!interactive));
+    face.style.pointerEvents = interactive ? 'auto' : 'none';
+    face.style.userSelect = interactive ? 'text' : 'none';
+    face.style.zIndex = resting && interactive ? '2' : '';
+
+    const inner = face.querySelector('.face__inner');
+    if (inner) {
+      inner.style.pointerEvents = interactive ? 'auto' : 'none';
+      inner.style.userSelect = interactive ? 'text' : 'none';
+    }
+  }
+
+  function resetFaceState(face) {
+    face.removeAttribute('inert');
+    if ('inert' in face) face.inert = false;
+    face.setAttribute('aria-hidden', 'false');
+    ['visibility', 'pointer-events', 'user-select', 'z-index', 'transform'].forEach((property) => {
+      face.style.removeProperty(property);
+    });
+    const inner = face.querySelector('.face__inner');
+    inner?.style.removeProperty('pointer-events');
+    inner?.style.removeProperty('user-select');
+  }
+
   function applyFlatMode() {
     body.classList.toggle('is-flat', flatMode);
     root.style.scrollBehavior = flatMode ? '' : 'auto';
     flatSelect.checked = !flatMode;
     if (referenceHint) referenceHint.textContent = flatMode ? 'Scroll to explore' : 'Scroll to rotate';
-    faces.forEach(face => {
-      face.inert = false;
-      face.removeAttribute('inert');
-      face.style.pointerEvents = flatMode ? '' : 'none';
+    faces.forEach((face) => {
+      if (flatMode) resetFaceState(face);
+      else setFaceState(face, { visible: false, interactive: false });
     });
     if (flatMode) {
       cancelAnimationFrame(turnRafId);
@@ -586,10 +611,7 @@
       prism.style.transform = 'none';
       faces.forEach((face, i) => {
         const isCurrent = i === restingFace;
-        face.style.visibility = isCurrent ? 'visible' : 'hidden';
-        face.inert = !isCurrent;
-        face.toggleAttribute('inert', !isCurrent);
-        face.style.pointerEvents = isCurrent ? 'auto' : 'none';
+        setFaceState(face, { visible: isCurrent, interactive: isCurrent, resting: true });
         face.style.transform = 'none';
         face.style.setProperty('--shade', '0');
       });
@@ -606,14 +628,10 @@
       const outgoing = i === segment;
       const incoming = i === segment + 1;
       const visible = outgoing || incoming;
-      face.style.visibility = visible ? 'visible' : 'hidden';
-      face.inert = !visible;
-      face.toggleAttribute('inert', !visible);
       // Both faces remain interactive throughout the turn. The old halfway
       // switch made the visible face inert and caused lost clicks and text
       // selections during wheel-driven transitions.
-      face.style.pointerEvents = visible ? 'auto' : 'none';
-      face.setAttribute('aria-hidden', String(!visible));
+      setFaceState(face, { visible, interactive: visible });
       face.style.transform = outgoing ? `translateZ(${depth}px)` : incoming ? `rotateX(-90deg) translateZ(${depth}px)` : 'none';
       const shade = shadowsEnabled ? outgoing ? 0.42 * t : 0.5 * (1 - t) : 0;
       face.style.setProperty('--shade', String(shade));

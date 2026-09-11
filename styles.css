@@ -12,7 +12,8 @@ html[data-palette=mono-electric]{--ink:#173AE3;--accent:var(--ink);--field:var(-
 .menu-category{margin-bottom:65px;scroll-margin-top:35px}.category-heading{display:flex;justify-content:space-between;align-items:baseline;gap:25px;border-top:1px solid var(--ink);padding-top:15px;margin-bottom:26px}.category-heading h2{font:500 clamp(42px,6vw,88px)/1 var(--serif);letter-spacing:-.055em;margin:0}.carousel-controls{display:flex;align-items:center;gap:8px}.carousel-controls button{width:44px;height:44px;border:1px solid var(--line);background:none;font-size:22px}.carousel-controls button:disabled{opacity:.25;cursor:default}.carousel-count{font:11px var(--mono);margin-right:14px;white-space:nowrap}
 .carousel{display:flex;gap:3vw;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:var(--ink) var(--paper);padding-bottom:22px;align-items:flex-start}.dish{flex:0 0 calc((100% - 6vw)/3);min-width:0;scroll-snap-align:start}.dish-art{margin:0 0 20px;aspect-ratio:3/4;overflow:hidden;background:var(--paper)}.dish-art[hidden]{display:none}.dish-art img{width:100%;height:100%;object-fit:contain;display:block}.dish-caption{display:grid;grid-template-columns:24px 1fr;gap:12px;border-top:1px solid var(--line);padding-top:16px}.item-number{font:10px var(--mono);padding-top:5px}.dish h3{font:500 clamp(22px,2.5vw,36px)/1.07 var(--serif);letter-spacing:-.035em;margin:0 0 10px}.dish p{font:14px/1.55 var(--sans);max-width:340px;margin:0 0 14px}.dish small{font:10px/1.5 var(--mono);display:block}.warm-ritual{display:flex;justify-content:space-between;gap:20px;padding:20px 0 55px;font:15px var(--sans)}.warm-ritual b{font:11px var(--mono);margin-right:12px}.section-kicker{margin:0 0 32px}.menu-category:last-child{margin-bottom:0}footer{display:flex;gap:30px;align-items:center;flex-wrap:wrap;justify-content:space-between;border-top:1px solid var(--ink);padding-top:30px;margin-top:60px}footer p{font-size:12px;line-height:1.6}footer button{border:0;background:none;text-decoration:underline;text-underline-offset:5px;font-size:13px}#share-status{font-size:12px}
 body:not(.is-flat) #scroll-track{height:600svh}body:not(.is-flat) #scene{position:sticky;top:0;height:100svh;perspective:1800px;overflow:hidden}body:not(.is-flat) #prism{width:100%;height:100%;transform-style:preserve-3d;will-change:transform}body:not(.is-flat) .face{position:absolute;inset:0;width:100%;height:100%;backface-visibility:hidden;overflow:hidden}body:not(.is-flat) .face__inner{height:100%;min-height:0;overflow:auto;padding-top:35px}body:not(.is-flat) .face::after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(var(--shade-direction,to bottom),transparent,rgba(0,0,0,calc(var(--shade,0) * .7)));opacity:1;z-index:10;backface-visibility:hidden;transform:translateZ(.5px);will-change:background;contain:paint}
-body:not(.is-flat) #scene.no-3d-shadows .face::after{display:none}
+body:not(.is-flat) #scene.no-3d-shadows .face::after,
+body:not(.is-flat) #scene.is-resting .face::after{display:none}
 .is-flat .face{visibility:visible!important;transform:none!important}.is-flat #prism{transform:none!important}
 @media(min-width:1600px){.face__inner{padding-left:max(4vw,calc((100vw - 1480px)/2));padding-right:max(4vw,calc((100vw - 1480px)/2))}.hero .face__inner{min-height:1000px}}
 @media(max-width:800px){.topbar{gap:16px;margin:0 6vw;padding:18px 0;flex-wrap:wrap}.topbar nav{gap:18px}.small-wordmark{font-size:22px}.developer-panel{width:100%;font-size:10px}.developer-panel summary{padding:0}.developer-panel__body{top:95px;right:0}.face__inner{padding:35px 6vw 45px}.hero .face__inner{min-height:0;padding-top:22px;padding-bottom:60px}.logo{font-size:6vw;gap:5vw;margin-top:35px}.logo b{font-size:3.3em}.hero-print{position:relative;top:auto;right:auto;width:69%;margin:-5px 0 0 auto}.hero-intro{margin-top:12px;max-width:440px}.hero-intro p{font-size:16px}.hero-index{display:none}.dish{flex-basis:74%;}.carousel{gap:24px}.category-heading h2{font-size:47px}.carousel-count{display:none}.menu-category{margin-bottom:45px}.warm-ritual{display:grid;gap:18px;padding-bottom:40px}.logo-stacked .logo{font-size:8vw}.logo-stacked .hero-print{margin-top:-50px;right:0;width:60%}.logo-stacked .hero-intro{margin-top:20px}footer{gap:18px;align-items:flex-start}footer .small-wordmark{width:100%}}
@@ -217,7 +218,10 @@ body:not(.is-flat) #scroll-track{height:300svh}
 body:not(.is-flat) #scene{overscroll-behavior:none}
 body:not(.is-flat) #scene.is-resting{perspective:none}
 body:not(.is-flat) #scene.is-resting #prism{transform-style:flat}
-body:not(.is-flat) #scene.is-resting .face{backface-visibility:visible;user-select:text}
+body:not(.is-flat) #scene.is-resting .face{backface-visibility:visible}
+body:not(.is-flat) #scene.is-resting .face[aria-hidden=false],
+body:not(.is-flat) #scene.is-resting .face[aria-hidden=false] .face__inner{pointer-events:auto;user-select:text}
+body:not(.is-flat) #scene.is-resting .face[aria-hidden=true]{pointer-events:none;user-select:none}
 body:not(.is-flat) #face-2 .face__inner{align-items:flex-start;padding-top:max(110px,12vh);padding-bottom:100px}
 .layout-reference .hero .face__inner{display:flex;align-items:center;justify-content:center}
 .layout-reference .pair-layout{display:grid;grid-template-columns:minmax(280px,390px) minmax(260px,430px);gap:clamp(48px,8vw,140px);align-items:center;width:min(980px,100%);margin-inline:auto;min-height:0}
@@ -356,6 +360,11 @@ html[data-palette=brick-cyan] .face:nth-child(odd) h3{color:var(--ink)}
 html[data-palette=electric-carbon] .face:nth-child(odd) h1,
 html[data-palette=electric-carbon] .face:nth-child(odd) h2,
 html[data-palette=electric-carbon] .face:nth-child(odd) h3{color:var(--ink)}
+html[data-palette=electric-carbon] .face:nth-child(even):not(:last-child) h1,
+html[data-palette=electric-carbon] .face:nth-child(even):not(:last-child) h2,
+html[data-palette=electric-carbon] .face:nth-child(even):not(:last-child) h3,
+html[data-palette=electric-carbon] .face:nth-child(even):not(:last-child) .section-kicker,
+html[data-palette=electric-carbon] .face:nth-child(even):not(:last-child) .edition{color:var(--accent)}
 #face-2 .paired-menu__tabs button{border-color:var(--line);color:var(--text)}
 #face-2 .paired-menu__tabs button.is-active,
 #face-2 .paired-menu__tabs button[aria-selected=true]{background:var(--ink);border-color:var(--ink);color:var(--paper);box-shadow:inset 0 -2px 0 currentColor}
