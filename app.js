@@ -642,6 +642,7 @@
       turnInProgress = false;
       window.scrollTo({ top, behavior: 'auto' });
       updatePose();
+      maybeReleaseCommittedWheelGesture();
       return;
     }
     const start = window.scrollY;
@@ -650,6 +651,7 @@
       turnInProgress = false;
       window.scrollTo({ top, behavior: 'auto' });
       updatePose();
+      maybeReleaseCommittedWheelGesture();
       return;
     }
     const startedAt = performance.now();
@@ -666,6 +668,7 @@
         turnInProgress = false;
         window.scrollTo({ top, behavior: 'auto' });
         updatePose();
+        maybeReleaseCommittedWheelGesture();
       }
     };
     turnRafId = requestAnimationFrame(step);
@@ -685,26 +688,39 @@
   }
 
   const wheelCommitThreshold = 0.1;
+  const wheelGestureIdleDelay = 180;
   let wheelDirection = 0;
   let wheelBaseScroll = 0;
   let wheelTargetFace = -1;
+  let wheelGestureCommitted = false;
+  let wheelGestureIdle = true;
   let wheelReleaseTimer = 0;
 
   function resetWheelGesture() {
     wheelDirection = 0;
     wheelBaseScroll = 0;
     wheelTargetFace = -1;
+    wheelGestureCommitted = false;
+    wheelGestureIdle = true;
   }
 
-  function armWheelRelease(delay = 180) {
+  function maybeReleaseCommittedWheelGesture() {
+    if (wheelGestureCommitted && wheelGestureIdle && !turnInProgress) resetWheelGesture();
+  }
+
+  function armWheelRelease(delay = wheelGestureIdleDelay) {
     window.clearTimeout(wheelReleaseTimer);
+    wheelGestureIdle = false;
     wheelReleaseTimer = window.setTimeout(() => {
-      if (!turnInProgress && wheelDirection) {
-        const returnTop = getFaceScrollTop(currentFace);
-        resetWheelGesture();
-        animateTurnTo(returnTop, 220);
+      wheelGestureIdle = true;
+      if (wheelGestureCommitted) {
+        maybeReleaseCommittedWheelGesture();
+        return;
       }
+      const shouldSettle = !turnInProgress && wheelDirection;
+      const returnTop = shouldSettle ? getFaceScrollTop(currentFace) : 0;
       resetWheelGesture();
+      if (shouldSettle) animateTurnTo(returnTop, 220);
     }, delay);
   }
 
@@ -717,8 +733,18 @@
       : event.deltaMode === WheelEvent.DOM_DELTA_PAGE
         ? event.deltaY * window.innerHeight
         : event.deltaY;
-    // A new wheel delta always takes control immediately. Do not make the
-    // visitor wait for a previous auto-completion turn to finish.
+
+    // One continuous wheel gesture owns one adjacent face. Consume the
+    // remaining momentum after it commits so a trackpad tail cannot skip a
+    // second face. The gesture unlocks after a short input pause.
+    if (wheelGestureCommitted) {
+      event.preventDefault();
+      armWheelRelease();
+      return;
+    }
+
+    // Wheel input can still interrupt a navigation or settle animation when no
+    // committed wheel gesture owns that motion.
     if (turnInProgress) {
       cancelAnimationFrame(turnRafId);
       turnRafId = 0;
@@ -745,15 +771,17 @@
       return;
     }
     const metrics = getScrollMetrics();
-    const nextScroll = clamp(window.scrollY + normalizedDelta, metrics.trackTop, metrics.trackTop + metrics.maxScroll);
+    const destination = getFaceScrollTop(wheelTargetFace, metrics);
+    const segmentStart = Math.min(wheelBaseScroll, destination);
+    const segmentEnd = Math.max(wheelBaseScroll, destination);
+    const nextScroll = clamp(window.scrollY + normalizedDelta, segmentStart, segmentEnd);
     window.scrollTo({ top: nextScroll, behavior: 'auto' });
     // Render in the same wheel event so a ten-pixel delta produces a
     // ten-pixel-equivalent pose change without waiting for another frame.
     updatePose();
     armWheelRelease();
     if (Math.abs(nextScroll - wheelBaseScroll) >= metrics.pageSpan * wheelCommitThreshold) {
-      const destination = getFaceScrollTop(wheelTargetFace, metrics);
-      resetWheelGesture();
+      wheelGestureCommitted = true;
       animateTurnTo(destination);
     }
   }
