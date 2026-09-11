@@ -517,6 +517,7 @@
   let currentFace = 0;
   let rafId = 0;
   const faces = [...prism.querySelectorAll('.face')];
+  let landedInteractionLock = null;
 
   const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
@@ -556,7 +557,51 @@
     inner?.style.removeProperty('user-select');
   }
 
+  function captureLandedInteraction(event) {
+    if (flatMode) return;
+    const face = event.target instanceof Element ? event.target.closest('.face') : null;
+    const index = faces.indexOf(face);
+    if (index < 0) return;
+    landedInteractionLock = { index, top: getFaceScrollTop(index) };
+  }
+
+  function restoreLandedInteraction() {
+    const lock = landedInteractionLock;
+    if (!lock || flatMode) return;
+    if (Math.abs(window.scrollY - lock.top) > 0.5) {
+      currentFace = lock.index;
+      window.scrollTo({ top: lock.top, behavior: 'auto' });
+      updatePose();
+    }
+  }
+
+  function queueLandedInteractionRestore() {
+    if (!landedInteractionLock) return;
+    requestAnimationFrame(() => {
+      restoreLandedInteraction();
+      requestAnimationFrame(() => {
+        restoreLandedInteraction();
+        landedInteractionLock = null;
+      });
+    });
+  }
+
+  scene.addEventListener('pointerdown', captureLandedInteraction, true);
+  scene.addEventListener('focusin', (event) => {
+    captureLandedInteraction(event);
+    queueLandedInteractionRestore();
+  }, true);
+  scene.addEventListener('click', (event) => {
+    captureLandedInteraction(event);
+    queueLandedInteractionRestore();
+  }, true);
+  document.addEventListener('pointerup', queueLandedInteractionRestore, true);
+  document.addEventListener('pointercancel', () => {
+    landedInteractionLock = null;
+  }, true);
+
   function applyFlatMode() {
+    landedInteractionLock = null;
     body.classList.toggle('is-flat', flatMode);
     root.style.scrollBehavior = flatMode ? '' : 'auto';
     flatSelect.checked = !flatMode;
@@ -705,6 +750,7 @@
   }
 
   function goToFace(index) {
+    landedInteractionLock = null;
     const target = clamp(Number(index), 0, 5);
     currentFace = target;
     updateNav(target);
@@ -752,6 +798,7 @@
     if (flatMode || event.ctrlKey || event.metaKey || !event.deltaY) return;
     const target = event.target instanceof Element ? event.target : null;
     if (target?.closest('.developer-panel')) return;
+    landedInteractionLock = null;
     const normalizedDelta = event.deltaMode === WheelEvent.DOM_DELTA_LINE
       ? event.deltaY * 16
       : event.deltaMode === WheelEvent.DOM_DELTA_PAGE
