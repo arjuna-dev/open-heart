@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Work+Sans:wght@400;500;600;700&display=swap');
 :root{--paper:#FAFAF7;--ink:#159DDA;--accent:#B64032;--field:#B64032;--deep:#159DDA;--field-text:#FAFAF7;--text:var(--ink);--serif:'Newsreader',Georgia,serif;--sans:'Work Sans',Arial,sans-serif;--mono:'DM Mono',monospace;--line:color-mix(in srgb,var(--ink) 25%,var(--paper))}
 html[data-palette=cyan-brick]{--ink:#159DDA;--accent:#B64032;--field:#159DDA;--deep:#B64032;--text:#B64032}
+html[data-palette=brick-cyan]{--ink:#B64032;--accent:#159DDA;--field:#9F4A40;--deep:#159DDA;--text:#159DDA}
 html[data-palette=electric-carbon]{--ink:#173AE3;--accent:#242321;--field:#173AE3;--deep:#242321;--text:#242321}
 html[data-palette=mono-aubergine]{--ink:#63365F;--accent:var(--ink);--field:var(--ink);--deep:var(--ink);--text:var(--ink)}
 html[data-palette=mono-electric]{--ink:#173AE3;--accent:var(--ink);--field:var(--ink);--deep:var(--ink);--text:var(--ink)}
@@ -318,6 +319,11 @@ body:not(.is-flat) .layout-reference .face:not(#face-2)>.face__inner.closing{ali
 html[data-palette=cyan-brick] .face:nth-child(odd) h1,
 html[data-palette=cyan-brick] .face:nth-child(odd) h2,
 html[data-palette=cyan-brick] .face:nth-child(odd) h3{color:var(--ink)}
+
+/* The inverted recipe keeps brick red as the ink and softens it on field faces. */
+html[data-palette=brick-cyan] .face:nth-child(odd) h1,
+html[data-palette=brick-cyan] .face:nth-child(odd) h2,
+html[data-palette=brick-cyan] .face:nth-child(odd) h3{color:var(--ink)}
 
 /* Rotation controls stay visible in every menu presentation. */
 [data-carousel-autoplay-toggle]{border:1px solid var(--line);background:transparent;color:inherit;padding:8px 11px;font:10px var(--mono);text-transform:uppercase}

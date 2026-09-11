@@ -19,7 +19,7 @@ The project is not selling breakfast as a category. It is exploring the experien
 
 The local prototype is a six-section story with a menu area, developer controls, palette experiments, and a print-led asset archive. Normal scrolling is the default. The page also includes a CSS 3D prism experiment for the six full-viewport faces.
 
-The production hero is locked to the strongest ChatGPT menu artwork, and the developer menu exposes only four deliberate web recipes: Cyan + brick red, Electric blue + carbon, Mono / aubergine, and Mono / electric blue. The poster archive still preserves the paired ChatGPT and Gemini experiments for review, but the live page does not switch generated providers.
+The production hero is locked to the strongest ChatGPT menu artwork, and the developer menu exposes five deliberate web recipes: Cyan + brick red, Brick red + cyan, Electric blue + carbon, Mono / aubergine, and Mono / electric blue. The poster archive still preserves the paired ChatGPT and Gemini experiments for review, but the live page does not switch generated providers.
 
 The intended information hierarchy is:
 
@@ -75,7 +75,7 @@ Then open [http://localhost:4173/](http://localhost:4173/).
 
 The page also remains readable as a normal document when JavaScript is disabled, when reduced motion is requested, or when the **3D scrolling** checkbox is left unchecked. In the default centered-pair SMALL composition, every non-menu section uses the same 300-pixel text column and 300-pixel image column. CSS 3D mode connects every adjacent full-viewport section with the same vertical turn, shared physical edges, and local shading.
 
-In CSS 3D mode, the first wheel or trackpad delta moves the turn immediately. There is no scroll-behavior queue and no artificial opening pause. Ten percent of the face span is the commit threshold: a smaller nudge settles back to the current face, while a larger nudge completes one smooth 720-millisecond vertical turn. Both adjoining faces remain visible and interactive while the turn is in progress, and a landed face leaves the transformed 3D scene and becomes a true flat reading surface, so links, controls, and text selection remain reliable. If a face is taller than the viewport, as the full menu can be, wheel input scrolls that face first and turns to the next face only after reaching its edge. The fixed **Turn the page** pager remains available in 3D and centered reference modes; it stays hidden in the default simple-scroll view.
+In CSS 3D mode, every wheel or trackpad delta is applied to the pose in the same input event, so a ten-pixel gesture produces a corresponding ten-pixel-equivalent movement instead of waiting for a queued animation. A new gesture immediately takes control if an automatic completion is already running. There is no scroll-behavior queue and no artificial opening pause. Ten percent of the face span is the commit threshold: a smaller nudge settles back to the current face, while a larger nudge completes one smooth 720-millisecond vertical turn. Both adjoining faces remain visible and interactive while the turn is in progress, and a landed face leaves the transformed 3D scene and becomes a true flat reading surface, so links, controls, and text selection remain reliable. If a face is taller than the viewport, as the full menu can be, wheel input scrolls that face first and turns to the next face only after reaching its edge. The fixed **Turn the page** pager remains available in 3D and centered reference modes; it stays hidden in the default simple-scroll view.
 
 ## Repository map
 
@@ -96,7 +96,7 @@ The repository includes a GitHub Actions workflow for the static site. A push to
 
 The **Studio controls** menu can compare:
 
-1. The four approved web ink recipes, including two-ink and strict mono-color directions.
+1. The five approved web ink recipes, including inverted two-ink and strict mono-color directions.
 2. A centered-pair SMALL composition against a visibly more open centered-pair reference composition based on the supplied sparse study. The distinction is preserved on desktop and mobile.
 3. The baseline Open Heart wordmark with its oversized O and H.
 4. The full category carousel against a much smaller ultra-minimal three-group menu with two category columns and a print, or a menu constrained to the same centered-pair SMALL system as the other sections.

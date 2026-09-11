@@ -658,6 +658,7 @@
       const progress = clamp((now - startedAt) / duration, 0, 1);
       const eased = -(Math.cos(Math.PI * progress) - 1) / 2;
       window.scrollTo(0, start + distance * eased);
+      updatePose();
       if (progress < 1) {
         turnRafId = requestAnimationFrame(step);
       } else {
@@ -687,7 +688,6 @@
   let wheelDirection = 0;
   let wheelBaseScroll = 0;
   let wheelTargetFace = -1;
-  let wheelGestureLocked = false;
   let wheelReleaseTimer = 0;
 
   function resetWheelGesture() {
@@ -704,7 +704,6 @@
         resetWheelGesture();
         animateTurnTo(returnTop, 220);
       }
-      wheelGestureLocked = false;
       resetWheelGesture();
     }, delay);
   }
@@ -718,10 +717,14 @@
       : event.deltaMode === WheelEvent.DOM_DELTA_PAGE
         ? event.deltaY * window.innerHeight
         : event.deltaY;
+    // A new wheel delta always takes control immediately. Do not make the
+    // visitor wait for a previous auto-completion turn to finish.
     if (turnInProgress) {
-      event.preventDefault();
-      armWheelRelease(900);
-      return;
+      cancelAnimationFrame(turnRafId);
+      turnRafId = 0;
+      turnInProgress = false;
+      window.clearTimeout(wheelReleaseTimer);
+      resetWheelGesture();
     }
     const faceScroller = target?.closest('.face__inner');
     if (faceScroller && faceScroller.scrollHeight > faceScroller.clientHeight + 1) {
@@ -731,7 +734,6 @@
       if (canScrollInside) return;
     }
     event.preventDefault();
-    if (wheelGestureLocked) return;
     const direction = normalizedDelta > 0 ? 1 : -1;
     if (!wheelDirection || direction !== wheelDirection) {
       wheelDirection = direction;
@@ -745,13 +747,13 @@
     const metrics = getScrollMetrics();
     const nextScroll = clamp(window.scrollY + normalizedDelta, metrics.trackTop, metrics.trackTop + metrics.maxScroll);
     window.scrollTo({ top: nextScroll, behavior: 'auto' });
-    requestPoseUpdate();
+    // Render in the same wheel event so a ten-pixel delta produces a
+    // ten-pixel-equivalent pose change without waiting for another frame.
+    updatePose();
     armWheelRelease();
     if (Math.abs(nextScroll - wheelBaseScroll) >= metrics.pageSpan * wheelCommitThreshold) {
       const destination = getFaceScrollTop(wheelTargetFace, metrics);
       resetWheelGesture();
-      wheelGestureLocked = true;
-      armWheelRelease(900);
       animateTurnTo(destination);
     }
   }
