@@ -25,7 +25,7 @@ The intended information hierarchy is:
 
 1. A clear invitation to discover a plant-based creation.
 2. Vegan eggs Benedict as the memorable proof point.
-3. One automatically rotating menu carousel whose slides are menu sections, rather than a separate page for every category. Each category has one poster image and a text carousel of dishes. A persistent Pause or Play control, focus and hover behavior, and visible active states give the visitor control over rotation. Developer options can instead show either an ultra-minimal three-group text list or the active category inside the same centered-pair SMALL structure used by the rest of the page.
+3. One automatically rotating menu carousel whose slides are menu sections, rather than a separate page for every category. Each category has one poster image and a text carousel of dishes. A persistent Pause or Play control, focus and hover behavior, and visible active states give the visitor control over rotation. Developer options can instead show either an ultra-minimal three-group menu with two category columns and one image column per group, or the active category inside the same centered-pair SMALL structure used by the rest of the page.
 4. Atmosphere and Copenhagen references used as visual context, not unsupported location claims.
 5. Opening hours, contact, find-us, and language areas that can be filled with final restaurant details.
 6. A lightweight action such as feedback, an interest list, or following the concept.
@@ -75,7 +75,7 @@ Then open [http://localhost:4173/](http://localhost:4173/).
 
 The page also remains readable as a normal document when JavaScript is disabled, when reduced motion is requested, or when the **3D scrolling** checkbox is left unchecked. In the default centered-pair SMALL composition, every non-menu section uses the same 300-pixel text column and 300-pixel image column. CSS 3D mode connects every adjacent full-viewport section with the same vertical turn, shared physical edges, and local shading.
 
-In CSS 3D mode, the first wheel or trackpad delta moves the turn immediately. There is no scroll-behavior queue and no artificial opening pause. Ten percent of the face span is the commit threshold: a smaller nudge settles back to the current face, while a larger nudge completes one smooth 720-millisecond vertical turn. A landed face leaves the transformed 3D scene and becomes a true flat reading surface, so links, controls, and text selection remain reliable. If a face is taller than the viewport, as the full menu can be, wheel input scrolls that face first and turns to the next face only after reaching its edge. The fixed **Turn the page** pager remains available in 3D and centered reference modes; it stays hidden in the default simple-scroll view.
+In CSS 3D mode, the first wheel or trackpad delta moves the turn immediately. There is no scroll-behavior queue and no artificial opening pause. Ten percent of the face span is the commit threshold: a smaller nudge settles back to the current face, while a larger nudge completes one smooth 720-millisecond vertical turn. Both adjoining faces remain visible and interactive while the turn is in progress, and a landed face leaves the transformed 3D scene and becomes a true flat reading surface, so links, controls, and text selection remain reliable. If a face is taller than the viewport, as the full menu can be, wheel input scrolls that face first and turns to the next face only after reaching its edge. The fixed **Turn the page** pager remains available in 3D and centered reference modes; it stays hidden in the default simple-scroll view.
 
 ## Repository map
 
@@ -99,8 +99,8 @@ The **Studio controls** menu can compare:
 1. The four approved web ink recipes, including two-ink and strict mono-color directions.
 2. A centered-pair SMALL composition against a visibly more open centered-pair reference composition based on the supplied sparse study. The distinction is preserved on desktop and mobile.
 3. The baseline Open Heart wordmark with its oversized O and H.
-4. The full category carousel against a much smaller ultra-minimal three-group menu or a menu constrained to the same centered-pair SMALL system as the other sections.
-5. GSAP carousel motion: slide left and right, fade in and out, or no animation.
+4. The full category carousel against a much smaller ultra-minimal three-group menu with two category columns and a print, or a menu constrained to the same centered-pair SMALL system as the other sections.
+5. GSAP carousel motion in all menu presentations: slide left and right, fade in and out, or no animation. Selecting a category or dish pauses autoplay until Play is chosen.
 6. An unchecked-by-default **3D scrolling** control. Checking it enables the CSS 3D experiment; leaving it unchecked keeps normal document scrolling.
 
 The previous full-editorial composition has been removed from both the controls and the stylesheet.

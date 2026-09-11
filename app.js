@@ -52,6 +52,7 @@
   const minimalMenu = document.querySelector('#minimal-menu');
   const minimalTabs = [...document.querySelectorAll('[data-minimal-tab]')];
   const minimalSlides = [...document.querySelectorAll('[data-minimal-slide]')];
+  const minimalViewport = document.querySelector('.minimal-menu__viewport');
   const pairedMenu = document.querySelector('#paired-menu');
   const pairedMenuTitle = document.querySelector('#paired-menu-title');
   const pairedMenuItems = document.querySelector('#paired-menu-items');
@@ -66,8 +67,15 @@
   let pairedMenuMode = false;
   let carouselAnimationMode = carouselAnimationSelect?.value || 'slide';
   let categoryAnimation = null;
+  let minimalAnimation = null;
+  let pairedAnimation = null;
 
-  function renderPairedCategory(index) {
+  function resetMotionStyles(element) {
+    if (window.gsap) window.gsap.set(element, { clearProps: 'transform,opacity' });
+    ['transform', 'opacity', 'translate', 'rotate', 'scale', 'position', 'inset', 'width'].forEach((property) => element.style.removeProperty(property));
+  }
+
+  function renderPairedCategory(index, { animate = false } = {}) {
     const slide = categorySlides[index];
     if (!slide || !pairedMenuItems) return;
     const category = slide.dataset.categorySlide;
@@ -98,8 +106,40 @@
     pairedTabs.forEach((tab, tabIndex) => {
       const isActive = tabIndex === index;
       tab.setAttribute('aria-selected', String(isActive));
+      if (isActive) tab.setAttribute('aria-current', 'page');
+      else tab.removeAttribute('aria-current');
       tab.tabIndex = isActive ? 0 : -1;
       tab.classList.toggle('is-active', isActive);
+    });
+    if (animate) animatePairedPresentation();
+  }
+
+  function finishPairedAnimation() {
+    if (pairedAnimation) {
+      pairedAnimation.kill();
+      pairedAnimation = null;
+    }
+    pairedMenu?.querySelectorAll('.paired-menu__copy,.paired-menu__print').forEach((element) => {
+      resetMotionStyles(element);
+    });
+  }
+
+  function animatePairedPresentation() {
+    if (!pairedMenu || pairedMenu.hidden || carouselAnimationMode === 'none' || prefersReducedMotion.matches || !window.gsap) return;
+    finishPairedAnimation();
+    const elements = [...pairedMenu.querySelectorAll('.paired-menu__copy,.paired-menu__print')];
+    const from = carouselAnimationMode === 'fade'
+      ? { opacity: 0, x: 0, xPercent: 0 }
+      : { opacity: 0, x: 28, xPercent: 0 };
+    const to = carouselAnimationMode === 'fade'
+      ? { opacity: 1, duration: 0.52, ease: 'power1.inOut' }
+      : { opacity: 1, x: 0, duration: 0.58, ease: 'power2.out' };
+    pairedAnimation = window.gsap.fromTo(elements, from, {
+      ...to,
+      onComplete: () => {
+        pairedAnimation = null;
+        elements.forEach(resetMotionStyles);
+      }
     });
   }
 
@@ -137,7 +177,7 @@
       slide.setAttribute('aria-hidden', String(!isActive));
       slide.inert = !isActive;
       slide.toggleAttribute('inert', !isActive);
-      ['transform', 'opacity', 'position', 'inset', 'width'].forEach((property) => slide.style.removeProperty(property));
+      resetMotionStyles(slide);
     });
     categoryViewport?.classList.remove('is-animating');
   }
@@ -148,7 +188,8 @@
     categoryTabs.forEach((tab, i) => {
       const isActive = i === index;
       tab.setAttribute('aria-selected', String(isActive));
-      tab.setAttribute('aria-current', isActive ? 'page' : 'false');
+      if (isActive) tab.setAttribute('aria-current', 'page');
+      else tab.removeAttribute('aria-current');
       tab.tabIndex = isActive ? 0 : -1;
       tab.classList.toggle('is-active', isActive);
     });
@@ -163,6 +204,10 @@
     const previous = activeCategory;
     activeCategory = (index + categorySlides.length) % categorySlides.length;
     updateCategoryState(activeCategory);
+    if (pairedMenuMode && pairedMenu && !pairedMenu.hidden) {
+      renderPairedCategory(activeCategory, { animate: animate && previous !== activeCategory });
+      return;
+    }
     renderPairedCategory(activeCategory);
     if (!animate || previous === activeCategory || carouselAnimationMode === 'none' || prefersReducedMotion.matches || !window.gsap || !categoryViewport) {
       finishCategoryAnimation();
@@ -187,8 +232,8 @@
     categoryViewport.classList.add('is-animating');
 
     if (carouselAnimationMode === 'fade') {
-      window.gsap.set(outgoing, { opacity: 1, x: 0 });
-      window.gsap.set(incoming, { opacity: 0, x: 0 });
+      window.gsap.set(outgoing, { opacity: 1, x: 0, xPercent: 0 });
+      window.gsap.set(incoming, { opacity: 0, x: 0, xPercent: 0 });
       categoryAnimation = window.gsap.timeline({
         onComplete: () => {
           categoryAnimation = null;
@@ -201,8 +246,8 @@
       return;
     }
 
-    window.gsap.set(outgoing, { opacity: 1, xPercent: 0 });
-    window.gsap.set(incoming, { opacity: 1, xPercent: 100 });
+    window.gsap.set(outgoing, { opacity: 1, x: 0, xPercent: 0 });
+    window.gsap.set(incoming, { opacity: 1, x: 0, xPercent: 100 });
     categoryAnimation = window.gsap.timeline({
       onComplete: () => {
         categoryAnimation = null;
@@ -214,21 +259,63 @@
       .to(incoming, { xPercent: 0, duration: 0.62, ease: 'power2.inOut' }, 0);
   }
 
-  categoryTabs.forEach((tab, index) => tab.addEventListener('click', () => showCategory(index)));
-  categoryPrevious?.addEventListener('click', () => showCategory(activeCategory - 1));
-  categoryNext?.addEventListener('click', () => showCategory(activeCategory + 1));
+  categoryTabs.forEach((tab, index) => tab.addEventListener('click', () => {
+    pauseAutoplayForInteraction();
+    showCategory(index);
+  }));
+  categoryPrevious?.addEventListener('click', () => {
+    pauseAutoplayForInteraction();
+    showCategory(activeCategory - 1);
+  });
+  categoryNext?.addEventListener('click', () => {
+    pauseAutoplayForInteraction();
+    showCategory(activeCategory + 1);
+  });
   showCategory(0, { animate: false });
   stabilizeCategoryViewport();
 
-  function showMinimalGroup(index) {
-    if (!minimalSlides.length) return;
-    activeMinimalGroup = (index + minimalSlides.length) % minimalSlides.length;
+  function stabilizeMinimalViewport() {
+    if (!minimalViewport || minimalMenu?.hidden || minimalViewport.clientWidth < 1) return;
+    let maximumHeight = 0;
+    minimalSlides.forEach((slide) => {
+      const wasHidden = slide.hidden;
+      const savedStyle = slide.getAttribute('style');
+      slide.hidden = false;
+      slide.style.position = 'absolute';
+      slide.style.inset = '0 auto auto 0';
+      slide.style.width = '100%';
+      slide.style.visibility = 'hidden';
+      slide.style.pointerEvents = 'none';
+      maximumHeight = Math.max(maximumHeight, slide.offsetHeight);
+      slide.hidden = wasHidden;
+      if (savedStyle === null) slide.removeAttribute('style');
+      else slide.setAttribute('style', savedStyle);
+    });
+    minimalViewport.style.height = `${Math.max(220, Math.ceil(maximumHeight))}px`;
+  }
+
+  function commitMinimalGroup(index) {
     minimalSlides.forEach((slide, i) => {
-      const isActive = i === activeMinimalGroup;
+      const isActive = i === index;
       slide.hidden = !isActive;
       slide.classList.toggle('is-active', isActive);
       slide.setAttribute('aria-hidden', String(!isActive));
+      slide.inert = !isActive;
+      slide.toggleAttribute('inert', !isActive);
+      resetMotionStyles(slide);
     });
+    minimalViewport?.classList.remove('is-animating');
+  }
+
+  function finishMinimalAnimation() {
+    if (minimalAnimation) {
+      minimalAnimation.kill();
+      minimalAnimation = null;
+    }
+    commitMinimalGroup(activeMinimalGroup);
+  }
+
+  function updateMinimalTabs() {
     minimalTabs.forEach((tab, i) => {
       const isActive = i === activeMinimalGroup;
       tab.setAttribute('aria-selected', String(isActive));
@@ -239,15 +326,83 @@
     });
   }
 
-  minimalTabs.forEach((tab, index) => tab.addEventListener('click', () => showMinimalGroup(index)));
-  pairedTabs.forEach((tab, index) => tab.addEventListener('click', () => showCategory(index)));
-  showMinimalGroup(0);
+  function showMinimalGroup(index, { animate = true } = {}) {
+    if (!minimalSlides.length) return;
+    if (minimalAnimation) finishMinimalAnimation();
+    const previous = activeMinimalGroup;
+    activeMinimalGroup = (index + minimalSlides.length) % minimalSlides.length;
+    updateMinimalTabs();
+    if (!animate || previous === activeMinimalGroup || carouselAnimationMode === 'none' || prefersReducedMotion.matches || !window.gsap || !minimalViewport || minimalMenu?.hidden) {
+      commitMinimalGroup(activeMinimalGroup);
+      return;
+    }
+
+    const outgoing = minimalSlides[previous];
+    const incoming = minimalSlides[activeMinimalGroup];
+    minimalSlides.forEach((slide, i) => {
+      const isInTransition = i === previous || i === activeMinimalGroup;
+      slide.hidden = !isInTransition;
+      slide.classList.toggle('is-active', i === activeMinimalGroup);
+      slide.setAttribute('aria-hidden', String(i !== activeMinimalGroup));
+      slide.inert = false;
+      slide.removeAttribute('inert');
+      if (isInTransition) {
+        slide.style.position = 'absolute';
+        slide.style.inset = '0 auto auto 0';
+        slide.style.width = '100%';
+      }
+    });
+    minimalViewport.classList.add('is-animating');
+    if (carouselAnimationMode === 'fade') {
+      window.gsap.set(outgoing, { opacity: 1, x: 0, xPercent: 0 });
+      window.gsap.set(incoming, { opacity: 0, x: 0, xPercent: 0 });
+      minimalAnimation = window.gsap.timeline({
+        onComplete: () => {
+          minimalAnimation = null;
+          commitMinimalGroup(activeMinimalGroup);
+        }
+      });
+      minimalAnimation
+        .to(outgoing, { opacity: 0, duration: 0.24, ease: 'power1.out' }, 0)
+        .to(incoming, { opacity: 1, duration: 0.42, ease: 'power1.inOut' }, 0.16);
+      return;
+    }
+    window.gsap.set(outgoing, { opacity: 1, x: 0, xPercent: 0 });
+    window.gsap.set(incoming, { opacity: 1, x: 0, xPercent: 100 });
+    minimalAnimation = window.gsap.timeline({
+      onComplete: () => {
+        minimalAnimation = null;
+        commitMinimalGroup(activeMinimalGroup);
+      }
+    });
+    minimalAnimation
+      .to(outgoing, { xPercent: -100, duration: 0.62, ease: 'power2.inOut' }, 0)
+      .to(incoming, { xPercent: 0, duration: 0.62, ease: 'power2.inOut' }, 0);
+  }
+
+  minimalTabs.forEach((tab, index) => tab.addEventListener('click', () => {
+    pauseAutoplayForInteraction();
+    showMinimalGroup(index);
+  }));
+  pairedTabs.forEach((tab, index) => tab.addEventListener('click', () => {
+    pauseAutoplayForInteraction();
+    showCategory(index);
+  }));
+  showMinimalGroup(0, { animate: false });
 
   let categoryTimer = 0;
   let autoplayPausedByUser = false;
   let autoplayStoppedByFocus = false;
   let autoplayPausedByHover = false;
   let autoplayExplicitlyStarted = false;
+
+  function pauseAutoplayForInteraction() {
+    autoplayPausedByUser = true;
+    autoplayStoppedByFocus = true;
+    autoplayPausedByHover = false;
+    autoplayExplicitlyStarted = false;
+    stopCategoryAutoplay();
+  }
 
   function syncAutoplayControls() {
     const isPlaying = Boolean(categoryTimer);
@@ -296,6 +451,15 @@
   });
 
   carouselRegions.forEach((region) => {
+    region.addEventListener('click', (event) => {
+      if (event.target.closest('[data-carousel-autoplay-toggle]')) return;
+      if (event.target.closest('[data-category-tab],[data-minimal-tab],[data-paired-tab],.dish,.minimal-menu__item,.paired-menu__item')) {
+        pauseAutoplayForInteraction();
+      }
+    });
+  });
+
+  carouselRegions.forEach((region) => {
     region.addEventListener('focusin', () => {
       if (autoplayExplicitlyStarted) return;
       autoplayStoppedByFocus = true;
@@ -328,7 +492,12 @@
     if (minimalMenu) minimalMenu.hidden = !minimalMenuMode;
     if (pairedMenu) pairedMenu.hidden = !pairedMenuMode;
     finishCategoryAnimation();
-    window.requestAnimationFrame(stabilizeCategoryViewport);
+    finishMinimalAnimation();
+    finishPairedAnimation();
+    window.requestAnimationFrame(() => {
+      stabilizeCategoryViewport();
+      stabilizeMinimalViewport();
+    });
     stopCategoryAutoplay();
     startCategoryAutoplay();
   }
@@ -339,6 +508,8 @@
     carouselAnimationMode = event.target.value;
     root.dataset.carouselAnimation = carouselAnimationMode;
     finishCategoryAnimation();
+    finishMinimalAnimation();
+    finishPairedAnimation();
   });
   root.dataset.carouselAnimation = carouselAnimationMode;
 
@@ -422,7 +593,6 @@
     const depth = scene.clientHeight / 2;
     const rotation = `rotateX(${angle}deg)`;
     prism.style.transform = `translateZ(${-depth}px) ${rotation}`;
-    const interactiveFace = t < 0.5 ? segment : segment + 1;
     faces.forEach((face, i) => {
       const outgoing = i === segment;
       const incoming = i === segment + 1;
@@ -430,7 +600,11 @@
       face.style.visibility = visible ? 'visible' : 'hidden';
       face.inert = !visible;
       face.toggleAttribute('inert', !visible);
-      face.style.pointerEvents = i === interactiveFace ? 'auto' : 'none';
+      // Both faces remain interactive throughout the turn. The old halfway
+      // switch made the visible face inert and caused lost clicks and text
+      // selections during wheel-driven transitions.
+      face.style.pointerEvents = visible ? 'auto' : 'none';
+      face.setAttribute('aria-hidden', String(!visible));
       face.style.transform = outgoing ? `translateZ(${depth}px)` : incoming ? `rotateX(-90deg) translateZ(${depth}px)` : 'none';
       face.style.setProperty('--shade', String(outgoing ? 0.42 * t : 0.5 * (1 - t)));
       face.style.setProperty('--shade-direction', outgoing ? 'to bottom' : 'to top');
@@ -467,7 +641,7 @@
     if (prefersReducedMotion.matches) {
       turnInProgress = false;
       window.scrollTo({ top, behavior: 'auto' });
-      requestPoseUpdate();
+      updatePose();
       return;
     }
     const start = window.scrollY;
@@ -475,7 +649,7 @@
     if (Math.abs(distance) < 0.5) {
       turnInProgress = false;
       window.scrollTo({ top, behavior: 'auto' });
-      requestPoseUpdate();
+      updatePose();
       return;
     }
     const startedAt = performance.now();
@@ -490,7 +664,7 @@
         turnRafId = 0;
         turnInProgress = false;
         window.scrollTo({ top, behavior: 'auto' });
-        requestPoseUpdate();
+        updatePose();
       }
     };
     turnRafId = requestAnimationFrame(step);
@@ -727,7 +901,10 @@
   window.addEventListener('scroll', requestPoseUpdate, { passive: true });
   window.addEventListener('resize', () => {
     finishCategoryAnimation();
+    finishMinimalAnimation();
+    finishPairedAnimation();
     stabilizeCategoryViewport();
+    stabilizeMinimalViewport();
     requestPoseUpdate();
     renderPretext();
   }, { passive: true });
@@ -773,6 +950,10 @@
   applyMenuMode(menuModeSelect?.value || 'carousel');
   applyFlatMode();
   document.fonts?.ready.then(stabilizeCategoryViewport);
-  window.addEventListener('load', stabilizeCategoryViewport, { once: true });
+  document.fonts?.ready.then(stabilizeMinimalViewport);
+  window.addEventListener('load', () => {
+    stabilizeCategoryViewport();
+    stabilizeMinimalViewport();
+  }, { once: true });
   requestPoseUpdate();
 })();
