@@ -380,3 +380,25 @@ body:not(.is-flat) .face__inner{user-select:text}
   .minimal-menu__columns .minimal-menu__item h4{font-size:15px}
   .menu-slide-content .dish h3{font-size:19px}
 }
+
+/* Mobile art is always centered, regardless of the desktop composition. */
+@media(max-width:800px){
+  .face figure,
+  .hero-print,
+  .feature-print,
+  .panel-print,
+  .pair-print,
+  .category-art,
+  .minimal-menu__print,
+  .paired-menu__print{
+    margin-left:auto!important;
+    margin-right:auto!important;
+    justify-self:center!important;
+  }
+  .face figure img,
+  .face img{
+    display:block;
+    margin-left:auto;
+    margin-right:auto;
+  }
+}
