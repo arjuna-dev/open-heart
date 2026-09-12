@@ -482,7 +482,7 @@
   });
   startCategoryAutoplay();
 
-  function applyMenuMode(mode = 'carousel') {
+  function applyMenuMode(mode = 'minimal-list') {
     pairedMenuMode = mode === 'paired-small';
     minimalMenuMode = mode === 'minimal-list';
     body.classList.toggle('menu-minimal', minimalMenuMode);
@@ -1053,7 +1053,7 @@
   });
 
   applyComposition(compositionSelect?.value || 'centered-pair-small');
-  applyMenuMode(menuModeSelect?.value || 'carousel');
+  applyMenuMode(menuModeSelect?.value || 'minimal-list');
   applyShadowMode();
   applyFlatMode();
   document.fonts?.ready.then(stabilizeCategoryViewport);

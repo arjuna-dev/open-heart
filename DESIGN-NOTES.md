@@ -15,7 +15,7 @@
 
 ## Menu experiments, not finalized recipes
 
-menu.json captures the expanded working menu. The user specified the categories and flavor directions. Added crushed spiced peas and coriander hollandaise, corn and black beans, pulled mushrooms and slaw, and the protein-salad composition are development hypotheses. No recipes, suppliers, nutritional protein claims, allergens or commercial alcohol-free specifications have been validated.
+menu.json captures the expanded working menu. The user specified the categories and flavor directions. Added crushed spiced peas and coriander hollandaise, corn and black beans, jackfruit and slaw, and the protein-salad composition are development hypotheses. No recipes, suppliers, nutritional protein claims, allergens or commercial alcohol-free specifications have been validated.
 
 Honey and dairy are not vegan. Keep the London fog and mascarpone dessert honestly described; alternative sweeteners and plant-based creams need recipe tests. Vegan creme brulee is an explicit development ambition.
 

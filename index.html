@@ -38,8 +38,8 @@
 
         <label for="menu-mode-select">Menu presentation</label>
         <select id="menu-mode-select">
-          <option value="carousel" selected>Category carousel</option>
-          <option value="minimal-list">Ultra-minimal text list</option>
+          <option value="carousel">Category carousel</option>
+          <option value="minimal-list" selected>Ultra-minimal text list</option>
           <option value="paired-small">Match SMALL pair</option>
         </select>
 
@@ -151,7 +151,7 @@
                       <figure class="category-art" data-category-art="sandwiches"><img src="assets/posters/chatgpt/03-vegan-salmon.png" width="1086" height="1448" alt="Vegan salmon open sandwich in a controlled two-ink editorial print"></figure>
                       <div class="carousel dish-carousel" tabindex="0" aria-label="Sandwich menu items">
                         <article class="dish" data-item="salmon-sandwich"><div class="dish-caption"><span class="item-number">01</span><div><h3>Vegan salmon open sandwich</h3><p>Plant-based salmon, open-faced.</p><small>Vegan</small></div></div></article>
-                        <article class="dish" data-item="pulled-sandwich"><div class="dish-caption"><span class="item-number">02</span><div><h3>Veggie pulled sandwich</h3><p>Pulled mushrooms, sharp slaw, BBQ sauce.</p><small>Vegan</small></div></div></article>
+                        <article class="dish" data-item="pulled-sandwich"><div class="dish-caption"><span class="item-number">02</span><div><h3>Veggie pulled sandwich</h3><p>Jackfruit, sharp slaw, BBQ sauce.</p><small>Vegan</small></div></div></article>
                       </div>
                     </div>
                   </section>
@@ -214,8 +214,9 @@
                       <article class="dish" data-item="london-fog"><div class="dish-caption"><span class="item-number">05</span><div><h3>Decadent Earl Grey</h3><p>London fog: Earl Grey, vanilla, honey, milk.</p><small>Earl Grey / vanilla / milk</small></div></div></article>
                       <article class="dish" data-item="cafe-viennois"><div class="dish-caption"><span class="item-number">06</span><div><h3>Cafe viennois</h3><p>Coffee, whipped cream.</p><small>Coffee / cream</small></div></div></article>
                       <article class="dish" data-item="chocolate-espanol"><div class="dish-caption"><span class="item-number">07</span><div><h3>Chocolate espanol</h3><p>Thick, hot drinking chocolate.</p><small>Thick / hot</small></div></div></article>
-                      <article class="dish" data-item="licorice-beer"><div class="dish-caption"><span class="item-number">08</span><div><h3>Licorice beer</h3><p>Beer with a licorice note.</p><small>Cold / curious</small></div></div></article>
-                      <article class="dish" data-item="michelada"><div class="dish-caption"><span class="item-number">09</span><div><h3>0,0 michelada</h3><p>Alcohol-free, lime, spice, a salted rim.</p><small>Lime / spice / salt</small></div></div></article>
+                      <article class="dish" data-item="alkoholfri-glogg"><div class="dish-caption"><span class="item-number">08</span><div><h3>alkoholfri gløgg all year round</h3><p>Alcohol-free gløgg, all year round.</p><small>Hot / all year</small></div></div></article>
+                      <article class="dish" data-item="licorice-beer"><div class="dish-caption"><span class="item-number">09</span><div><h3>Licorice beer</h3><p>Beer with a licorice note.</p><small>Cold / curious</small></div></div></article>
+                      <article class="dish" data-item="michelada"><div class="dish-caption"><span class="item-number">10</span><div><h3>0,0 michelada</h3><p>Alcohol-free, lime, spice, a salted rim.</p><small>Lime / spice / salt</small></div></div></article>
                       </div>
                     </div>
                   </section>
@@ -250,7 +251,7 @@
                         <h3 class="minimal-menu__category">Sandwiches</h3>
                         <ol class="minimal-menu__list">
                           <li class="minimal-menu__item"><span>01</span><div><h4>Vegan salmon open sandwich</h4><p>Plant-based salmon, open-faced.</p></div></li>
-                          <li class="minimal-menu__item"><span>02</span><div><h4>Veggie pulled sandwich</h4><p>Pulled mushrooms, sharp slaw, BBQ sauce.</p></div></li>
+                          <li class="minimal-menu__item"><span>02</span><div><h4>Veggie pulled sandwich</h4><p>Jackfruit, sharp slaw, BBQ sauce.</p></div></li>
                         </ol>
                       </div>
                       <figure class="minimal-menu__print"><img src="assets/posters/chatgpt/03-vegan-salmon.png" width="1086" height="1448" alt="Vegan salmon open sandwich in a controlled two-ink editorial print"></figure>
@@ -285,6 +286,13 @@
                       <div class="minimal-menu__column">
                         <h3 class="minimal-menu__category">Drinks</h3>
                         <ol class="minimal-menu__list">
+                          <li class="minimal-menu__item"><span>01</span><div><h4>Licorice beer</h4><p>Beer with a licorice note.</p></div></li>
+                          <li class="minimal-menu__item"><span>02</span><div><h4>0,0 michelada</h4><p>Alcohol-free, lime, spice.</p></div></li>
+                        </ol>
+                      </div>
+                      <div class="minimal-menu__column">
+                        <h3 class="minimal-menu__category">Hot drinks</h3>
+                        <ol class="minimal-menu__list">
                           <li class="minimal-menu__item"><span>01</span><div><h4>Matcha</h4><p>Whisked matcha.</p></div></li>
                           <li class="minimal-menu__item"><span>02</span><div><h4>Hojicha</h4><p>Roasted Japanese green tea.</p></div></li>
                           <li class="minimal-menu__item"><span>03</span><div><h4>Espresso</h4><p>Small, dark, concentrated.</p></div></li>
@@ -292,11 +300,8 @@
                           <li class="minimal-menu__item"><span>05</span><div><h4>Decadent Earl Grey</h4><p>Vanilla, honey, milk.</p></div></li>
                           <li class="minimal-menu__item"><span>06</span><div><h4>Cafe viennois</h4><p>Coffee, whipped cream.</p></div></li>
                           <li class="minimal-menu__item"><span>07</span><div><h4>Chocolate espanol</h4><p>Thick, hot drinking chocolate.</p></div></li>
-                          <li class="minimal-menu__item"><span>08</span><div><h4>Licorice beer</h4><p>Beer with a licorice note.</p></div></li>
-                          <li class="minimal-menu__item"><span>09</span><div><h4>0,0 michelada</h4><p>Alcohol-free, lime, spice.</p></div></li>
+                          <li class="minimal-menu__item"><span>08</span><div><h4>alkoholfri gløgg all year round</h4><p>Alcohol-free gløgg, all year round.</p></div></li>
                         </ol>
-                      </div>
-                      <div class="minimal-menu__column">
                         <h3 class="minimal-menu__category">Desserts</h3>
                         <ol class="minimal-menu__list">
                           <li class="minimal-menu__item"><span>01</span><div><h4>Avocado key-lime pie</h4><p>Sharp lime, crisp crumb base.</p></div></li>

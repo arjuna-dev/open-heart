@@ -31,7 +31,7 @@
     "id": "pulled-sandwich",
     "category": "Sandwiches",
     "name": "Veggie pulled sandwich",
-    "description": "Pulled mushrooms, sharp slaw, BBQ sauce.",
+    "description": "Jackfruit, sharp slaw, BBQ sauce.",
     "diet": "Vegan"
   },
   {
@@ -166,6 +166,13 @@
     "name": "Chocolate espanol",
     "description": "Thick, hot drinking chocolate.",
     "diet": "Vegan option"
+  },
+  {
+    "id": "alkoholfri-glogg",
+    "category": "Hot drinks",
+    "name": "alkoholfri gløgg all year round",
+    "description": "Alcohol-free gløgg, all year round.",
+    "diet": "0,0"
   },
   {
     "id": "chipotle-mayo",
